@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Seminario II · Análisis de la información</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#0b2940; --navy-900:#10344f; --navy-800:#164563;
+  --blue-700:#2c668f; --blue-600:#3f7da7; --blue-200:#dbeaf3; --blue-100:#eaf3f8; --blue-050:#f4f8fb;
+  --ink:#183344; --muted:#5c717b; --paper:#f5f8f8; --surface:#ffffff; --surface-2:#f2f7f9;
+  --line:#d8e2e6; --anno:#b4472b; --accent:#d6a44a; --accent-soft:#fbf3e2;
+  --ok-bg:#e9f4ee; --ok-line:#3d8a63; --bad-bg:#f8eef0; --bad-line:#a35d6a;
+  --shadow:0 16px 42px rgba(23,52,79,.09); --radius:22px;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy-950:#e6f0f6; --navy-900:#0f2a3e; --navy-800:#9cc6e4;
+    --blue-700:#8ec0e2; --blue-600:#6fa8d0; --blue-200:#24455c; --blue-100:#1b3649; --blue-050:#16303f;
+    --ink:#e2ecf1; --muted:#9db1bb; --paper:#0e1d27; --surface:#142734; --surface-2:#1a3141;
+    --line:#2b4555; --anno:#f29a7a; --accent:#e0b65e; --accent-soft:#3a3120;
+    --ok-bg:#163428; --ok-line:#5fb889; --bad-bg:#3a2026; --bad-line:#d38593;
+    --shadow:0 16px 42px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --navy-950:#e6f0f6; --navy-900:#0f2a3e; --navy-800:#9cc6e4;
+  --blue-700:#8ec0e2; --blue-600:#6fa8d0; --blue-200:#24455c; --blue-100:#1b3649; --blue-050:#16303f;
+  --ink:#e2ecf1; --muted:#9db1bb; --paper:#0e1d27; --surface:#142734; --surface-2:#1a3141;
+  --line:#2b4555; --anno:#f29a7a; --accent:#e0b65e; --accent-soft:#3a3120;
+  --ok-bg:#163428; --ok-line:#5fb889; --bad-bg:#3a2026; --bad-line:#d38593;
+  --shadow:0 16px 42px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.6;font-size:16px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+img,svg{max-width:100%}
+h1,h2,h3{font-family:var(--serif);color:var(--navy-950);line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2rem,4vw,3rem)}
+h2{font-size:clamp(1.55rem,2.6vw,2.1rem)}
+h3{font-size:1.25rem}
+p{margin:0 0 .9em}
+.prose{max-width:74ch}
+.muted{color:var(--muted)}
+.hidden{display:none!important}
+
+/* Encabezado */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px clamp(16px,3vw,34px);background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{flex-shrink:0;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:var(--navy-900);color:#fff;font-weight:900;letter-spacing:.04em}
+.brand strong{display:block;font-size:1.08rem}
+.brand small{display:block;color:var(--muted);font-size:.92rem}
+.tools{display:flex;gap:10px;flex-wrap:wrap}
+.pill{border:1.5px solid var(--blue-700);background:var(--surface);color:var(--navy-800);padding:9px 16px;border-radius:999px;font-weight:800;font-size:.92rem}
+body.teacher .pill#teacherBtn{background:var(--accent);border-color:var(--accent);color:#1c1c1c}
+
+/* Cadena del análisis */
+.chain{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px;align-items:center;padding:14px clamp(16px,3vw,34px);background:#10344f;color:#fff}
+.chain-steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
+.chain-step{position:relative;display:grid;place-items:center;text-align:center;min-height:44px;padding:8px;border-radius:9px;background:#24536f;font-size:.8rem;font-weight:800;line-height:1.2}
+.chain-step:not(:last-child)::after{content:"→";position:absolute;right:-9px;color:#e0b65e;font-weight:900;transform:translateX(50%)}
+.chain-note{padding-left:20px;border-left:1px solid rgba(255,255,255,.25);color:#dce9ef;font-size:.9rem;line-height:1.4}
+.chain-note strong{color:#fff}
+
+/* Estructura */
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);align-items:start}
+.sidebar{position:sticky;top:env(safe-area-inset-top,0px);max-height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--line);padding:26px 18px;min-height:100%}
+.sidebar h2{font-size:1.7rem;margin:6px 0 12px}
+.side-label{font-size:.82rem;font-weight:800;color:var(--blue-700)}
+.progress{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin:10px 0 6px}
+.progress>div{height:100%;width:0;background:var(--accent);transition:width .25s}
+#ptxt{color:var(--muted);font-size:.88rem}
+.side-nav{display:grid;gap:6px;margin-top:20px}
+.side-link{display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:center;width:100%;padding:9px 10px;border:0;border-radius:13px;background:transparent;text-align:left;color:var(--muted)}
+.side-link:hover{background:var(--blue-050)}
+.side-link.active{background:var(--blue-100);color:var(--ink)}
+.side-num{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);font-weight:900;color:var(--blue-700)}
+.side-link.active .side-num{background:var(--navy-900);color:#fff}
+.side-link.done .side-num::after{content:"";}
+.side-link strong{display:block;font-size:.97rem;color:var(--ink)}
+.side-link small{display:block;font-size:.8rem}
+.side-link.done strong::after{content:" ✓";color:var(--ok-line)}
+main{padding:28px clamp(16px,3vw,40px) 60px;min-width:0}
+.view{display:none}
+.view.active{display:block}
+
+/* Componentes */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(20px,3vw,38px);margin-bottom:22px}
+.kicker{display:inline-block;font-size:.85rem;font-weight:800;color:var(--blue-700);margin-bottom:8px}
+.lead{font-size:1.12rem;color:var(--ink);max-width:70ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.card h3{font-size:1.1rem;margin-bottom:.4em}
+.card.tint{background:var(--surface-2)}
+.note{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:14px;padding:14px 16px;margin:16px 0}
+.note strong{color:var(--ink)}
+.warn{background:var(--bad-bg);border:1px solid color-mix(in srgb,var(--bad-line) 40%,transparent);border-radius:14px;padding:14px 16px;margin:16px 0}
+.good{background:var(--ok-bg);border:1px solid color-mix(in srgb,var(--ok-line) 40%,transparent);border-radius:14px;padding:14px 16px;margin:16px 0}
+.case{border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--surface-2);margin:16px 0}
+.case .case-tag{display:inline-block;font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:999px;background:var(--blue-100);color:var(--blue-700);margin-bottom:8px}
+.case .case-tag.law{background:#efe6f6;color:#6b3f8f}
+.case .case-tag.acc{background:#e5f2ea;color:#2f6d4c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .case .case-tag.law{background:#3a2a48;color:#d7b8ef} :root:not([data-theme="light"]) .case .case-tag.acc{background:#1f3a2c;color:#9fd8b8}}
+:root[data-theme="dark"] .case .case-tag.law{background:#3a2a48;color:#d7b8ef}
+:root[data-theme="dark"] .case .case-tag.acc{background:#1f3a2c;color:#9fd8b8}
+.steps{counter-reset:s;display:grid;gap:12px;margin:14px 0;padding:0;list-style:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
+.steps li::before{content:counter(s);width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--navy-900);color:#fff;font-weight:900}
+.steps li strong{display:block}
+details.acc{border:1px solid var(--line);border-radius:14px;background:var(--surface);margin:10px 0}
+details.acc summary{cursor:pointer;padding:13px 16px;font-weight:800;color:var(--navy-800);list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"+";font-size:1.2rem;line-height:1}
+details.acc[open] summary::after{content:"–"}
+details.acc .acc-body{padding:0 16px 14px}
+.quote{border-left:4px solid var(--blue-600);background:var(--surface-2);padding:12px 16px;border-radius:0 12px 12px 0;margin:10px 0;font-style:normal}
+.quote b{color:var(--blue-700)}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:11px;padding:10px 16px;font-weight:800;border:1.5px solid transparent}
+.btn.primary{background:#164563;color:#fff}
+.btn.secondary{background:var(--surface);color:var(--navy-800);border-color:var(--blue-700)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;margin-top:18px}
+.chip-btn{border:1px solid var(--line);background:var(--surface);color:var(--navy-800);border-radius:999px;padding:7px 13px;font-weight:700;font-size:.9rem;margin:4px 6px 4px 0}
+.chip-btn:hover{border-color:var(--blue-600)}
+
+/* Tablas */
+.table-wrap{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.93rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--blue-100);color:var(--ink);font-weight:800}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:800;background:var(--surface-2)}
+.apa-title{margin:16px 0 2px;font-weight:800}
+.apa-sub{margin:0 0 6px;font-style:italic}
+.apa-note{font-size:.88rem;color:var(--muted);margin-top:4px}
+.apa table{border:0;min-width:520px}
+.apa th,.apa td{border:0;border-bottom:1px solid var(--line)}
+.apa thead th{border-top:2px solid var(--ink);border-bottom:1.5px solid var(--ink);background:transparent}
+.apa tr.total td{border-top:1.5px solid var(--ink);border-bottom:2px solid var(--ink);background:transparent}
+
+/* Ejercicios */
+.ex{border:1.5px dashed var(--blue-600);border-radius:18px;padding:18px;margin:18px 0;background:var(--blue-050)}
+.ex-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+.ex-head .badge{background:#164563;color:#fff;font-size:.78rem;font-weight:800;padding:3px 10px;border-radius:999px}
+.ex-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ex-row:last-of-type{border-bottom:0}
+.ex-row.two{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,.8fr)}
+select,input[type=text],textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+textarea{min-height:84px;resize:vertical}
+select.ok,.opt.ok{border-color:var(--ok-line);background:var(--ok-bg)}
+select.bad,.opt.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.why{grid-column:1/-1;font-size:.9rem;color:var(--muted);display:none}
+.ex.checked .why{display:block}
+.fb{margin-top:12px;padding:12px 14px;border-radius:12px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--ok-bg);border-left:4px solid var(--ok-line)}
+.fb.bad{background:var(--bad-bg);border-left:4px solid var(--bad-line)}
+.opts{display:grid;gap:8px;margin:10px 0}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 14px}
+.opt:hover{border-color:var(--blue-600)}
+.checks{display:grid;gap:8px;margin:10px 0}
+.checks label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.checks label.ok{border-color:var(--ok-line);background:var(--ok-bg)}
+.checks label.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.checks input{margin-top:5px;accent-color:#164563}
+.clave{display:none;margin-top:12px;border:1.5px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:12px 14px}
+.clave::before{content:"Clave docente";display:block;font-weight:900;font-size:.85rem;color:var(--ink);margin-bottom:4px}
+body.teacher .clave{display:block}
+
+/* Calculadora */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat span{display:block;font-size:.82rem;color:var(--muted)}
+.stat b{font-size:1.3rem;font-variant-numeric:tabular-nums}
+.dotplot{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px}
+
+/* Quiz */
+.quiz-top{display:flex;justify-content:space-between;color:var(--muted);font-weight:700;font-size:.9rem}
+.quiz-q{font-size:1.1rem;font-weight:700;margin:10px 0}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(8,25,38,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:500}
+.modal-bg.show{display:flex}
+.modal{background:var(--surface);color:var(--ink);border-radius:20px;max-width:640px;width:100%;max-height:85vh;overflow:auto;padding:26px;box-shadow:var(--shadow)}
+.modal-close{float:right;border:0;background:var(--surface-2);border-radius:10px;width:36px;height:36px;font-size:1.2rem}
+.ficha-preview{white-space:pre-wrap;background:var(--surface-2);border-radius:12px;padding:14px;font-size:.9rem;border:1px solid var(--line)}
+
+/* Inicio */
+.hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.8fr);gap:20px}
+.hero h1{margin-bottom:.35em}
+.qbox{display:grid;gap:12px;align-content:start}
+.qbox .card b{display:block;color:var(--blue-700);font-size:.9rem}
+
+@media (max-width:1100px){
+  .chain{grid-template-columns:1fr}
+  .chain-note{border-left:0;padding-left:0}
+}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);padding:14px}
+  .sidebar h2,.sidebar .side-label{display:none}
+  .side-nav{display:flex;overflow-x:auto;gap:6px;margin-top:8px;padding-bottom:4px}
+  .side-link{min-width:200px}
+  .grid2,.grid3,.hero{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ex-row,.ex-row.two{grid-template-columns:1fr}
+  .chain-steps{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .chain-step:nth-child(3)::after{display:none}
+  .brand-mark{width:44px;height:44px;border-radius:12px;font-size:.85rem}
+  .brand small{display:none}
+  .pill{padding:7px 12px;font-size:.84rem}
+  .chain{padding:12px 16px;gap:10px}
+  .chain-step{font-size:.72rem;min-height:38px}
+  .chain-note{font-size:.84rem}
+}
+
+.profes{margin-top:16px;color:var(--muted);font-size:.95rem}
+.site-footer{margin-top:30px;padding:20px 4px 4px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+.site-footer p{margin:0 0 8px}
+.site-footer a,.modal a{color:var(--blue-700)}
+.lic{display:flex;gap:12px;align-items:center}
+.cc{flex-shrink:0;border:2px solid currentColor;border-radius:8px;padding:2px 8px;font-weight:900;font-size:.8rem;text-transform:lowercase}
+.ficha-table-wrap{overflow-x:auto;margin:8px 0}
+.ficha-table{min-width:760px}
+.ficha-table td{padding:4px}
+.ficha-table td.n{text-align:center;font-weight:800;width:44px;vertical-align:middle}
+.ficha-table textarea{min-height:96px;border:0;border-radius:6px;background:var(--surface-2)}
+.ficha-preview{white-space:normal}
+.ficha-preview table{min-width:640px;color:#000;background:#fff}
+:fullscreen{overflow-y:auto;background:var(--paper)}
+@media (max-width:700px){
+  .ficha-table{min-width:0}
+  .ficha-table thead{display:none}
+  .ficha-table,.ficha-table tbody,.ficha-table tr,.ficha-table td{display:block;width:100%}
+  .ficha-table tr{border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:12px;background:var(--surface)}
+  .ficha-table td{border:0;padding:4px 0}
+  .ficha-table td::before{content:attr(data-label);display:block;font-weight:800;font-size:.85rem;margin-bottom:3px}
+  .ficha-table td.n{text-align:left;width:auto}
+  .ficha-table td.n::before{content:"N.º";display:inline;margin-right:6px}
+  .ficha-table textarea{min-height:70px}
+  .tools{width:100%}
+  .lic{align-items:flex-start}
+}
+@media (max-width:420px){
+  .tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .tools .pill{padding:7px 6px;font-size:.74rem;border-radius:12px;text-align:center;line-height:1.2}
+  .topbar{padding:12px}
+  main{padding:18px 12px 40px}
+  .panel{padding:18px 16px;border-radius:18px}
+  .chain-steps{gap:14px}
+  .stats{grid-template-columns:1fr 1fr}
+  .btn{padding:9px 13px}
+  .btn-row .btn{flex:1 1 auto;justify-content:center}
+}
+
+.anno-fig{margin:10px 0 0}
+.anno-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:10px}
+.anno-svg{display:block;width:100%;min-width:720px;height:auto}
+.anno{fill:var(--anno)}
+.anno-line{stroke:var(--anno);stroke-width:1.6}
+.anno-head{fill:var(--anno)}
+.anno-fig figcaption{font-size:.85rem;color:var(--muted);margin-top:6px}
+@media (min-width:901px){.anno-fig figcaption{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">SII</div>
+    <div><strong>Seminario II · Análisis de la información</strong><small>Universidad Florencio del Castillo</small></div>
+  </div>
+  <div class="tools">
+    <button class="pill fs-btn" aria-pressed="false">Pantalla completa</button>
+    <button class="pill" id="creditsBtn">Créditos y uso de IA</button>
+    <button class="pill" id="teacherBtn">Acceso docente</button>
+  </div>
+</header>
+
+<div class="chain" aria-label="Cadena del análisis">
+  <div class="chain-steps">
+    <div class="chain-step">Datos recogidos</div>
+    <div class="chain-step">Organizar</div>
+    <div class="chain-step">Describir</div>
+    <div class="chain-step">Interpretar</div>
+    <div class="chain-step">Contrastar con la teoría</div>
+    <div class="chain-step">Presentar</div>
+  </div>
+  <div class="chain-note"><strong>Recuerde:</strong> el análisis se organiza desde los objetivos, no desde el orden de las preguntas. Las conclusiones no forman parte de este capítulo.</div>
+</div>
+
+<div class="layout">
+<aside class="sidebar">
+  <span class="side-label">Ruta de aprendizaje</span>
+  <h2>Del dato al conocimiento</h2>
+  <div class="progress"><div id="pbar"></div></div>
+  <div id="ptxt">0 de 10 momentos explorados</div>
+  <nav class="side-nav" id="sideNav"></nav>
+</aside>
+
+<main>
+
+<!-- ===================== INICIO ===================== -->
+<section class="view" id="v0">
+  <div class="hero">
+    <div class="panel">
+      <span class="kicker">Clase virtual de Seminario II</span>
+      <h1>¿Qué significan los datos que ya recogí?</h1>
+      <p class="lead">Al terminar la recolección, usted tiene transcripciones, cuestionarios llenos, fichas de expedientes o bases de datos. Todavía no tiene resultados. En esta sesión aprenderá a convertir ese material en evidencia que responde a sus objetivos de investigación, tanto en estudios cualitativos como cuantitativos y mixtos.</p>
+      <p>Los ejemplos provienen de dos campos que usan intensamente la investigación aplicada en Costa Rica: el <b>derecho</b> (procesos judiciales, expedientes, entrevistas a personas juzgadoras) y la <b>contaduría</b> (encuestas a personas contadoras, registros contables, cumplimiento tributario). Todos los casos y datos son ficticios y tienen fines didácticos.</p>
+      <div class="btn-row" style="justify-content:flex-start">
+        <button class="btn primary" data-go="1">Comenzar la sesión</button>
+        <button class="btn secondary" data-go="10">Ir a la ficha de aplicación</button>
+        <button class="btn secondary fs-btn" aria-pressed="false">Ver en pantalla completa</button>
+      </div>
+      <p class="fb bad" id="fsMsg">Este navegador no permitió activar la pantalla completa (ocurre en algunos teléfonos, como el iPhone). Puede abrir el sitio en una pestaña nueva y usar la opción «Agregar a pantalla de inicio» o girar el dispositivo para aprovechar todo el espacio.</p>
+      <p class="profes"><b>Personas docentes:</b> Adrián Murillo-González, Iria Briceño-Álvarez y Ginnette Jiménez G.</p>
+    </div>
+    <div class="qbox">
+      <div class="card"><b>Pregunta guía</b>¿Qué dicen mis datos sobre cada uno de mis objetivos?</div>
+      <div class="card"><b>Decisión central</b>¿Qué técnica de análisis corresponde a cada categoría o variable, según el instrumento que apliqué?</div>
+      <div class="card"><b>Coherencia</b>¿Mi análisis interpreta, o solo copia respuestas y repite cifras?</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h2>Al finalizar podrá</h2>
+    <div class="grid3">
+      <div class="card tint"><h3>Planificar</h3><p>Construir una matriz de congruencia que vincule cada objetivo específico con su categoría o variable, el instrumento, los ítems y la técnica de análisis.</p></div>
+      <div class="card tint"><h3>Analizar</h3><p>Aplicar los pasos del análisis cualitativo (codificación y categorización) y del cuantitativo (limpieza, estadística descriptiva y relaciones entre variables).</p></div>
+      <div class="card tint"><h3>Comunicar</h3><p>Presentar tablas, figuras y textos interpretativos que cumplan las normas de presentación y redactar el capítulo de resultados por objetivos.</p></div>
+    </div>
+    <div class="note"><strong>Cómo usar este sitio.</strong> Recorra los momentos en orden. Cada uno combina teoría, un caso aplicado y una práctica con retroalimentación inmediata. Su avance se guarda en este dispositivo. Al final, use la ficha de aplicación para trasladar lo aprendido a su propio anteproyecto.</div>
+  </div>
+</section>
+
+<!-- ===================== 1. QUÉ ES ANALIZAR ===================== -->
+<section class="view" id="v1">
+  <div class="panel">
+    <span class="kicker">Momento 1</span>
+    <h2>¿A qué nos referimos con análisis de la información?</h2>
+    <div class="prose">
+      <p>El análisis de la información es el proceso mediante el cual la persona investigadora <b>organiza, interpreta y explica</b> los datos obtenidos, con el fin de responder a los objetivos y a las preguntas de investigación.</p>
+      <p>Analizar no consiste en presentar cifras o pegar citas textuales. Consiste en <b>dar sentido</b> a la información para comprender el fenómeno estudiado. Por eso su alcance es fundamentalmente interpretativo: busca explicar las relaciones, los significados y los patrones que emergen del material empírico, más allá de la descripción superficial de resultados.</p>
+      <p>El análisis es el <b>puente entre los datos y el conocimiento producido</b>. Transforma la información recolectada en evidencia significativa que responde a las preguntas de investigación y que, más adelante, sustentará las conclusiones del estudio.</p>
+    </div>
+    <h3 style="margin-top:22px">Fases generales del análisis</h3>
+    <ol class="steps">
+      <li><div><strong>Organización de los datos</strong>Codificar, clasificar, limpiar o transcribir. Es el trabajo previo que permite leer los datos con orden.</div></li>
+      <li><div><strong>Descripción de los resultados</strong>Qué se encontró en los datos recopilados: frecuencias, tendencias, temas recurrentes.</div></li>
+      <li><div><strong>Interpretación</strong>Qué significan esos hallazgos para la investigación y cómo los explica la persona investigadora.</div></li>
+      <li><div><strong>Contraste con el marco teórico</strong>Coincidencias, diferencias y aportes respecto de lo que plantean otros autores.</div></li>
+    </ol>
+    <div class="warn"><strong>Nota importante:</strong> las conclusiones no son parte del análisis y no deben aparecer en el capítulo de resultados. El análisis interpreta lo encontrado para cada objetivo; las conclusiones sintetizan el estudio completo en otro capítulo.</div>
+  </div>
+
+  <div class="panel">
+    <h3>Las cuatro fases aplicadas a un caso</h3>
+    <div class="case">
+      <span class="case-tag acc">Contaduría · caso ficticio</span>
+      <p><b>Objetivo específico:</b> determinar la frecuencia con que personas contadoras que atienden micro y pequeñas empresas de Cartago utilizan software contable para preparar declaraciones tributarias.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Fase</th><th>Qué hace la persona investigadora</th></tr></thead>
+        <tbody>
+          <tr><td>Organización</td><td>Exporta las 115 respuestas del cuestionario a una hoja de cálculo, elimina dos registros duplicados y corrige un error de digitación (una persona con «200» años de experiencia).</td></tr>
+          <tr><td>Descripción</td><td>El 66,09 % de las personas encuestadas utiliza software contable de forma habitual; el uso es mayor en despachos con más de cinco personas.</td></tr>
+          <tr><td>Interpretación</td><td>La adopción tecnológica parece depender de la escala del despacho: quienes trabajan solos asumen individualmente el costo de licencias y capacitación.</td></tr>
+          <tr><td>Contraste teórico</td><td>Este patrón coincide con estudios que vinculan la digitalización contable con los recursos disponibles de la organización (Autor, año), pero difiere de quienes atribuyen la baja adopción principalmente a la resistencia al cambio (Autor, año).</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ex" data-type="select">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Identifique la fase a la que corresponde cada enunciado</strong></div>
+      <p class="muted">Caso de derecho (ficticio): entrevistas a personas juzgadoras de familia sobre la participación de personas adolescentes en procesos judiciales.</p>
+      <div class="ex-row"><p>«Cuatro de las seis personas juzgadoras mencionaron la falta de salas adecuadas para escuchar a la persona adolescente.»</p>
+        <select data-ans="desc"><option value="">Seleccione…</option><option value="org">Organización</option><option value="desc">Descripción</option><option value="int">Interpretación</option><option value="teo">Contraste teórico</option><option value="con">Conclusión (no va aquí)</option></select>
+        <p class="why">Informa qué se encontró y con qué frecuencia, sin explicar todavía su significado.</p></div>
+      <div class="ex-row"><p>«Se transcribieron literalmente las seis entrevistas y se asignó un código a cada persona participante (J1 a J6).»</p>
+        <select data-ans="org"><option value="">Seleccione…</option><option value="org">Organización</option><option value="desc">Descripción</option><option value="int">Interpretación</option><option value="teo">Contraste teórico</option><option value="con">Conclusión (no va aquí)</option></select>
+        <p class="why">Transcribir y codificar a las personas participantes prepara el material para su lectura.</p></div>
+      <div class="ex-row"><p>«La reiterada mención de la infraestructura sugiere que el derecho a ser escuchado depende, en la práctica, de condiciones materiales que la norma no garantiza por sí sola.»</p>
+        <select data-ans="int"><option value="">Seleccione…</option><option value="org">Organización</option><option value="desc">Descripción</option><option value="int">Interpretación</option><option value="teo">Contraste teórico</option><option value="con">Conclusión (no va aquí)</option></select>
+        <p class="why">Explica qué significa el hallazgo: va más allá de contar menciones.</p></div>
+      <div class="ex-row"><p>«Este hallazgo coincide con lo planteado por (Autor, año), quien advierte que la participación infantil y adolescente se debilita cuando los despachos carecen de recursos.»</p>
+        <select data-ans="teo"><option value="">Seleccione…</option><option value="org">Organización</option><option value="desc">Descripción</option><option value="int">Interpretación</option><option value="teo">Contraste teórico</option><option value="con">Conclusión (no va aquí)</option></select>
+        <p class="why">Relaciona el hallazgo con lo que dice la literatura.</p></div>
+      <div class="ex-row"><p>«En síntesis, la investigación demuestra que el Código Procesal de Familia debe reformarse.»</p>
+        <select data-ans="con"><option value="">Seleccione…</option><option value="org">Organización</option><option value="desc">Descripción</option><option value="int">Interpretación</option><option value="teo">Contraste teórico</option><option value="con">Conclusión (no va aquí)</option></select>
+        <p class="why">Es una conclusión general (y además una recomendación). No pertenece al capítulo de análisis.</p></div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="0">Volver al inicio</button><button class="btn primary" data-go="2">Matriz de congruencia</button></div>
+</section>
+
+<!-- ===================== 2. MATRIZ ===================== -->
+<section class="view" id="v2">
+  <div class="panel">
+    <span class="kicker">Momento 2</span>
+    <h2>La matriz de congruencia del análisis</h2>
+    <div class="prose">
+      <p>La matriz de congruencia es una tabla que muestra cómo se conectan los elementos de la investigación, desde cada objetivo específico hasta la técnica con la que se analizarán los datos. Permite <b>ordenar los datos por objetivos</b> y comprobar que cada objetivo tiene información que lo responda.</p>
+      <p>En etapas anteriores del seminario usted construyó la matriz de operacionalización para diseñar su instrumento. Ahora recorre esa misma cadena en sentido inverso: parte del instrumento ya aplicado y pregunta qué ítems responden a cada objetivo y cómo los analizará.</p>
+    </div>
+    <div class="grid3">
+      <div class="card tint"><h3>Para qué sirve</h3><p>Organizar el análisis de los datos ya recogidos, vinculando cada ítem con el objetivo al que responde.</p></div>
+      <div class="card tint"><h3>Cómo se lee</h3><p>De izquierda a derecha. Cada fila corresponde a un objetivo y cada columna, a un paso de la cadena.</p></div>
+      <div class="card tint"><h3>Qué revela</h3><p>Objetivos sin ítems que los respondan, ítems que no responden a ningún objetivo y técnicas incompatibles con el nivel de medición.</p></div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th></th><th>1. Objetivo específico</th><th>2. Categoría o variable</th><th>3. Instrumento aplicado</th><th>4. Ítems</th><th>5. Técnica de análisis</th></tr></thead>
+      <tbody>
+        <tr><td><b>Pregunta guía</b></td><td>¿Qué quiero lograr?</td><td>¿Qué observo o mido?</td><td>¿Con qué recogí la información?</td><td>¿Qué ítems responden a este objetivo?</td><td>¿Cómo voy a analizarlo?</td></tr>
+        <tr><td><b>Cualitativo (derecho)</b></td><td>Analizar las condiciones que, según personas juzgadoras de familia, favorecen o limitan la participación de personas adolescentes en los procesos que les afectan.</td><td>Categoría «Participación procesal de personas adolescentes» (subcategorías: condiciones institucionales, relacionales e interpretativas)</td><td>Guía de entrevista semiestructurada</td><td>Preguntas 3 a 7 de la guía</td><td>Codificación y análisis temático</td></tr>
+        <tr><td><b>Cuantitativo (contaduría)</b></td><td>Determinar la relación entre el tamaño del despacho y el uso de software contable entre personas contadoras que atienden mipymes en Cartago.</td><td>Variables «Tamaño del despacho» (ordinal) y «Uso de software contable» (nominal)</td><td>Cuestionario autoadministrado</td><td>Ítems 2 y 9</td><td>Tabla de contingencia, porcentajes por fila y prueba de chi-cuadrado</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><strong>Regla de oro:</strong> el análisis se organiza desde los objetivos, no desde el orden de las preguntas del instrumento. Cada objetivo específico será un apartado del capítulo de resultados.</div>
+    <details class="acc"><summary>¿Y si mi estudio usa fuentes documentales?</summary><div class="acc-body">
+      <p>La cadena es la misma. El «instrumento aplicado» es la ficha o matriz de registro documental, y los «ítems» son sus campos. Por ejemplo, en un estudio sobre resoluciones judiciales, los campos «fecha de presentación» y «fecha de resolución» permiten calcular la duración del proceso, y el campo «fundamento normativo invocado» puede codificarse cualitativamente.</p>
+    </div></details>
+  </div>
+
+  <div class="panel">
+    <div class="ex" data-type="select">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Complete la fila de la matriz</strong></div>
+      <div class="case" style="margin-top:4px">
+        <span class="case-tag law">Derecho · estudio documental ficticio</span>
+        <p><b>Objetivo específico:</b> describir la duración de los procesos de pensión alimentaria resueltos en un juzgado de pensiones durante 2025.</p>
+        <p class="muted" style="margin:0">Se revisaron expedientes anonimizados, con autorización institucional, mediante una ficha de registro documental.</p>
+      </div>
+      <div class="ex-row"><p><b>2. Variable</b></p>
+        <select data-ans="b"><option value="">Seleccione…</option><option value="a">Satisfacción de las personas usuarias con el juzgado</option><option value="b">Duración del proceso, en días naturales (razón)</option><option value="c">Tipo de pensión solicitada (nominal)</option></select>
+        <p class="why">El objetivo habla de duración; la variable debe medirla directamente y su nivel de medición (razón) permite calcular promedios.</p></div>
+      <div class="ex-row"><p><b>3. Instrumento</b></p>
+        <select data-ans="c"><option value="">Seleccione…</option><option value="a">Cuestionario a personas usuarias</option><option value="b">Guía de entrevista a personas juzgadoras</option><option value="c">Ficha de registro documental de expedientes</option></select>
+        <p class="why">La fuente son expedientes, no personas; el instrumento es la ficha documental.</p></div>
+      <div class="ex-row"><p><b>4. Ítems</b></p>
+        <select data-ans="a"><option value="">Seleccione…</option><option value="a">Campos «fecha de presentación» y «fecha de resolución»</option><option value="b">Campo «nombre de la persona demandada»</option><option value="c">Todos los campos de la ficha</option></select>
+        <p class="why">La duración se calcula con la diferencia entre ambas fechas. El nombre es un dato identificador que, además, no debe registrarse.</p></div>
+      <div class="ex-row"><p><b>5. Técnica de análisis</b></p>
+        <select data-ans="b"><option value="">Seleccione…</option><option value="a">Codificación temática de las fechas</option><option value="b">Media, mediana, desviación estándar y diagrama de caja</option><option value="c">Frecuencia de la moda únicamente</option></select>
+        <p class="why">Una variable de razón se describe con tendencia central y dispersión; el diagrama de caja ayuda a detectar procesos extraordinariamente largos.</p></div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="1">Momento anterior</button><button class="btn primary" data-go="3">Análisis cualitativo</button></div>
+</section>
+
+<!-- ===================== 3. CUALITATIVO ===================== -->
+<section class="view" id="v3">
+  <div class="panel">
+    <span class="kicker">Momento 3</span>
+    <h2>Análisis cualitativo</h2>
+    <div class="prose">
+      <p>El análisis cualitativo es el proceso mediante el cual se interpretan <b>datos no numéricos</b>: textos, entrevistas, observaciones, videos, documentos, entre otros. Busca comprender fenómenos sociales en su contexto, a través de las experiencias y percepciones de las personas, y se enfoca en el <b>significado, los patrones y las relaciones</b> presentes en los datos.</p>
+    </div>
+    <div class="grid2">
+      <div class="card tint"><h3>Por qué es importante</h3><p>Permite comprender experiencias, opiniones y significados; se centra en la interpretación más que en la medición numérica.</p></div>
+      <div class="card tint"><h3>Dónde se utiliza</h3><p>En educación, ciencias sociales, salud, derecho y ciencias de la información. Complementa el análisis cuantitativo para obtener una visión más integral.</p></div>
+    </div>
+    <div class="case">
+      <span class="case-tag law">Caso de trabajo · derecho (ficticio)</span>
+      <p><b>Pregunta:</b> ¿cómo valoran personas juzgadoras de familia la participación de personas adolescentes en los procesos que les afectan, a partir del Código Procesal de Familia?</p>
+      <p><b>Participantes:</b> seis personas juzgadoras de familia (J1 a J6), seleccionadas de forma intencional por su experiencia en audiencias con personas adolescentes.</p>
+      <p style="margin:0"><b>Técnica:</b> entrevista semiestructurada, grabada con consentimiento informado.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Los cinco pasos del análisis cualitativo</h3>
+    <details class="acc" open><summary>Paso 1. Organización de los datos</summary><div class="acc-body">
+      <p><b>Transcripción:</b> poner por escrito los datos recopilados con los diferentes instrumentos. En entrevistas se recomienda la transcripción literal, que conserva las palabras exactas de la persona participante.</p>
+      <p><b>Revisión y limpieza:</b> editar la información recopilada, eliminando datos irrelevantes o repetidos de acuerdo con los objetivos. En el caso, se eliminan saludos y conversaciones sobre la logística de la entrevista, y se sustituyen nombres de partes procesales por seudónimos.</p>
+      <p><b>Estructuración:</b> crear un archivo por entrevista, observación o grupo focal, con un encabezado que indique quién entrevistó, a quién (con su código), la fecha y el registro del consentimiento.</p>
+      <p><b>Herramientas:</b> ATLAS.ti, Excel o tablas en un procesador de texto. La herramienta organiza; no interpreta por usted.</p>
+    </div></details>
+    <details class="acc"><summary>Paso 2. Lectura y familiarización</summary><div class="acc-body">
+      <p>Lea con detalle cada transcripción completa antes de codificar. Identifique ideas generales y fragmentos que podría citar en el análisis. Tome notas de primeras impresiones y subraye frases clave. Marque la información de acuerdo con los temas clave de cada objetivo.</p>
+      <p><b>Análisis por tema:</b> se lee cada transcripción y se delimitan los fragmentos que se refieren a cada temática. Al margen se anotan códigos que indican a qué sección pertenecen. Después se reúnen todos los fragmentos de una misma sección (de todas las entrevistas) y, con ese material reunido, se reclasifica e interpreta, abriendo subsecciones si es pertinente.</p>
+    </div></details>
+    <details class="acc"><summary>Paso 3. Codificación y categorización</summary><div class="acc-body">
+      <p><b>Codificar</b> es asignar etiquetas breves a segmentos de texto con temas relevantes. <b>Categorizar</b> es agrupar códigos afines en temas más amplios. Las categorías pueden venir del marco teórico (deductivas) o surgir de los datos (emergentes); ambas son legítimas si se documenta su origen.</p>
+      <p>Una buena categoría representa el contenido del fragmento sin alejarse de lo que la persona realmente expresó.</p>
+    </div></details>
+    <details class="acc"><summary>Paso 4. Interpretación de resultados</summary><div class="acc-body">
+      <p>Conecte los hallazgos con el contexto y con la literatura previa. Explique qué significan los patrones encontrados. Responda la pregunta de investigación y los objetivos planteados, y menciónelos de forma explícita para que la persona lectora se ubique.</p>
+    </div></details>
+    <details class="acc"><summary>Paso 5. Presentación de los hallazgos</summary><div class="acc-body">
+      <p>Describa los resultados de forma narrativa. Incluya citas textuales de las personas participantes para darles voz. Use esquemas, infografías u otros recursos para mostrar relaciones entre categorías, y agréguelos al índice de figuras.</p>
+    </div></details>
+  </div>
+
+  <div class="panel">
+    <h3>Del fragmento al código</h3>
+    <p class="prose">Estos son fragmentos de las transcripciones del caso. Observe cómo se segmenta cada idea antes de asignarle un código.</p>
+    <div class="quote"><b>J1:</b> «La norma le da voz al adolescente, y eso es un avance enorme. Pero muchas veces llega a la audiencia acompañado por el mismo progenitor con quien tiene el conflicto, y uno nota que no habla con libertad.»</div>
+    <div class="quote"><b>J2:</b> «Con la carga de expedientes que tenemos, escuchar bien a una persona adolescente requiere una audiencia aparte y una sala adecuada, y eso no siempre existe.»</div>
+    <div class="quote"><b>J3:</b> «Depende mucho de cada juez. Yo lo escucho siempre que pueda formarse un criterio propio; otros colegas lo hacen solo si alguna de las partes lo pide.»</div>
+    <div class="quote"><b>J4:</b> «Cuando el equipo interdisciplinario prepara antes a la persona adolescente, la diferencia es clarísima: llega sabiendo qué se discute y qué puede pedir.»</div>
+
+    <div class="ex" data-type="select">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Asigne código y categoría a cada segmento</strong></div>
+      <div class="ex-row two"><p>«llega a la audiencia acompañado por el mismo progenitor con quien tiene el conflicto»</p>
+        <select data-ans="med"><option value="">Código…</option><option value="nor">Avance normativo</option><option value="med">Mediación del progenitor</option><option value="car">Carga de trabajo</option><option value="dis">Criterio judicial variable</option><option value="eqi">Preparación interdisciplinaria</option></select>
+        <select data-ans="lim"><option value="">Categoría…</option><option value="lim">Condiciones que limitan</option><option value="fav">Condiciones que favorecen</option></select>
+        <p class="why">El fragmento describe una condición relacional que inhibe a la persona adolescente: limita su participación.</p></div>
+      <div class="ex-row two"><p>«requiere una audiencia aparte y una sala adecuada, y eso no siempre existe»</p>
+        <select data-ans="car"><option value="">Código…</option><option value="nor">Avance normativo</option><option value="med">Mediación del progenitor</option><option value="car">Carga de trabajo</option><option value="dis">Criterio judicial variable</option><option value="eqi">Preparación interdisciplinaria</option></select>
+        <select data-ans="lim"><option value="">Categoría…</option><option value="lim">Condiciones que limitan</option><option value="fav">Condiciones que favorecen</option></select>
+        <p class="why">Es una condición institucional (tiempo, espacio y recursos) que restringe la escucha.</p></div>
+      <div class="ex-row two"><p>«otros colegas lo hacen solo si alguna de las partes lo pide»</p>
+        <select data-ans="dis"><option value="">Código…</option><option value="nor">Avance normativo</option><option value="med">Mediación del progenitor</option><option value="car">Carga de trabajo</option><option value="dis">Criterio judicial variable</option><option value="eqi">Preparación interdisciplinaria</option></select>
+        <select data-ans="lim"><option value="">Categoría…</option><option value="lim">Condiciones que limitan</option><option value="fav">Condiciones que favorecen</option></select>
+        <p class="why">Señala que la aplicación depende de la interpretación de cada persona juzgadora: una condición interpretativa que genera desigualdad.</p></div>
+      <div class="ex-row two"><p>«el equipo interdisciplinario prepara antes a la persona adolescente»</p>
+        <select data-ans="eqi"><option value="">Código…</option><option value="nor">Avance normativo</option><option value="med">Mediación del progenitor</option><option value="car">Carga de trabajo</option><option value="dis">Criterio judicial variable</option><option value="eqi">Preparación interdisciplinaria</option></select>
+        <select data-ans="fav"><option value="">Categoría…</option><option value="lim">Condiciones que limitan</option><option value="fav">Condiciones que favorecen</option></select>
+        <p class="why">La persona entrevistada asocia esta práctica con una participación mejor informada.</p></div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+      <div class="clave">La codificación propuesta es una lectura posible, no la única. Pida al grupo justificar cada código con las palabras exactas del fragmento. Si alguien propone «Avance normativo» para J1, es correcto para la primera oración, pero no para el segmento seleccionado: esto ilustra por qué hay que segmentar antes de codificar.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Matriz de análisis según códigos</h3>
+    <p class="prose">Una vez codificadas todas las entrevistas, se reúnen los fragmentos en una matriz: cada fila es una persona participante y cada columna, un código o subcategoría. Leída por columnas, la matriz muestra coincidencias y diferencias entre participantes.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Participante</th><th>Experiencia</th><th>Condiciones institucionales</th><th>Condiciones relacionales</th><th>Condiciones interpretativas</th></tr></thead>
+      <tbody>
+        <tr><td>J1</td><td>12 años</td><td>—</td><td>«llega acompañado por el mismo progenitor con quien tiene el conflicto»</td><td>«la norma le da voz al adolescente»</td></tr>
+        <tr><td>J2</td><td>6 años</td><td>«requiere una audiencia aparte y una sala adecuada»</td><td>—</td><td>—</td></tr>
+        <tr><td>J3</td><td>20 años</td><td>—</td><td>—</td><td>«depende mucho de cada juez»</td></tr>
+        <tr><td>J4</td><td>9 años</td><td>«el equipo interdisciplinario prepara antes»</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Las celdas vacías también informan: si nadie menciona una subcategoría prevista en el marco teórico, ese silencio merece una reflexión en el análisis.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Esto no es análisis, y esto sí lo es</h3>
+    <div class="grid2">
+      <div class="warn" style="margin:0">
+        <strong>Esto no es análisis</strong>
+        <p style="margin-top:8px">Una tabla de dos columnas con la pregunta de la guía y la respuesta completa de cada persona juzgadora.</p>
+        <div class="table-wrap"><table style="min-width:0">
+          <tr><th>Pregunta 4</th><td>¿Considera que el Código Procesal de Familia garantiza plenamente la participación de las personas adolescentes?</td></tr>
+          <tr><th>J1</th><td>No, no la garantiza plenamente. Si bien constituye un avance al reconocerles la posibilidad de ser escuchados, la intervención queda mediada por la representación de los progenitores…</td></tr>
+        </table></div>
+        <p>Se transcribe, pero no se organiza por objetivo, no se compara entre participantes ni se interpreta.</p>
+      </div>
+      <div class="good" style="margin:0">
+        <strong>Esto sí es análisis</strong>
+        <p style="margin-top:8px">«En relación con el segundo objetivo específico, las personas juzgadoras coinciden en reconocer la norma como un avance, pero identifican condiciones que limitan su efectividad. La más mencionada es de tipo institucional: la escucha adecuada exige audiencias separadas y salas apropiadas que no siempre existen (J2). A ello se suma una condición relacional, pues la persona adolescente suele llegar acompañada del progenitor con quien mantiene el conflicto, lo que, según J1, inhibe su expresión. Estos testimonios sugieren que el derecho a ser escuchado depende de condiciones materiales y relacionales que la norma no asegura por sí sola, tal como advierte (Autor, año).»</p>
+        <p>Nombra el objetivo, agrupa por categorías, compara participantes, cita con precisión, interpreta y contrasta con la literatura.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ex" data-type="mcq">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>¿Qué interpretación está mejor anclada en los fragmentos J1 a J4?</strong></div>
+      <div class="opts">
+        <button class="opt" data-ok="0" data-fb="Generaliza más allá de los datos: J1 valora la norma como un avance; nadie afirma que no se aplique.">Las personas juzgadoras consideran que el Código Procesal de Familia no se aplica en la práctica.</button>
+        <button class="opt" data-ok="1" data-fb="Correcto. Integra los cuatro fragmentos sin desbordar lo que las personas participantes dijeron: reconocen el avance normativo, señalan limitaciones institucionales, relacionales e interpretativas, y una práctica que favorece la participación.">La participación de las personas adolescentes se reconoce como un avance normativo, pero su efectividad depende de condiciones institucionales, relacionales y de criterio judicial; la preparación interdisciplinaria aparece como un factor que la favorece.</button>
+        <button class="opt" data-ok="0" data-fb="Es una recomendación, no una interpretación, y además no se desprende directamente de los fragmentos.">Es necesario contratar más personas juzgadoras de familia en todo el país.</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="2">Momento anterior</button><button class="btn primary" data-go="4">Análisis cuantitativo</button></div>
+</section>
+
+<!-- ===================== 4. CUANTITATIVO ===================== -->
+<section class="view" id="v4">
+  <div class="panel">
+    <span class="kicker">Momento 4</span>
+    <h2>Análisis cuantitativo</h2>
+    <div class="prose">
+      <p>El análisis cuantitativo se basa en <b>datos numéricos</b>, métodos estadísticos y procedimientos matemáticos para analizar fenómenos y relaciones entre variables. Su propósito es proporcionar resultados objetivos y verificables, permitir la generalización de los hallazgos (cuando la muestra lo permite) y facilitar la comparación entre poblaciones o contextos.</p>
+    </div>
+    <div class="grid3">
+      <div class="card tint"><h3>Datos</h3><p>Provienen de encuestas, experimentos, registros administrativos o bases de datos.</p></div>
+      <div class="card tint"><h3>Rigor</h3><p>Busca objetividad y replicabilidad: otra persona con los mismos datos y procedimientos debería obtener los mismos resultados.</p></div>
+      <div class="card tint"><h3>Alcance</h3><p>Permite establecer relaciones entre variables. Solo con muestras probabilísticas pueden generalizarse los resultados a la población.</p></div>
+    </div>
+    <div class="note"><strong>Advertencia:</strong> de nada sirve realizar correctamente todas las fases del proceso estadístico si al final la interpretación es errónea.</div>
+    <div class="case">
+      <span class="case-tag acc">Caso de trabajo · contaduría (ficticio)</span>
+      <p style="margin:0">Encuesta a 115 personas contadoras que atienden micro y pequeñas empresas en Cartago, sobre el uso de software contable, los años de experiencia, el tamaño del despacho y la satisfacción con sus herramientas (escala de 1 a 5).</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Paso 1. Organización y limpieza de los datos</h3>
+    <p class="prose">Antes de calcular cualquier estadística hay que revisar, organizar y limpiar la base de datos. Estructure los datos en formato de matriz: <b>cada fila es una persona encuestada y cada columna, una variable</b>. Luego verifique valores ausentes, valores atípicos o extremos y errores de digitación.</p>
+    <div class="ex" data-type="select">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Revise la base de datos: ¿qué haría con cada registro?</strong></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>ID</th><th class="num">Años de experiencia</th><th class="num">Clientes que atiende</th><th>Usa software</th><th class="num">Satisfacción (1–5)</th></tr></thead>
+        <tbody>
+          <tr><td>018</td><td class="num">7</td><td class="num">14</td><td>Sí</td><td class="num">4</td></tr>
+          <tr><td>019</td><td class="num">200</td><td class="num">9</td><td>Sí</td><td class="num">3</td></tr>
+          <tr><td>020</td><td class="num">11</td><td class="num">−3</td><td>No</td><td class="num">2</td></tr>
+          <tr><td>021</td><td class="num">4</td><td class="num">22</td><td>Sí</td><td class="num">7</td></tr>
+          <tr><td>022</td><td class="num">15</td><td class="num">31</td><td>Sí</td><td class="num"></td></tr>
+          <tr><td>018</td><td class="num">7</td><td class="num">14</td><td>Sí</td><td class="num">4</td></tr>
+        </tbody>
+      </table></div>
+      <div class="ex-row"><p>Registro 019 (200 años de experiencia)</p>
+        <select data-ans="ver"><option value="">Seleccione…</option><option value="ok">Conservar sin cambios</option><option value="ver">Verificar con el cuestionario original y corregir el error de digitación</option><option value="falt">Tratar como dato faltante</option><option value="dup">Eliminar por duplicado</option></select>
+        <p class="why">Es un valor imposible. Probablemente se digitó «20» o «2,0»; se verifica en el cuestionario original. Si no puede verificarse, se trata como faltante.</p></div>
+      <div class="ex-row"><p>Registro 020 (−3 clientes)</p>
+        <select data-ans="ver"><option value="">Seleccione…</option><option value="ok">Conservar sin cambios</option><option value="ver">Verificar con el cuestionario original y corregir el error de digitación</option><option value="falt">Tratar como dato faltante</option><option value="dup">Eliminar por duplicado</option></select>
+        <p class="why">Una cantidad de clientes no puede ser negativa, del mismo modo que un salario negativo indica un error.</p></div>
+      <div class="ex-row"><p>Registro 021 (satisfacción = 7)</p>
+        <select data-ans="ver"><option value="">Seleccione…</option><option value="ok">Conservar sin cambios</option><option value="ver">Verificar con el cuestionario original y corregir el error de digitación</option><option value="falt">Tratar como dato faltante</option><option value="dup">Eliminar por duplicado</option></select>
+        <p class="why">El valor está fuera del rango de la escala (1 a 5).</p></div>
+      <div class="ex-row"><p>Registro 022 (satisfacción vacía)</p>
+        <select data-ans="falt"><option value="">Seleccione…</option><option value="ok">Conservar sin cambios</option><option value="ver">Verificar con el cuestionario original y corregir el error de digitación</option><option value="falt">Tratar como dato faltante</option><option value="dup">Eliminar por duplicado</option></select>
+        <p class="why">Si el cuestionario original también está en blanco, se registra como faltante y se informa cuántos faltantes tiene cada variable. No se inventa un valor.</p></div>
+      <div class="ex-row"><p>Segundo registro 018</p>
+        <select data-ans="dup"><option value="">Seleccione…</option><option value="ok">Conservar sin cambios</option><option value="ver">Verificar con el cuestionario original y corregir el error de digitación</option><option value="falt">Tratar como dato faltante</option><option value="dup">Eliminar por duplicado</option></select>
+        <p class="why">Mismo identificador y mismas respuestas: es un duplicado. Contarlo dos veces infla los resultados.</p></div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Paso 2. Análisis descriptivo</h3>
+    <p class="prose">El análisis descriptivo ofrece un panorama general de los datos mediante medidas de tendencia central, medidas de dispersión y visualizaciones.</p>
+    <div class="grid2">
+      <div class="card tint"><h3>Tendencia central</h3>
+        <p><b>Media (promedio):</b> suma de todos los valores dividida entre la cantidad de observaciones. Es sensible a valores extremos.</p>
+        <p><b>Mediana:</b> valor central cuando los datos están ordenados. Es robusta ante valores extremos.</p>
+        <p style="margin:0"><b>Moda:</b> valor que más se repite. Es la única medida válida para variables nominales.</p></div>
+      <div class="card tint"><h3>Dispersión y distribución</h3>
+        <p><b>Rango:</b> diferencia entre el valor máximo y el mínimo.</p>
+        <p><b>Varianza y desviación estándar:</b> miden cuánto se alejan los datos de la media.</p>
+        <p style="margin:0"><b>Histogramas y diagramas de caja:</b> muestran la forma de la distribución y permiten detectar valores atípicos.</p></div>
+    </div>
+
+    <div class="ex" id="calc">
+      <div class="ex-head"><span class="badge">Laboratorio</span><strong>Calcule y compare la media y la mediana</strong></div>
+      <p>Horas semanales que 12 personas contadoras dedican a conciliaciones bancarias. Edite los valores (separados por espacios o punto y coma) y observe qué ocurre cuando cambia el valor extremo de 28 horas.</p>
+      <textarea id="calcInput" aria-label="Valores">4 5 5 6 6 6 7 8 8 9 10 28</textarea>
+      <div class="btn-row" style="justify-content:flex-start"><button class="btn primary" id="calcBtn">Calcular</button><button class="btn secondary" id="calcReset">Restablecer datos</button></div>
+      <div class="stats" id="calcOut"></div>
+      <div class="dotplot" id="dotplot" aria-label="Diagrama de puntos"></div>
+      <div class="fb show ok" id="calcMsg"></div>
+    </div>
+
+    <div class="ex" data-type="select">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Elija la medida adecuada según el nivel de medición</strong></div>
+      <div class="ex-row"><p>Tipo de software contable que utiliza (nominal)</p>
+        <select data-ans="moda"><option value="">Seleccione…</option><option value="moda">Moda y frecuencias</option><option value="mediana">Mediana</option><option value="media">Media y desviación estándar</option></select>
+        <p class="why">Las categorías nominales no se ordenan ni se promedian.</p></div>
+      <div class="ex-row"><p>Satisfacción con la herramienta, de 1 a 5 (ordinal)</p>
+        <select data-ans="mediana"><option value="">Seleccione…</option><option value="moda">Moda y frecuencias</option><option value="mediana">Mediana</option><option value="media">Media y desviación estándar</option></select>
+        <p class="why">Los valores tienen orden, pero la distancia entre «2» y «3» no es necesariamente igual a la de «4» y «5». La mediana es la opción más defendible, acompañada de frecuencias.</p></div>
+      <div class="ex-row"><p>Años de experiencia profesional (razón, sin valores extremos)</p>
+        <select data-ans="media"><option value="">Seleccione…</option><option value="moda">Moda y frecuencias</option><option value="mediana">Mediana</option><option value="media">Media y desviación estándar</option></select>
+        <p class="why">Con una variable de razón y una distribución sin valores extremos, la media y la desviación estándar resumen bien los datos. Si hubiera valores extremos, conviene informar también la mediana.</p></div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Paso 3. Análisis de relaciones entre variables</h3>
+    <div class="prose">
+      <p>Este análisis determina si existe una conexión o un patrón entre dos o más aspectos estudiados; es decir, si una variable se asocia con otra. Requiere distinguir la <b>variable independiente</b> (la que se supone que influye) de la <b>variable dependiente</b> (la que se ve influida).</p>
+      <p>Para saber si una relación observada es real o una coincidencia producto del azar, se usan herramientas de <b>estadística inferencial</b>. Para dos variables categóricas, como en el caso, es habitual la prueba de chi-cuadrado; para dos variables numéricas, una correlación.</p>
+    </div>
+    <p class="apa-title">Tabla 1</p>
+    <p class="apa-sub">Personas contadoras encuestadas según tamaño del despacho y uso habitual de software contable, Cartago, 2026 (valores absolutos y relativos)</p>
+    <div class="table-wrap apa"><table>
+      <thead><tr><th rowspan="2">Tamaño del despacho</th><th class="num" colspan="2">Valores absolutos</th><th class="num" rowspan="2">Total</th><th class="num" colspan="2">Valores relativos (%)</th></tr>
+      <tr><th class="num">Usa</th><th class="num">No usa</th><th class="num">Usa</th><th class="num">No usa</th></tr></thead>
+      <tbody>
+        <tr><td>Una persona</td><td class="num">18</td><td class="num">22</td><td class="num">40</td><td class="num">45,00</td><td class="num">55,00</td></tr>
+        <tr><td>De 2 a 5 personas</td><td class="num">31</td><td class="num">14</td><td class="num">45</td><td class="num">68,89</td><td class="num">31,11</td></tr>
+        <tr><td>Más de 5 personas</td><td class="num">27</td><td class="num">3</td><td class="num">30</td><td class="num">90,00</td><td class="num">10,00</td></tr>
+        <tr class="total"><td>Total</td><td class="num">76</td><td class="num">39</td><td class="num">115</td><td class="num">66,09</td><td class="num">33,91</td></tr>
+      </tbody>
+    </table></div>
+    <p class="apa-note"><i>Nota.</i> Los porcentajes se calculan por fila. Fuente: elaboración propia con datos de la encuesta a personas contadoras (datos ficticios con fines didácticos).</p>
+    <div class="ex" data-type="mcq">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>¿Cuál es la lectura correcta de la Tabla 1?</strong></div>
+      <div class="opts">
+        <button class="opt" data-ok="0" data-fb="Confunde asociación con causalidad. Un estudio transversal como este no demuestra que el tamaño cause el uso; además, la relación podría explicarse por otra variable, como los ingresos del despacho.">Tener un despacho grande provoca que las personas contadoras usen software.</button>
+        <button class="opt" data-ok="1" data-fb="Correcto. Describe el patrón con los porcentajes por fila, identifica las variables y reconoce que hace falta una prueba inferencial para afirmar que la asociación no se debe al azar.">El uso de software aumenta con el tamaño del despacho (del 45,00 % al 90,00 %); una prueba de chi-cuadrado permitiría valorar si esta asociación es estadísticamente significativa.</button>
+        <button class="opt" data-ok="0" data-fb="Compara valores absolutos de grupos con tamaños distintos (40, 45 y 30 personas). Para comparar grupos se usan porcentajes por fila.">El grupo de 2 a 5 personas es el que más usa software, porque tiene 31 casos.</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Pasos 4 y 5. Interpretación y presentación</h3>
+    <div class="grid2">
+      <div class="card tint"><h3>Interpretar</h3><p>Revise si los resultados responden la pregunta de investigación. Explique qué significan en el contexto del estudio, discuta sus limitaciones (tamaño de la muestra, tipo de muestreo, sesgos de respuesta) y plantee líneas para futuras investigaciones.</p></div>
+      <div class="card tint"><h3>Presentar</h3><p>Comunique los hallazgos de forma clara y estructurada: tablas y gráficos, un texto que explique métodos y resultados, y diapositivas con los análisis clave para la defensa.</p></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="3">Momento anterior</button><button class="btn primary" data-go="5">Tablas y figuras</button></div>
+</section>
+
+<!-- ===================== 5. TABLAS Y FIGURAS ===================== -->
+<section class="view" id="v5">
+  <div class="panel">
+    <span class="kicker">Momento 5</span>
+    <h2>Tablas y figuras que comunican</h2>
+    <p class="prose">Una tabla o un gráfico no sustituyen el análisis: lo apoyan. Cada elemento debe estar citado en el texto, numerado correctamente e incluido en el índice de tablas o de figuras con su número y título.</p>
+    <div class="grid2">
+      <div class="card tint"><h3>Elementos de una tabla</h3>
+        <ol class="steps" style="margin:0">
+          <li><div><strong>Número</strong>Tabla 1, Tabla 2… en orden de aparición.</div></li>
+          <li><div><strong>Título</strong>Responde qué, cómo, cuándo y dónde.</div></li>
+          <li><div><strong>Cuerpo</strong>Encabezados, filas y columnas con los datos.</div></li>
+          <li><div><strong>Notas</strong>Aclaraciones sobre cálculos o abreviaturas.</div></li>
+          <li><div><strong>Fuente</strong>De dónde provienen los datos.</div></li>
+        </ol></div>
+      <div class="card tint"><h3>Normas de presentación de tablas</h3>
+        <p>Ordene filas y columnas por algún criterio. Incluya totales o promedios cuando corresponda. Redondee a dos decimales y use el mismo número de decimales en toda la tabla. Use un espacio como separador de miles (12 450) y un único separador decimal en todo el documento. Alinee los números a la derecha. No deje celdas vacías: use un guion y explíquelo en una nota.</p></div>
+    </div>
+    <div class="warn"><strong>Esto no es una tabla:</strong> dos celdas con «Hombres 15» y «Mujeres 22», sin número, título, totales ni fuente. Un dato tan simple se escribe en una oración.</div>
+    <div class="note ref-note"><strong>Nota importante: toda tabla y toda figura deben mencionarse de forma explícita en el texto, con su número.</strong>
+      <p style="margin:8px 0 6px">La mención va en el párrafo que la analiza, antes de que el elemento aparezca, para que la persona lectora sepa exactamente a cuál se refiere.</p>
+      <div class="grid2" style="gap:10px">
+        <div class="good" style="margin:0"><b>Correcto</b><br>«El uso de software aumenta con el tamaño del despacho (ver Tabla 2).»<br>«Como se muestra en la Tabla 2, el 90,00 % de los despachos grandes…»<br>«La Figura 1 evidencia que…»</div>
+        <div class="warn" style="margin:0"><b>Incorrecto</b><br>«La siguiente tabla muestra…»<br>«En la tabla se observa que…»<br>«El gráfico muestra…» o «como se aprecia a continuación», sin indicar el número de la tabla o figura.</div>
+      </div></div>
+  </div>
+
+  <div class="panel">
+    <h3>Ejemplo de una tabla correcta</h3>
+    <p class="prose">Las flechas señalan los elementos que debe contener la tabla. En el texto se mencionaría así: «el uso de software aumenta con el tamaño del despacho (ver Tabla 2)».</p>
+    <figure class="anno-fig"><div class="anno-wrap"><svg viewBox="90 0 875 350" class="anno-svg" role="img" aria-label="Ejemplo de tabla correcta con flechas que señalan número, título, nota preliminar, encabezado, cuerpo, cifras alineadas, fila de totales, nota al pie y fuente"><defs><marker id="aT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="anno-head"/></marker></defs><g font-family="Arial,Helvetica,sans-serif" fill="currentColor" font-size="13"><text x="210" y="40" font-weight="700" font-size="14">Tabla 2</text><text x="210" y="64" font-style="italic" font-size="14">Personas contadoras encuestadas según tamaño del despacho y uso de software</text><text x="210" y="84" font-style="italic" font-size="14">contable, Cartago, 2026</text><text x="210" y="106">(valores absolutos y relativos)</text><line x1="210" y1="120" x2="755" y2="120" stroke="currentColor" stroke-width="2"/><text x="215" y="152" font-weight="700">Tamaño del despacho</text><text x="480" y="140" font-weight="700" text-anchor="middle">Valores absolutos</text><text x="600" y="152" font-weight="700" text-anchor="end">Total</text><text x="690" y="140" font-weight="700" text-anchor="middle">Valores relativos (%)</text><line x1="420" y1="146" x2="540" y2="146" stroke="currentColor" stroke-opacity=".6"/><line x1="625" y1="146" x2="755" y2="146" stroke="currentColor" stroke-opacity=".6"/><text x="470" y="164" font-weight="700" text-anchor="end">Usa</text><text x="535" y="164" font-weight="700" text-anchor="end">No usa</text><text x="680" y="164" font-weight="700" text-anchor="end">Usa</text><text x="750" y="164" font-weight="700" text-anchor="end">No usa</text><line x1="210" y1="174" x2="755" y2="174" stroke="currentColor" stroke-width="1.5"/><text x="215" y="196">Una persona</text><text x="470" y="196" text-anchor="end">18</text><text x="535" y="196" text-anchor="end">22</text><text x="600" y="196" text-anchor="end">40</text><text x="680" y="196" text-anchor="end">45,00</text><text x="750" y="196" text-anchor="end">55,00</text><text x="215" y="220">De 2 a 5 personas</text><text x="470" y="220" text-anchor="end">31</text><text x="535" y="220" text-anchor="end">14</text><text x="600" y="220" text-anchor="end">45</text><text x="680" y="220" text-anchor="end">68,89</text><text x="750" y="220" text-anchor="end">31,11</text><text x="215" y="244">Más de 5 personas<tspan font-size="10" dy="-5"> 1/</tspan></text><text x="470" y="244" text-anchor="end">27</text><text x="535" y="244" text-anchor="end">3</text><text x="600" y="244" text-anchor="end">30</text><text x="680" y="244" text-anchor="end">90,00</text><text x="750" y="244" text-anchor="end">10,00</text><line x1="210" y1="256" x2="755" y2="256" stroke="currentColor" stroke-width="1.5"/><text x="215" y="276" font-weight="700">Total</text><text x="470" y="276" text-anchor="end" font-weight="700">76</text><text x="535" y="276" text-anchor="end" font-weight="700">39</text><text x="600" y="276" text-anchor="end" font-weight="700">115</text><text x="680" y="276" text-anchor="end" font-weight="700">66,09</text><text x="750" y="276" text-anchor="end" font-weight="700">33,91</text><line x1="210" y1="286" x2="755" y2="286" stroke="currentColor" stroke-width="2"/><text x="210" y="308" font-size="12">1/ Incluye firmas organizadas como sociedades.</text><text x="210" y="330" font-size="12">Fuente: Elaboración propia con datos de la encuesta a personas contadoras, 2026.</text></g><g font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700"><text x="180" y="40" class="anno" text-anchor="end"><tspan x="180" dy="0">Número</tspan></text><line x1="186" y1="36" x2="204" y2="36" class="anno-line" marker-end="url(#aT)"/><text x="180" y="74" class="anno" text-anchor="end"><tspan x="180" dy="0">Título</tspan></text><line x1="186" y1="70" x2="204" y2="70" class="anno-line" marker-end="url(#aT)"/><text x="180" y="146" class="anno" text-anchor="end"><tspan x="180" dy="0">Encabezado</tspan><tspan x="180" dy="16">de columnas</tspan></text><line x1="186" y1="150" x2="210" y2="150" class="anno-line" marker-end="url(#aT)"/><text x="180" y="222" class="anno" text-anchor="end"><tspan x="180" dy="0">Cuerpo</tspan></text><line x1="186" y1="218" x2="210" y2="218" class="anno-line" marker-end="url(#aT)"/><text x="180" y="330" class="anno" text-anchor="end"><tspan x="180" dy="0">Fuente</tspan></text><line x1="186" y1="326" x2="204" y2="326" class="anno-line" marker-end="url(#aT)"/><text x="800" y="106" class="anno" text-anchor="start"><tspan x="800" dy="0">Nota preliminar</tspan></text><line x1="794" y1="102" x2="412" y2="102" class="anno-line" marker-end="url(#aT)"/><text x="800" y="212" class="anno" text-anchor="start"><tspan x="800" dy="0">Cifras alineadas a la</tspan><tspan x="800" dy="16">derecha, dos decimales</tspan></text><line x1="794" y1="216" x2="760" y2="216" class="anno-line" marker-end="url(#aT)"/><text x="800" y="276" class="anno" text-anchor="start"><tspan x="800" dy="0">Fila de totales</tspan></text><line x1="794" y1="272" x2="760" y2="272" class="anno-line" marker-end="url(#aT)"/><text x="800" y="308" class="anno" text-anchor="start"><tspan x="800" dy="0">Nota al pie (explica</tspan></text><line x1="794" y1="304" x2="520" y2="304" class="anno-line" marker-end="url(#aT)"/><text x="800" y="324" class="anno" font-size="13">la llamada 1/)</text></g></svg></div>
+      <figcaption>Desplace horizontalmente en el teléfono para ver la tabla completa. Datos ficticios con fines didácticos.</figcaption></figure>
+  </div>
+
+  <div class="panel">
+    <h3>Normas para gráficos</h3>
+    <div class="prose">
+      <p>Identifique los ejes con nombre y unidades, y todas las categorías de la leyenda. Mantenga tamaños uniformes a lo largo del documento. Incluya las cifras dentro del gráfico. No use efectos 3D ni fondos oscuros. Formule el título con qué, cómo, cuándo y dónde.</p>
+      <p>No incluya gráficos que no aportan, como uno de 100 % para una sola categoría. El título nunca debe copiar la pregunta del cuestionario. Al igual que las tablas, cada figura se menciona en el texto con su número: «(ver Figura 1)».</p>
+    </div>
+    <h3 style="margin-top:18px">Ejemplo de un gráfico correcto</h3>
+    <figure class="anno-fig"><div class="anno-wrap"><svg viewBox="90 0 875 400" class="anno-svg" role="img" aria-label="Ejemplo de gráfico correcto con flechas que señalan número, título, nota preliminar, leyenda, título del eje Y, cifras, título del eje X y fuente"><defs><marker id="aF" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="anno-head"/></marker></defs><g font-family="Arial,Helvetica,sans-serif" fill="currentColor" font-size="13"><text x="210" y="40" font-weight="700" font-size="14">Figura 1</text><text x="210" y="64" font-style="italic" font-size="14">Personas contadoras encuestadas según uso de software contable y tamaño</text><text x="210" y="84" font-style="italic" font-size="14">del despacho, Cartago, 2026</text><text x="210" y="106">(valores relativos)</text><rect x="430" y="123" width="13" height="13" fill="#3f7da7"/><text x="449" y="134" font-size="12">Usa software</text><rect x="560" y="123" width="13" height="13" fill="#d6a44a"/><text x="579" y="134" font-size="12">No usa software</text><text transform="rotate(-90 232 225)" x="232" y="225" text-anchor="middle" font-size="12">Tamaño del despacho</text><text x="360" y="174" text-anchor="end">Una persona</text><rect x="370" y="152" width="153.0" height="16" fill="#3f7da7"/><text x="529.0" y="164" font-size="12">45,00</text><rect x="370" y="170" width="187.0" height="16" fill="#d6a44a"/><text x="563.0" y="182" font-size="12">55,00</text><text x="360" y="229" text-anchor="end">De 2 a 5 personas</text><rect x="370" y="207" width="234.2" height="16" fill="#3f7da7"/><text x="610.2" y="219" font-size="12">68,89</text><rect x="370" y="225" width="105.8" height="16" fill="#d6a44a"/><text x="481.8" y="237" font-size="12">31,11</text><text x="360" y="284" text-anchor="end">Más de 5 personas</text><rect x="370" y="262" width="306.0" height="16" fill="#3f7da7"/><text x="682.0" y="274" font-size="12">90,00</text><rect x="370" y="280" width="34.0" height="16" fill="#d6a44a"/><text x="410.0" y="292" font-size="12">10,00</text><line x1="370" y1="140" x2="370" y2="310" stroke="currentColor" stroke-opacity=".5"/><line x1="370" y1="310" x2="710" y2="310" stroke="currentColor" stroke-opacity=".5"/><line x1="370" y1="310" x2="370" y2="315" stroke="currentColor" stroke-opacity=".5"/><text x="370" y="328" text-anchor="middle" font-size="12">0</text><line x1="455" y1="310" x2="455" y2="315" stroke="currentColor" stroke-opacity=".5"/><text x="455" y="328" text-anchor="middle" font-size="12">25</text><line x1="540" y1="310" x2="540" y2="315" stroke="currentColor" stroke-opacity=".5"/><text x="540" y="328" text-anchor="middle" font-size="12">50</text><line x1="625" y1="310" x2="625" y2="315" stroke="currentColor" stroke-opacity=".5"/><text x="625" y="328" text-anchor="middle" font-size="12">75</text><line x1="710" y1="310" x2="710" y2="315" stroke="currentColor" stroke-opacity=".5"/><text x="710" y="328" text-anchor="middle" font-size="12">100</text><text x="540" y="350" text-anchor="middle" font-size="12">Porcentaje de personas encuestadas (%)</text><text x="210" y="382" font-size="12">Fuente: Elaboración propia con datos de la encuesta a personas contadoras, 2026.</text></g><g font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700"><text x="180" y="40" class="anno" text-anchor="end"><tspan x="180" dy="0">Número</tspan></text><line x1="186" y1="36" x2="204" y2="36" class="anno-line" marker-end="url(#aF)"/><text x="180" y="74" class="anno" text-anchor="end"><tspan x="180" dy="0">Título</tspan></text><line x1="186" y1="70" x2="204" y2="70" class="anno-line" marker-end="url(#aF)"/><text x="180" y="222" class="anno" text-anchor="end"><tspan x="180" dy="0">Título del</tspan><tspan x="180" dy="16">eje Y</tspan></text><line x1="186" y1="226" x2="222" y2="226" class="anno-line" marker-end="url(#aF)"/><text x="180" y="382" class="anno" text-anchor="end"><tspan x="180" dy="0">Fuente</tspan></text><line x1="186" y1="378" x2="204" y2="378" class="anno-line" marker-end="url(#aF)"/><text x="800" y="106" class="anno" text-anchor="start"><tspan x="800" dy="0">Nota preliminar</tspan></text><line x1="794" y1="102" x2="330" y2="102" class="anno-line" marker-end="url(#aF)"/><text x="800" y="134" class="anno" text-anchor="start"><tspan x="800" dy="0">Leyenda</tspan></text><line x1="794" y1="130" x2="690" y2="130" class="anno-line" marker-end="url(#aF)"/><text x="800" y="256" class="anno" text-anchor="start"><tspan x="800" dy="0">Cifras dentro</tspan></text><line x1="794" y1="260" x2="730" y2="260" class="anno-line" marker-end="url(#aF)"/><text x="800" y="350" class="anno" text-anchor="start"><tspan x="800" dy="0">Título del eje X</tspan></text><line x1="794" y1="346" x2="668" y2="346" class="anno-line" marker-end="url(#aF)"/><text x="800" y="272" class="anno" font-size="13">del gráfico</text></g></svg></div>
+      <figcaption>Desplace horizontalmente en el teléfono para ver el gráfico completo. Datos ficticios con fines didácticos.</figcaption></figure>
+  </div>
+
+  <div class="panel">
+    <div class="ex" data-type="multi">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Audite esta tabla: marque todos los errores que encuentre</strong></div>
+      <div class="card" style="margin-bottom:10px">
+        <p style="margin:0 0 6px"><b>¿Usa usted software contable para sus declaraciones?</b></p>
+        <div class="table-wrap"><table style="min-width:360px">
+          <tr><th>Respuesta</th><th>Cantidad</th><th>%</th></tr>
+          <tr><td>Sí</td><td>76</td><td>66.087</td></tr>
+          <tr><td>No</td><td>39</td><td>33,9</td></tr>
+          <tr><td>No responde</td><td></td><td></td></tr>
+        </table></div>
+      </div>
+      <div class="checks">
+        <label><input type="checkbox" data-ok="1"> El título copia la pregunta del cuestionario.</label>
+        <label><input type="checkbox" data-ok="1"> No tiene número de tabla.</label>
+        <label><input type="checkbox" data-ok="1"> Mezcla separadores decimales y número de decimales.</label>
+        <label><input type="checkbox" data-ok="1"> Tiene celdas vacías.</label>
+        <label><input type="checkbox" data-ok="1"> No indica la fuente ni incluye el total.</label>
+        <label><input type="checkbox" data-ok="0"> Presenta los porcentajes junto a los valores absolutos.</label>
+      </div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+      <div class="clave">Versión corregida para mostrar al grupo: «Tabla 3. Personas contadoras según uso de software contable para declaraciones tributarias, Cartago, 2026 (valores absolutos y relativos)», con filas ordenadas, total de 115, porcentajes 66,09 y 33,91, un guion explicado en nota si no hubo «no responde», y la fuente.</div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="4">Momento anterior</button><button class="btn primary" data-go="6">Análisis mixto</button></div>
+</section>
+
+<!-- ===================== 6. MIXTO ===================== -->
+<section class="view" id="v6">
+  <div class="panel">
+    <span class="kicker">Momento 6</span>
+    <h2>Análisis mixto: integrar, no yuxtaponer</h2>
+    <div class="prose">
+      <p>El análisis mixto integra los resultados cualitativos y cuantitativos para obtener una comprensión más amplia y profunda del fenómeno. Permite <b>triangular</b> la información: validar hallazgos cuando los datos convergen y complementar perspectivas que, de manera aislada, serían parciales.</p>
+      <p>Presentar un capítulo de estadísticas seguido de otro de entrevistas no es análisis mixto. La integración ocurre cuando cada hallazgo de un tipo se pone en diálogo con el otro.</p>
+    </div>
+    <div class="grid3">
+      <div class="card tint"><h3>Contrastar</h3><p>Comparar los resultados numéricos con las percepciones y los significados expresados por las personas participantes.</p></div>
+      <div class="card tint"><h3>Profundizar</h3><p>Explicar los hallazgos estadísticos mediante el discurso de las personas participantes.</p></div>
+      <div class="card tint"><h3>Integrar</h3><p>Producir interpretaciones que respondan con mayor solidez a la pregunta y a los objetivos específicos.</p></div>
+    </div>
+    <h3 style="margin-top:22px">Tres formas en que los datos se relacionan</h3>
+    <div class="grid3">
+      <div class="card"><h3>Convergencia</h3><p>Ambos tipos de datos apuntan en la misma dirección. El hallazgo se fortalece.</p></div>
+      <div class="card"><h3>Complementariedad</h3><p>Un tipo de dato explica o amplía al otro: el número muestra cuánto; el testimonio, por qué.</p></div>
+      <div class="card"><h3>Divergencia</h3><p>Los datos se contradicen. No se oculta: se analiza y puede generar nuevas preguntas.</p></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="case">
+      <span class="case-tag acc">Contaduría · diseño mixto ficticio</span>
+      <p style="margin:0">A la encuesta de 115 personas contadoras se suman entrevistas a cinco personas que trabajan solas, para comprender por qué en ese grupo el uso de software es menor.</p>
+    </div>
+    <div class="ex" data-type="select">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Clasifique cada par de hallazgos</strong></div>
+      <div class="ex-row"><p><b>Encuesta:</b> el 55,00 % de quienes trabajan solos no usa software. <b>Entrevista:</b> «La licencia anual me cuesta lo mismo que dos clientes; no me da el número.»</p>
+        <select data-ans="com"><option value="">Seleccione…</option><option value="conv">Convergencia</option><option value="com">Complementariedad</option><option value="div">Divergencia</option></select>
+        <p class="why">El testimonio explica el porqué de la cifra: el costo frente a la escala del negocio.</p></div>
+      <div class="ex-row"><p><b>Encuesta:</b> la satisfacción mediana con las herramientas es 4 de 5. <b>Entrevistas:</b> cuatro de cinco personas se declaran conformes con sus herramientas actuales.</p>
+        <select data-ans="conv"><option value="">Seleccione…</option><option value="conv">Convergencia</option><option value="com">Complementariedad</option><option value="div">Divergencia</option></select>
+        <p class="why">Ambas fuentes indican satisfacción alta.</p></div>
+      <div class="ex-row"><p><b>Encuesta:</b> casi nadie señala la falta de capacitación como obstáculo. <b>Entrevistas:</b> todas las personas mencionan que aprendieron a usar el software «a prueba y error» y que les tomó meses.</p>
+        <select data-ans="div"><option value="">Seleccione…</option><option value="conv">Convergencia</option><option value="com">Complementariedad</option><option value="div">Divergencia</option></select>
+        <p class="why">Los datos se contradicen. Puede deberse a la redacción del ítem o a que la capacitación no se percibe como obstáculo, aunque lo sea. Se discute en el análisis.</p></div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="5">Momento anterior</button><button class="btn primary" data-go="7">Redacción del capítulo</button></div>
+</section>
+
+<!-- ===================== 7. REDACCIÓN ===================== -->
+<section class="view" id="v7">
+  <div class="panel">
+    <span class="kicker">Momento 7</span>
+    <h2>Redactar el capítulo de resultados</h2>
+    <p class="prose">En el Trabajo Final de Graduación, el análisis se presenta en el capítulo de resultados. Su estructura responde a los objetivos, no al instrumento.</p>
+    <ol class="steps">
+      <li><div><strong>Introducción del capítulo</strong>Explica su propósito y recuerda brevemente el enfoque metodológico.</div></li>
+      <li><div><strong>Análisis por objetivos o categorías</strong>Un apartado por objetivo específico. Nunca por preguntas, y sin transcribirlas textualmente.</div></li>
+      <li><div><strong>Interpretación de resultados</strong>Explica lo encontrado y lo contrasta con el marco teórico.</div></li>
+      <li><div><strong>Síntesis general del análisis</strong>Integra los hallazgos de los apartados. No es todavía el capítulo de conclusiones.</div></li>
+    </ol>
+    <h3>Frases modelo para la introducción</h3>
+    <div class="quote"><b>Propósito:</b> «Este capítulo presenta el análisis de la información recolectada mediante [entrevistas, cuestionarios, revisión de expedientes], con el objetivo de responder a la pregunta de investigación y dar cumplimiento a los objetivos propuestos.»</div>
+    <div class="quote"><b>Enfoque cualitativo:</b> «Dado que la investigación se desarrolló bajo un enfoque cualitativo, el análisis se fundamenta en la identificación de patrones, categorías y significados construidos a partir del discurso de las personas participantes.»</div>
+    <div class="quote"><b>Enfoque cuantitativo:</b> «Los resultados se presentan mediante estadística descriptiva y pruebas de asociación, organizados según los objetivos específicos del estudio.»</div>
+  </div>
+
+  <div class="panel">
+    <h3>Cómo se ve un buen párrafo de análisis</h3>
+    <div class="grid2">
+      <div class="card tint"><h3>Para resultados cuantitativos</h3><p>Remita a la tabla o figura, destaque el dato más relevante (no todos), interprételo y contrástelo. No repita en el texto todas las cifras de la tabla.</p></div>
+      <div class="card tint"><h3>Para resultados cualitativos</h3><p>Presente la categoría, explique el patrón, apóyelo con citas breves identificadas por código (J1, E3) y relaciónelo con la literatura.</p></div>
+    </div>
+    <div class="ex" data-type="mcq">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>¿Qué párrafo analiza la Tabla 1?</strong></div>
+      <div class="opts">
+        <button class="opt" data-ok="0" data-fb="Repite la tabla en prosa. No destaca lo relevante ni interpreta.">En la Tabla 1 se observa que 18 personas de despachos de una persona usan software y 22 no; en despachos de 2 a 5 personas, 31 usan y 14 no; en despachos de más de 5 personas, 27 usan y 3 no; en total, 76 usan y 39 no.</button>
+        <button class="opt" data-ok="1" data-fb="Correcto. Remite a la tabla, nombra el objetivo, destaca el patrón, lo interpreta, lo contrasta con la literatura y reconoce un límite, sin adelantar conclusiones.">En relación con el tercer objetivo específico, la Tabla 1 muestra que el uso habitual de software contable aumenta con el tamaño del despacho: pasa del 45,00 % entre quienes trabajan solos al 90,00 % en despachos de más de cinco personas. Este patrón sugiere que la adopción depende de la capacidad para distribuir los costos de licencias y capacitación, en la línea de lo planteado por (Autor, año). Dado que la muestra no es probabilística, el resultado describe a las personas encuestadas y no puede generalizarse a todo el gremio.</button>
+        <button class="opt" data-ok="0" data-fb="Es una conclusión con recomendación. No pertenece al capítulo de resultados.">Por lo tanto, se concluye que el Colegio de Contadores Públicos debe subsidiar licencias de software para quienes trabajan de manera independiente.</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+    <div class="ex" data-type="mcq">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Elija el mejor título para una figura</strong></div>
+      <div class="opts">
+        <button class="opt" data-ok="0" data-fb="Copia la pregunta del cuestionario.">¿Cuántos años tiene de ejercer la contaduría?</button>
+        <button class="opt" data-ok="0" data-fb="Es demasiado vago: no dice cómo, cuándo ni dónde.">Experiencia</button>
+        <button class="opt" data-ok="1" data-fb="Correcto. Responde qué, cómo, cuándo y dónde.">Distribución de las personas contadoras encuestadas según años de ejercicio profesional, Cartago, 2026</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="6">Momento anterior</button><button class="btn primary" data-go="8">Repaso</button></div>
+</section>
+
+<!-- ===================== 8. REPASO ===================== -->
+<section class="view" id="v8">
+  <div class="panel">
+    <span class="kicker">Momento 8</span>
+    <h2>Repaso: un reto a la vez</h2>
+    <p class="prose">Responda cada pregunta. Si falla, lea la explicación y vuelva a intentarlo antes de avanzar.</p>
+    <div class="ex" id="quiz">
+      <div class="quiz-top"><span id="qNum"></span><span id="qScore"></span></div>
+      <p class="quiz-q" id="qText"></p>
+      <div class="opts" id="qOpts"></div>
+      <div class="fb" id="qFb"></div>
+      <div class="btn-row"><span></span><button class="btn primary" id="qNext" disabled>Siguiente pregunta</button></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="7">Momento anterior</button><button class="btn primary" data-go="9">Cierre</button></div>
+</section>
+
+<!-- ===================== 9. CIERRE ===================== -->
+<section class="view" id="v9">
+  <div class="panel">
+    <span class="kicker">Momento 9</span>
+    <h2>Cierre: complete la idea central</h2>
+    <div class="ex" data-type="select" style="line-height:2.4">
+      <p>El análisis se organiza desde los
+        <select style="width:auto" data-ans="a"><option value="">…</option><option value="a">objetivos</option><option value="b">preguntas del instrumento</option><option value="c">gráficos</option></select>
+        y no desde el orden del instrumento. Primero se
+        <select style="width:auto" data-ans="b"><option value="">…</option><option value="a">concluyen</option><option value="b">organizan</option><option value="c">publican</option></select>
+        los datos; luego se describen, se
+        <select style="width:auto" data-ans="c"><option value="">…</option><option value="a">copian</option><option value="b">resumen en una tabla</option><option value="c">interpretan</option></select>
+        y se contrastan con el
+        <select style="width:auto" data-ans="a"><option value="">…</option><option value="a">marco teórico</option><option value="b">cronograma</option><option value="c">índice</option></select>.
+        En lo cualitativo, los fragmentos se
+        <select style="width:auto" data-ans="b"><option value="">…</option><option value="a">promedian</option><option value="b">codifican y categorizan</option><option value="c">eliminan</option></select>;
+        en lo cuantitativo, la técnica depende del
+        <select style="width:auto" data-ans="c"><option value="">…</option><option value="a">número de páginas</option><option value="b">software disponible</option><option value="c">nivel de medición</option></select>.
+        Las
+        <select style="width:auto" data-ans="a"><option value="">…</option><option value="a">conclusiones</option><option value="b">citas</option><option value="c">tablas</option></select>
+        se reservan para otro capítulo.</p>
+      <button class="btn primary check">Comprobar frase</button>
+      <div class="fb"></div>
+    </div>
+    <div class="note"><strong>Síntesis.</strong> Analizar no es mostrar datos: es explicar qué significan para cada objetivo, con evidencia ordenada, presentada con rigor y en diálogo con la teoría.</div>
+  </div>
+  <div class="panel">
+    <h3>Referencias metodológicas para profundizar</h3>
+    <p class="muted">Obras que tratan el análisis y la presentación de resultados en la investigación.</p>
+    <div style="padding-left:2em;text-indent:-2em">
+      <p>Barraza Macías, A. (2023). <i>Metodología de la investigación cualitativa: Una perspectiva interpretativa</i>. Benessere.</p>
+      <p>Barrero Ticona, J. E. (2023). <i>Metodologías de la investigación científica: Un enfoque práctico</i>. Colecciones Culturales Editores Impresores.</p>
+      <p>Calizaya López, J. M., Alemán Vilca, Y., Bellido Medina, R. S. y Ceballos Bejarano, F. E. (2022). <i>La investigación cuantitativa en las ciencias sociales</i> (2.ª ed.). AutanaBooks.</p>
+      <p>Hernández-Sampieri, R. y Mendoza Torres, C. P. (2018). <i>Metodología de la investigación: Las rutas cuantitativa, cualitativa y mixta</i>. McGraw-Hill Education.</p>
+      <p>Wood, P. y Smith, J. (2018). <i>Investigar en educación: Conceptos básicos y metodología para desarrollar proyectos de investigación</i>. Narcea.</p>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="8">Momento anterior</button><button class="btn primary" data-go="10">Ficha de aplicación</button></div>
+</section>
+
+<!-- ===================== FICHA ===================== -->
+<section class="view" id="v10">
+  <div class="panel">
+    <span class="kicker">Aplicación al proyecto propio</span>
+    <h2>Ficha: matriz de congruencia del análisis</h2>
+    <p class="prose">Complete una fila por objetivo específico de su anteproyecto, a partir del instrumento que diseñó y aplicó. La ficha se guarda en este dispositivo. Use «Copiar tabla» para pegarla en Word como una tabla editable.</p>
+    <div class="note"><strong>Recuerde:</strong> esta ficha se completa con sus propias decisiones metodológicas. Consulte con la persona docente las condiciones de uso de herramientas de inteligencia artificial.</div>
+    <div class="grid2">
+      <label>Título provisional del estudio<input type="text" data-f="titulo"></label>
+      <label>Enfoque<select data-f="enfoque"><option value="">Seleccione…</option><option>Cualitativo</option><option>Cuantitativo</option><option>Mixto</option></select></label>
+    </div>
+    <h3 style="margin-top:18px">Matriz por objetivo específico</h3>
+    <div class="ficha-table-wrap"><table class="ficha-table" id="fichaTable"><thead><tr><th>N.º</th><th>Objetivo específico</th><th>Categoría o variable</th><th>Instrumento aplicado</th><th>Ítems o campos</th><th>Técnica de análisis</th></tr></thead><tbody id="fichaRows"></tbody></table></div>
+    <button class="btn secondary" id="addRow" style="margin-top:10px">Agregar objetivo</button>
+    <label style="display:block;margin-top:12px">¿Qué debe organizar o limpiar antes de analizar? (transcripciones, duplicados, valores faltantes…)<textarea data-f="limpieza"></textarea></label>
+    <label style="display:block;margin-top:12px">¿Cómo presentará los resultados de cada objetivo? (tablas, figuras, narrativa con citas)<textarea data-f="presentacion"></textarea></label>
+    <div class="btn-row" style="justify-content:flex-start">
+      <button class="btn primary" id="copyFicha">Copiar tabla</button>
+      <button class="btn secondary" id="previewFicha">Ver vista previa</button>
+      <button class="btn secondary" id="clearFicha">Borrar ficha</button>
+    </div>
+    <p id="fichaMsg" class="muted"></p>
+    <div id="fichaPrev" class="ficha-preview hidden"></div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="9">Momento anterior</button><button class="btn secondary" data-go="0">Volver al inicio</button></div>
+</section>
+
+<footer class="site-footer">
+  <p><b>Seminario II</b>, Universidad Florencio del Castillo. Personas docentes: Adrián Murillo-González, Iria Briceño-Álvarez y Ginnette Jiménez G..</p>
+  <p class="lic"><span class="cc" aria-hidden="true">cc by</span><span>Esta obra está bajo una licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" target="_blank" rel="license noopener">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>. Puede compartirla y adaptarla citando la autoría.</span></p>
+</footer>
+</main>
+</div>
+
+<!-- Modales -->
+<div class="modal-bg" id="modalBg" role="dialog" aria-modal="true">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" id="modalClose" aria-label="Cerrar">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+<template id="m-creditos">
+  <h3>Créditos y declaración de uso de IA</h3>
+  <p>Recurso didáctico del curso Seminario II, Universidad Florencio del Castillo. Personas docentes: Adrián Murillo-González, Iria Briceño-Álvarez y Ginnette Jiménez G.. Contenido basado en la presentación «El análisis de la información en la investigación».</p>
+  <p>Este recurso se elaboró con apoyo de inteligencia artificial generativa para la organización de contenidos, la redacción de casos y ejercicios, y la programación del sitio. Las decisiones pedagógicas y la revisión final de los contenidos corresponden al criterio docente.</p>
+  <p>Los casos de derecho y contaduría, las citas de entrevistas y los datos numéricos son ficticios y se crearon con fines didácticos. Las referencias a «(Autor, año)» indican el lugar donde el estudiantado debe incorporar literatura real.</p>
+  <p><b>Licencia.</b> Esta obra está bajo una licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" target="_blank" rel="license noopener">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>.</p>
+</template>
+<template id="m-docente">
+  <h3>Activar modo docente</h3>
+  <p>Ingrese la clave para mostrar las claves y orientaciones docentes.</p>
+  <input type="text" id="teacherKey" autocomplete="off" aria-label="Clave docente">
+  <p id="teacherMsg" class="muted"></p>
+  <button class="btn primary" id="teacherOk">Ingresar</button>
+</template>
+
+<script>
+(function(){
+  const VIEWS=[
+    ["Inicio","Propósito y ruta"],["Qué es analizar","Del dato al conocimiento"],["Matriz de congruencia","Organizar desde los objetivos"],
+    ["Análisis cualitativo","Codificar e interpretar"],["Análisis cuantitativo","Limpiar, describir, relacionar"],["Tablas y figuras","Presentar con rigor"],
+    ["Análisis mixto","Integrar resultados"],["Redacción","Capítulo de resultados"],["Repaso","Reto interactivo"],["Cierre","Completar la idea central"],["Ficha","Aplicar a su proyecto"]
+  ];
+  const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+  const nav=document.getElementById('sideNav');
+  let visited=new Set(store.get('mii3-visitados',[]));
+  VIEWS.forEach((v,i)=>{
+    const b=document.createElement('button');b.className='side-link';b.dataset.go=i;
+    b.innerHTML=`<span class="side-num">${i===10?'F':String(i).padStart(2,'0')}</span><span><strong>${v[0]}</strong><small>${v[1]}</small></span>`;
+    nav.appendChild(b);
+  });
+  function go(i){
+    i=+i;
+    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='v'+i));
+    nav.querySelectorAll('.side-link').forEach(b=>b.classList.toggle('active',+b.dataset.go===i));
+    if(i>0&&i<10){visited.add(i);store.set('mii3-visitados',[...visited])}
+    nav.querySelectorAll('.side-link').forEach(b=>b.classList.toggle('done',visited.has(+b.dataset.go)));
+    const n=visited.size;document.getElementById('pbar').style.width=(n/9*100)+'%';
+    document.getElementById('ptxt').textContent=`${n} de 9 momentos explorados`;
+    const act=nav.querySelector('.side-link.active');if(act&&window.innerWidth<=900)act.scrollIntoView({block:'nearest',inline:'center'});
+    try{history.replaceState(null,'','#m'+i)}catch(e){}
+    window.scrollTo({top:0});
+  }
+  document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(t)go(t.dataset.go)});
+  const start=parseInt((location.hash||'').replace('#m',''));go(isNaN(start)?0:Math.min(10,Math.max(0,start)));
+
+  // Ejercicios de selección y casillas
+  document.querySelectorAll('.ex[data-type="select"],.ex[data-type="multi"]').forEach(ex=>{
+    const btn=ex.querySelector('.check'),fb=ex.querySelector(':scope > .fb');
+    btn.addEventListener('click',()=>{
+      let ok=0,tot=0,empty=false;
+      if(ex.dataset.type==='select'){
+        ex.querySelectorAll('select[data-ans]').forEach(s=>{tot++;s.classList.remove('ok','bad');if(!s.value){empty=true;return}const g=s.value===s.dataset.ans;s.classList.add(g?'ok':'bad');if(g)ok++});
+        if(empty){fb.className='fb show bad';fb.textContent='Complete todas las decisiones antes de comprobar.';return}
+      }else{
+        ex.querySelectorAll('.checks label').forEach(l=>{const c=l.querySelector('input');const should=c.dataset.ok==='1';tot++;l.classList.remove('ok','bad');if(c.checked===should){ok++;if(c.checked)l.classList.add('ok')}else l.classList.add('bad')});
+      }
+      ex.classList.add('checked');
+      const all=ok===tot;fb.className='fb show '+(all?'ok':'bad');
+      fb.textContent=all?'Excelente: todas las decisiones son coherentes. Lea las explicaciones para reforzar el porqué.':`Tiene ${ok} de ${tot} correctas. Revise las marcadas en rojo y lea la explicación de cada fila.`;
+    });
+  });
+  // Opción múltiple
+  document.querySelectorAll('.ex[data-type="mcq"]').forEach(ex=>{
+    const fb=ex.querySelector('.fb');
+    ex.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',()=>{
+      ex.querySelectorAll('.opt').forEach(x=>x.classList.remove('ok','bad'));
+      const g=o.dataset.ok==='1';o.classList.add(g?'ok':'bad');fb.className='fb show '+(g?'ok':'bad');fb.textContent=o.dataset.fb;
+    }));
+  });
+
+  // Calculadora
+  const fmt=n=>Number.isFinite(n)?n.toFixed(2).replace('.',','):'—';
+  const fmtv=n=>Number.isInteger(n)?String(n):fmt(n);
+  const input=document.getElementById('calcInput');
+  function calc(){
+    const vals=input.value.trim()===''?[]:input.value.replace(/,/g,'.').split(/[\s;]+/).filter(x=>x!=='').map(Number).filter(v=>!isNaN(v));
+    const out=document.getElementById('calcOut'),msg=document.getElementById('calcMsg'),dp=document.getElementById('dotplot');
+    if(vals.length<2){out.innerHTML='';dp.innerHTML='';msg.className='fb show bad';msg.textContent='Ingrese al menos dos valores numéricos.';return}
+    const s=[...vals].sort((a,b)=>a-b),n=s.length,mean=s.reduce((a,b)=>a+b,0)/n;
+    const med=n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2;
+    const freq={};s.forEach(v=>freq[v]=(freq[v]||0)+1);const mx=Math.max(...Object.values(freq));
+    const modes=mx>1?Object.keys(freq).filter(k=>freq[k]===mx).map(Number):[];
+    const sd=Math.sqrt(s.reduce((a,v)=>a+(v-mean)**2,0)/(n-1));
+    out.innerHTML=[['Media',fmt(mean)],['Mediana',fmt(med)],['Moda',modes.length?modes.map(fmtv).join(' y '):'Sin moda'],['Rango',fmt(s[n-1]-s[0])],['Desviación estándar',fmt(sd)],['n',n]].map(x=>`<div class="stat"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+    const W=600,H=124,pad=30,min=s[0],max=s[n-1],sc=v=>pad+(max===min?0.5:(v-min)/(max-min))*(W-2*pad);
+    let stack={},dots='';s.forEach(v=>{stack[v]=(stack[v]||0)+1;dots+=`<circle cx="${sc(v)}" cy="${70-(stack[v]-1)*12}" r="5" fill="#3f7da7"/>`});
+    dp.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Diagrama de puntos con media y mediana"><g font-family="Inter,Arial,sans-serif" font-size="11" fill="currentColor">
+      <line x1="${pad}" y1="80" x2="${W-pad}" y2="80" stroke="currentColor" stroke-opacity=".4"/>${dots}
+      <line x1="${sc(mean)}" y1="15" x2="${sc(mean)}" y2="85" stroke="#d6a44a" stroke-width="2"/><text x="${sc(mean)}" y="12" text-anchor="middle">media ${fmt(mean)}</text>
+      <line x1="${sc(med)}" y1="25" x2="${sc(med)}" y2="85" stroke="#2f6d4c" stroke-width="2" stroke-dasharray="4 3"/><text x="${sc(med)}" y="118" text-anchor="middle">mediana ${fmt(med)}</text>
+      <text x="${pad}" y="96" text-anchor="start">${fmtv(min)}</text><text x="${W-pad}" y="96" text-anchor="end">${fmtv(max)}</text></g></svg>`;
+    const gap=Math.abs(mean-med)/(sd||1);
+    msg.className='fb show ok';
+    msg.textContent=gap>0.25?`La media (${fmt(mean)}) se aleja de la mediana (${fmt(med)}) porque un valor extremo la arrastra. En este caso, la mediana describe mejor el tiempo típico; informe ambas y explique el valor atípico.`:`La media (${fmt(mean)}) y la mediana (${fmt(med)}) son cercanas: la distribución es bastante simétrica y la media resume bien los datos.`;
+  }
+  document.getElementById('calcBtn').addEventListener('click',calc);
+  document.getElementById('calcReset').addEventListener('click',()=>{input.value='4 5 5 6 6 6 7 8 8 9 10 28';calc()});
+  calc();
+
+  // Quiz
+  const Q=[
+    ["¿Cuál es la principal diferencia entre describir e interpretar?",["Describir usa números; interpretar usa palabras.","Describir informa qué se encontró; interpretar explica qué significa para la investigación.","No hay diferencia: son sinónimos."],1,"Ambos pueden darse con números o con palabras. La diferencia está en informar frente a explicar el significado."],
+    ["¿Cómo se organiza el capítulo de resultados?",["Siguiendo el orden de las preguntas del instrumento.","Por instrumento: primero el cuestionario y después las entrevistas.","Por objetivos específicos o categorías."],2,"Cada objetivo específico es un apartado; así se demuestra que todos fueron respondidos."],
+    ["En una encuesta, una persona registra un salario mensual negativo. ¿Qué corresponde hacer?",["Verificar el cuestionario original y corregir o tratar como faltante.","Dejarlo, porque eliminar datos es manipularlos.","Reemplazarlo por el promedio del grupo sin indicarlo."],0,"Es un error de digitación evidente. Se verifica y, si no puede corregirse, se trata como faltante y se informa."],
+    ["Para la variable «rama del derecho en que ejerce» (nominal), ¿qué medida corresponde?",["Media","Mediana","Moda y frecuencias"],2,"Las categorías nominales solo admiten frecuencias, porcentajes y moda."],
+    ["En la codificación cualitativa, una categoría es…",["una etiqueta breve asignada a un fragmento.","un grupo de códigos afines que representa un tema más amplio.","la pregunta de la guía de entrevista."],1,"El código etiqueta un segmento; la categoría agrupa códigos."],
+    ["¿Qué afirmación sobre una relación entre variables en un estudio transversal es correcta?",["Demuestra que la variable independiente causa la dependiente.","Muestra una asociación que debe valorarse con estadística inferencial y no implica causalidad por sí sola.","Solo puede analizarse con entrevistas."],1,"La asociación no equivale a causalidad; la prueba inferencial indica si la relación puede atribuirse al azar."],
+    ["Un gráfico circular muestra «100 % mujeres». ¿Qué hacer?",["Incluirlo con efecto 3D para que se vea mejor.","No incluirlo: el dato cabe en una oración.","Incluirlo sin título."],1,"Los gráficos que no aportan información no se incluyen."],
+    ["En un análisis mixto, los datos numéricos y los testimonios se contradicen. ¿Qué se hace?",["Se elimina el dato que no calza.","Se presenta la divergencia y se analiza su posible explicación.","Se privilegia siempre el dato cuantitativo."],1,"La divergencia es un hallazgo: se analiza y puede abrir nuevas preguntas."],
+    ["¿Cuál de estos elementos NO debe aparecer en el capítulo de análisis?",["Citas textuales de participantes","Contraste con el marco teórico","Conclusiones y recomendaciones del estudio"],2,"Las conclusiones van en un capítulo aparte."]
+  ];
+  let qi=0,score=0,answered=false;
+  const qText=document.getElementById('qText'),qOpts=document.getElementById('qOpts'),qFb=document.getElementById('qFb'),qNext=document.getElementById('qNext');
+  function showQ(){
+    answered=false;qNext.disabled=true;qFb.className='fb';
+    if(qi>=Q.length){qText.textContent=`Terminó el repaso: ${score} de ${Q.length} respuestas correctas al primer intento.`;qOpts.innerHTML='';qNext.textContent='Reiniciar repaso';qNext.disabled=false;document.getElementById('qNum').textContent='';return}
+    qNext.textContent='Siguiente pregunta';
+    const q=Q[qi];document.getElementById('qNum').textContent=`Pregunta ${qi+1} de ${Q.length}`;document.getElementById('qScore').textContent=`${score} correctas`;
+    qText.textContent=q[0];qOpts.innerHTML='';let first=true;
+    q[1].forEach((t,j)=>{const b=document.createElement('button');b.className='opt';b.textContent=t;b.addEventListener('click',()=>{
+      qOpts.querySelectorAll('.opt').forEach(x=>x.classList.remove('ok','bad'));
+      const g=j===q[2];b.classList.add(g?'ok':'bad');qFb.className='fb show '+(g?'ok':'bad');
+      qFb.textContent=(g?'Correcto. ':'Revise: ')+q[3];
+      if(g&&first&&!answered)score++;first=false;if(g){answered=true;qNext.disabled=false;document.getElementById('qScore').textContent=`${score} correctas`}
+    });qOpts.appendChild(b)});
+  }
+  qNext.addEventListener('click',()=>{if(qi>=Q.length){qi=0;score=0}else qi++;showQ()});
+  showQ();
+
+  // Ficha (tabla)
+  const rows=document.getElementById('fichaRows');
+  const cols=[['obj','Objetivo específico'],['cat','Categoría o variable'],['ins','Instrumento aplicado'],['items','Ítems o campos'],['tec','Técnica de análisis']];
+  const saved=store.get('mii3-ficha',{});
+  let nRows=Math.max(3,saved.__n||3);
+  function save(){const o={__n:nRows};document.querySelectorAll('[data-f]').forEach(x=>o[x.dataset.f]=x.value);store.set('mii3-ficha',o)}
+  function grow(f){f.style.height='auto';f.style.height=Math.max(f.scrollHeight+2,70)+'px'}
+  function addRow(r){
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="n" data-label="N.º">${r}</td>`+cols.map(c=>`<td data-label="${c[1]}"><textarea data-f="${c[0]}${r}" aria-label="${c[1]}, objetivo ${r}"></textarea></td>`).join('');
+    rows.appendChild(tr);
+    tr.querySelectorAll('textarea').forEach(f=>{if(saved[f.dataset.f])f.value=saved[f.dataset.f];f.addEventListener('input',()=>{save();grow(f)});requestAnimationFrame(()=>grow(f))});
+  }
+  for(let r=1;r<=nRows;r++)addRow(r);
+  document.getElementById('addRow').addEventListener('click',()=>{if(nRows>=8)return;nRows++;addRow(nRows);save()});
+  document.querySelectorAll('[data-f]').forEach(f=>{if(!f.closest('#fichaRows')){if(saved[f.dataset.f])f.value=saved[f.dataset.f];f.addEventListener('input',save)}});
+  const val=k=>(document.querySelector(`[data-f="${k}"]`)||{}).value||'';
+  const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  function fichaHTML(){
+    const td='border:1px solid #000;padding:4pt 5pt;vertical-align:top;font-family:Arial;font-size:10pt';
+    const th=td+';font-weight:bold;background:#d9d9d9';
+    let h=`<p style="font-family:Arial;font-size:11pt"><b>Matriz de congruencia del análisis</b></p>`;
+    h+=`<table style="border-collapse:collapse;width:100%"><tr><th style="${th};width:30%">Título provisional</th><td style="${td}">${esc(val('titulo'))}</td></tr><tr><th style="${th}">Enfoque</th><td style="${td}">${esc(val('enfoque'))}</td></tr></table><br>`;
+    h+=`<table style="border-collapse:collapse;width:100%"><thead><tr><th style="${th}">N.º</th>`+cols.map(c=>`<th style="${th}">${c[1]}</th>`).join('')+`</tr></thead><tbody>`;
+    let any=false;
+    for(let r=1;r<=nRows;r++){if(!cols.some(c=>val(c[0]+r).trim()))continue;any=true;h+=`<tr><td style="${td}">${r}</td>`+cols.map(c=>`<td style="${td}">${esc(val(c[0]+r))}</td>`).join('')+`</tr>`}
+    if(!any)h+=`<tr><td style="${td}" colspan="6">Sin objetivos completados</td></tr>`;
+    h+=`</tbody></table><br>`;
+    h+=`<table style="border-collapse:collapse;width:100%"><tr><th style="${th};width:30%">Organización y limpieza previas</th><td style="${td}">${esc(val('limpieza'))}</td></tr><tr><th style="${th}">Presentación prevista</th><td style="${td}">${esc(val('presentacion'))}</td></tr></table>`;
+    return h;
+  }
+  function fichaTSV(){
+    let t=`Matriz de congruencia del análisis\nTítulo provisional\t${val('titulo')}\nEnfoque\t${val('enfoque')}\n\nN.º\t`+cols.map(c=>c[1]).join('\t')+'\n';
+    for(let r=1;r<=nRows;r++){if(!cols.some(c=>val(c[0]+r).trim()))continue;t+=r+'\t'+cols.map(c=>val(c[0]+r).replace(/\s*\n\s*/g,' ')).join('\t')+'\n'}
+    t+=`\nOrganización y limpieza previas\t${val('limpieza').replace(/\n/g,' ')}\nPresentación prevista\t${val('presentacion').replace(/\n/g,' ')}\n`;return t;
+  }
+  const msgF=document.getElementById('fichaMsg'),prev=document.getElementById('fichaPrev');
+  function showPrev(){prev.innerHTML=`<div class="table-wrap">${fichaHTML()}</div>`;prev.classList.remove('hidden')}
+  document.getElementById('previewFicha').addEventListener('click',showPrev);
+  document.getElementById('copyFicha').addEventListener('click',async()=>{
+    const html=fichaHTML(),txt=fichaTSV();
+    try{
+      if(window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write){
+        await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([txt],{type:'text/plain'})})]);
+      }else throw new Error('sin ClipboardItem');
+      msgF.textContent='Tabla copiada. Péguela en Word o Google Docs: se conservará el formato de tabla.';
+    }catch(e){
+      showPrev();
+      try{const r=document.createRange();r.selectNodeContents(prev);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);
+        if(document.execCommand('copy')){msgF.textContent='Tabla copiada. Péguela en Word o Google Docs.';sel.removeAllRanges();return}}catch(_){}
+      msgF.textContent='No se pudo copiar automáticamente: seleccione la tabla de la vista previa y cópiela (Ctrl + C).';
+    }
+  });
+  document.getElementById('clearFicha').addEventListener('click',()=>{if(confirm('¿Borrar todo el contenido de la ficha?')){document.querySelectorAll('[data-f]').forEach(f=>f.value='');save();prev.classList.add('hidden');msgF.textContent='Ficha borrada.'}});
+
+  // Pantalla completa
+  const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
+  function fsUpdate(){document.querySelectorAll('.fs-btn').forEach(b=>{const on=!!fsEl();b.setAttribute('aria-pressed',on);b.textContent=on?'Salir de pantalla completa':(b.classList.contains('pill')?'Pantalla completa':'Ver en pantalla completa')})}
+  document.querySelectorAll('.fs-btn').forEach(b=>b.addEventListener('click',async()=>{
+    try{
+      if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}
+      else{const el=document.documentElement;const req=el.requestFullscreen||el.webkitRequestFullscreen;if(!req)throw new Error('no');await req.call(el)}
+    }catch(e){
+      const m=document.getElementById('fsMsg');m.classList.add('show');
+    }
+  }));
+  document.addEventListener('fullscreenchange',fsUpdate);document.addEventListener('webkitfullscreenchange',fsUpdate);
+
+  // Modales y modo docente
+  const bg=document.getElementById('modalBg'),mc=document.getElementById('modalContent');
+  function openModal(id){mc.innerHTML='';mc.appendChild(document.getElementById(id).content.cloneNode(true));bg.classList.add('show');const f=mc.querySelector('input,button');(f||document.getElementById('modalClose')).focus()}
+  function closeModal(){bg.classList.remove('show')}
+  document.getElementById('modalClose').addEventListener('click',closeModal);
+  bg.addEventListener('click',e=>{if(e.target===bg)closeModal()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+  document.getElementById('creditsBtn').addEventListener('click',()=>openModal('m-creditos'));
+  const TB=document.getElementById('teacherBtn');
+  TB.addEventListener('click',()=>{
+    if(document.body.classList.contains('teacher')){document.body.classList.remove('teacher');TB.textContent='Acceso docente';return}
+    openModal('m-docente');
+    const tryKey=()=>{const k=document.getElementById('teacherKey').value.trim();
+      if(k==='MII-analisis'){document.body.classList.add('teacher');TB.textContent='Salir del modo docente';closeModal()}
+      else document.getElementById('teacherMsg').textContent='Clave incorrecta. Verifique e intente de nuevo.'};
+    document.getElementById('teacherOk').addEventListener('click',tryKey);
+    document.getElementById('teacherKey').addEventListener('keydown',e=>{if(e.key==='Enter')tryKey()});
+  });
+})();
+</script>
+</body>
+</html>

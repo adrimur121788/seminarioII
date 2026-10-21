@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sustento teórico-conceptual · Seminario I</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --navy-950:#0b2940; --navy-900:#10344f; --navy-800:#164563;
+  --blue-700:#2c668f; --blue-600:#3f7da7; --blue-200:#dbeaf3; --blue-100:#eaf3f8; --blue-050:#f4f8fb;
+  --ink:#183344; --muted:#5c717b; --paper:#f5f8f8; --surface:#ffffff; --surface-2:#f2f7f9;
+  --line:#d8e2e6; --anno:#b4472b; --accent:#d6a44a; --accent-soft:#fbf3e2;
+  --ok-bg:#e9f4ee; --ok-line:#3d8a63; --bad-bg:#f8eef0; --bad-line:#a35d6a;
+  --shadow:0 16px 42px rgba(23,52,79,.09); --radius:22px;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy-950:#e6f0f6; --navy-900:#0f2a3e; --navy-800:#9cc6e4;
+    --blue-700:#8ec0e2; --blue-600:#6fa8d0; --blue-200:#24455c; --blue-100:#1b3649; --blue-050:#16303f;
+    --ink:#e2ecf1; --muted:#9db1bb; --paper:#0e1d27; --surface:#142734; --surface-2:#1a3141;
+    --line:#2b4555; --anno:#f29a7a; --accent:#e0b65e; --accent-soft:#3a3120;
+    --ok-bg:#163428; --ok-line:#5fb889; --bad-bg:#3a2026; --bad-line:#d38593;
+    --shadow:0 16px 42px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --navy-950:#e6f0f6; --navy-900:#0f2a3e; --navy-800:#9cc6e4;
+  --blue-700:#8ec0e2; --blue-600:#6fa8d0; --blue-200:#24455c; --blue-100:#1b3649; --blue-050:#16303f;
+  --ink:#e2ecf1; --muted:#9db1bb; --paper:#0e1d27; --surface:#142734; --surface-2:#1a3141;
+  --line:#2b4555; --anno:#f29a7a; --accent:#e0b65e; --accent-soft:#3a3120;
+  --ok-bg:#163428; --ok-line:#5fb889; --bad-bg:#3a2026; --bad-line:#d38593;
+  --shadow:0 16px 42px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.6;font-size:16px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+img,svg{max-width:100%}
+h1,h2,h3{font-family:var(--serif);color:var(--navy-950);line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2rem,4vw,3rem)}
+h2{font-size:clamp(1.55rem,2.6vw,2.1rem)}
+h3{font-size:1.25rem}
+p{margin:0 0 .9em}
+.prose{max-width:74ch}
+.muted{color:var(--muted)}
+.hidden{display:none!important}
+
+/* Encabezado */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px clamp(16px,3vw,34px);background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{flex-shrink:0;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:var(--navy-900);color:#fff;font-weight:900;letter-spacing:.04em}
+.brand strong{display:block;font-size:1.08rem}
+.brand small{display:block;color:var(--muted);font-size:.92rem}
+.tools{display:flex;gap:10px;flex-wrap:wrap}
+.pill{border:1.5px solid var(--blue-700);background:var(--surface);color:var(--navy-800);padding:9px 16px;border-radius:999px;font-weight:800;font-size:.92rem}
+body.teacher .pill#teacherBtn{background:var(--accent);border-color:var(--accent);color:#1c1c1c}
+
+/* Cadena del análisis */
+.chain{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px;align-items:center;padding:14px clamp(16px,3vw,34px);background:#10344f;color:#fff}
+.chain-steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
+.chain-step{position:relative;display:grid;place-items:center;text-align:center;min-height:44px;padding:8px;border-radius:9px;background:#24536f;font-size:.8rem;font-weight:800;line-height:1.2}
+.chain-step:not(:last-child)::after{content:"→";position:absolute;right:-9px;color:#e0b65e;font-weight:900;transform:translateX(50%)}
+.chain-note{padding-left:20px;border-left:1px solid rgba(255,255,255,.25);color:#dce9ef;font-size:.9rem;line-height:1.4}
+.chain-note strong{color:#fff}
+
+/* Estructura */
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);align-items:start}
+.sidebar{position:sticky;top:env(safe-area-inset-top,0px);max-height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--line);padding:26px 18px;min-height:100%}
+.sidebar h2{font-size:1.7rem;margin:6px 0 12px}
+.side-label{font-size:.82rem;font-weight:800;color:var(--blue-700)}
+.progress{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin:10px 0 6px}
+.progress>div{height:100%;width:0;background:var(--accent);transition:width .25s}
+#ptxt{color:var(--muted);font-size:.88rem}
+.side-nav{display:grid;gap:6px;margin-top:20px}
+.side-link{display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:center;width:100%;padding:9px 10px;border:0;border-radius:13px;background:transparent;text-align:left;color:var(--muted)}
+.side-link:hover{background:var(--blue-050)}
+.side-link.active{background:var(--blue-100);color:var(--ink)}
+.side-num{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);font-weight:900;color:var(--blue-700)}
+.side-link.active .side-num{background:var(--navy-900);color:#fff}
+.side-link.done .side-num::after{content:"";}
+.side-link strong{display:block;font-size:.97rem;color:var(--ink)}
+.side-link small{display:block;font-size:.8rem}
+.side-link.done strong::after{content:" ✓";color:var(--ok-line)}
+main{padding:28px clamp(16px,3vw,40px) 60px;min-width:0}
+.view{display:none}
+.view.active{display:block}
+
+/* Componentes */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(20px,3vw,38px);margin-bottom:22px}
+.kicker{display:inline-block;font-size:.85rem;font-weight:800;color:var(--blue-700);margin-bottom:8px}
+.lead{font-size:1.12rem;color:var(--ink);max-width:70ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.card h3{font-size:1.1rem;margin-bottom:.4em}
+.card.tint{background:var(--surface-2)}
+.note{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:14px;padding:14px 16px;margin:16px 0}
+.note strong{color:var(--ink)}
+.warn{background:var(--bad-bg);border:1px solid color-mix(in srgb,var(--bad-line) 40%,transparent);border-radius:14px;padding:14px 16px;margin:16px 0}
+.good{background:var(--ok-bg);border:1px solid color-mix(in srgb,var(--ok-line) 40%,transparent);border-radius:14px;padding:14px 16px;margin:16px 0}
+.case{border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--surface-2);margin:16px 0}
+.case .case-tag{display:inline-block;font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:999px;background:var(--blue-100);color:var(--blue-700);margin-bottom:8px}
+.case .case-tag.law{background:#efe6f6;color:#6b3f8f}
+.case .case-tag.acc{background:#e5f2ea;color:#2f6d4c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .case .case-tag.law{background:#3a2a48;color:#d7b8ef} :root:not([data-theme="light"]) .case .case-tag.acc{background:#1f3a2c;color:#9fd8b8}}
+:root[data-theme="dark"] .case .case-tag.law{background:#3a2a48;color:#d7b8ef}
+:root[data-theme="dark"] .case .case-tag.acc{background:#1f3a2c;color:#9fd8b8}
+.steps{counter-reset:s;display:grid;gap:12px;margin:14px 0;padding:0;list-style:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
+.steps li::before{content:counter(s);width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--navy-900);color:#fff;font-weight:900}
+.steps li strong{display:block}
+details.acc{border:1px solid var(--line);border-radius:14px;background:var(--surface);margin:10px 0}
+details.acc summary{cursor:pointer;padding:13px 16px;font-weight:800;color:var(--navy-800);list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"+";font-size:1.2rem;line-height:1}
+details.acc[open] summary::after{content:"–"}
+details.acc .acc-body{padding:0 16px 14px}
+.quote{border-left:4px solid var(--blue-600);background:var(--surface-2);padding:12px 16px;border-radius:0 12px 12px 0;margin:10px 0;font-style:normal}
+.quote b{color:var(--blue-700)}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:11px;padding:10px 16px;font-weight:800;border:1.5px solid transparent}
+.btn.primary{background:#164563;color:#fff}
+.btn.secondary{background:var(--surface);color:var(--navy-800);border-color:var(--blue-700)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;margin-top:18px}
+.chip-btn{border:1px solid var(--line);background:var(--surface);color:var(--navy-800);border-radius:999px;padding:7px 13px;font-weight:700;font-size:.9rem;margin:4px 6px 4px 0}
+.chip-btn:hover{border-color:var(--blue-600)}
+
+/* Tablas */
+.table-wrap{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.93rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--blue-100);color:var(--ink);font-weight:800}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:800;background:var(--surface-2)}
+.apa-title{margin:16px 0 2px;font-weight:800}
+.apa-sub{margin:0 0 6px;font-style:italic}
+.apa-note{font-size:.88rem;color:var(--muted);margin-top:4px}
+.apa table{border:0;min-width:520px}
+.apa th,.apa td{border:0;border-bottom:1px solid var(--line)}
+.apa thead th{border-top:2px solid var(--ink);border-bottom:1.5px solid var(--ink);background:transparent}
+.apa tr.total td{border-top:1.5px solid var(--ink);border-bottom:2px solid var(--ink);background:transparent}
+
+/* Ejercicios */
+.ex{border:1.5px dashed var(--blue-600);border-radius:18px;padding:18px;margin:18px 0;background:var(--blue-050)}
+.ex-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+.ex-head .badge{background:#164563;color:#fff;font-size:.78rem;font-weight:800;padding:3px 10px;border-radius:999px}
+.ex-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ex-row:last-of-type{border-bottom:0}
+.ex-row.two{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,.8fr)}
+select,input[type=text],textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+textarea{min-height:84px;resize:vertical}
+select.ok,.opt.ok{border-color:var(--ok-line);background:var(--ok-bg)}
+select.bad,.opt.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.why{grid-column:1/-1;font-size:.9rem;color:var(--muted);display:none}
+.ex.checked .why{display:block}
+.fb{margin-top:12px;padding:12px 14px;border-radius:12px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--ok-bg);border-left:4px solid var(--ok-line)}
+.fb.bad{background:var(--bad-bg);border-left:4px solid var(--bad-line)}
+.opts{display:grid;gap:8px;margin:10px 0}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 14px}
+.opt:hover{border-color:var(--blue-600)}
+.checks{display:grid;gap:8px;margin:10px 0}
+.checks label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.checks label.ok{border-color:var(--ok-line);background:var(--ok-bg)}
+.checks label.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.checks input{margin-top:5px;accent-color:#164563}
+.clave{display:none;margin-top:12px;border:1.5px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:12px 14px}
+.clave::before{content:"Clave docente";display:block;font-weight:900;font-size:.85rem;color:var(--ink);margin-bottom:4px}
+body.teacher .clave{display:block}
+
+/* Calculadora */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat span{display:block;font-size:.82rem;color:var(--muted)}
+.stat b{font-size:1.3rem;font-variant-numeric:tabular-nums}
+.dotplot{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px}
+
+/* Quiz */
+.quiz-top{display:flex;justify-content:space-between;color:var(--muted);font-weight:700;font-size:.9rem}
+.quiz-q{font-size:1.1rem;font-weight:700;margin:10px 0}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(8,25,38,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:500}
+.modal-bg.show{display:flex}
+.modal{background:var(--surface);color:var(--ink);border-radius:20px;max-width:640px;width:100%;max-height:85vh;overflow:auto;padding:26px;box-shadow:var(--shadow)}
+.modal-close{float:right;border:0;background:var(--surface-2);border-radius:10px;width:36px;height:36px;font-size:1.2rem}
+.ficha-preview{white-space:pre-wrap;background:var(--surface-2);border-radius:12px;padding:14px;font-size:.9rem;border:1px solid var(--line)}
+
+/* Inicio */
+.hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.8fr);gap:20px}
+.hero h1{margin-bottom:.35em}
+.qbox{display:grid;gap:12px;align-content:start}
+.qbox .card b{display:block;color:var(--blue-700);font-size:.9rem}
+
+@media (max-width:1100px){
+  .chain{grid-template-columns:1fr}
+  .chain-note{border-left:0;padding-left:0}
+}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);padding:14px}
+  .sidebar h2,.sidebar .side-label{display:none}
+  .side-nav{display:flex;overflow-x:auto;gap:6px;margin-top:8px;padding-bottom:4px}
+  .side-link{min-width:200px}
+  .grid2,.grid3,.hero{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ex-row,.ex-row.two{grid-template-columns:1fr}
+  .chain-steps{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .chain-step:nth-child(3)::after{display:none}
+  .brand-mark{width:44px;height:44px;border-radius:12px;font-size:.85rem}
+  .brand small{display:none}
+  .pill{padding:7px 12px;font-size:.84rem}
+  .chain{padding:12px 16px;gap:10px}
+  .chain-step{font-size:.72rem;min-height:38px}
+  .chain-note{font-size:.84rem}
+}
+
+.profes{margin-top:16px;color:var(--muted);font-size:.95rem}
+.site-footer{margin-top:30px;padding:20px 4px 4px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+.site-footer p{margin:0 0 8px}
+.site-footer a,.modal a{color:var(--blue-700)}
+.lic{display:flex;gap:12px;align-items:center}
+.cc{flex-shrink:0;border:2px solid currentColor;border-radius:8px;padding:2px 8px;font-weight:900;font-size:.8rem;text-transform:lowercase}
+.ficha-table-wrap{overflow-x:auto;margin:8px 0}
+.ficha-table{min-width:760px}
+.ficha-table td{padding:4px}
+.ficha-table td.n{text-align:center;font-weight:800;width:44px;vertical-align:middle}
+.ficha-table textarea{min-height:96px;border:0;border-radius:6px;background:var(--surface-2)}
+.ficha-preview{white-space:normal}
+.ficha-preview table{min-width:640px;color:#000;background:#fff}
+:fullscreen{overflow-y:auto;background:var(--paper)}
+@media (max-width:700px){
+  .ficha-table{min-width:0}
+  .ficha-table thead{display:none}
+  .ficha-table,.ficha-table tbody,.ficha-table tr,.ficha-table td{display:block;width:100%}
+  .ficha-table tr{border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:12px;background:var(--surface)}
+  .ficha-table td{border:0;padding:4px 0}
+  .ficha-table td::before{content:attr(data-label);display:block;font-weight:800;font-size:.85rem;margin-bottom:3px}
+  .ficha-table td.n{text-align:left;width:auto}
+  .ficha-table td.n::before{content:"N.º";display:inline;margin-right:6px}
+  .ficha-table textarea{min-height:70px}
+  .tools{width:100%}
+  .lic{align-items:flex-start}
+}
+@media (max-width:420px){
+  .tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .tools .pill{padding:7px 6px;font-size:.74rem;border-radius:12px;text-align:center;line-height:1.2}
+  .topbar{padding:12px}
+  main{padding:18px 12px 40px}
+  .panel{padding:18px 16px;border-radius:18px}
+  .chain-steps{gap:14px}
+  .stats{grid-template-columns:1fr 1fr}
+  .btn{padding:9px 13px}
+  .btn-row .btn{flex:1 1 auto;justify-content:center}
+}
+
+.anno-fig{margin:10px 0 0}
+.anno-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:10px}
+.anno-svg{display:block;width:100%;min-width:720px;height:auto}
+.anno{fill:var(--anno)}
+.anno-line{stroke:var(--anno);stroke-width:1.6}
+.anno-head{fill:var(--anno)}
+.anno-fig figcaption{font-size:.85rem;color:var(--muted);margin-top:6px}
+@media (min-width:901px){.anno-fig figcaption{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- Capítulo II: tokens adicionales ---- */
+:root{
+  --hl-p:#fbd38d; --hl-p-ink:#7a4a00;
+  --hl-s:#bcd9f7; --hl-s-ink:#14466e;
+  --hl-c:#c4ecd2; --hl-c-ink:#1f5c39;
+  --t1:#2c668f; --t1-soft:#e3eff7;
+  --t2:#3d8a63; --t2-soft:#e4f3ea;
+  --t3:#7a5aa6; --t3-soft:#efe8f7;
+  --t4:#b07a1f; --t4-soft:#fbf0dc;
+  --c-par:#2c668f; --c-nar:#7a5aa6; --c-tex:#b4472b; --c-apo:#3d8a63; --c-con:#9a6a12;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --hl-p:#6b4a12; --hl-p-ink:#ffe3b0; --hl-s:#1f4a70; --hl-s-ink:#d4e9ff; --hl-c:#1f4a33; --hl-c-ink:#c9f2d8;
+    --t1:#8ec0e2; --t1-soft:#1b3649; --t2:#7fd1a6; --t2-soft:#183a2a; --t3:#c6a9ef; --t3-soft:#2e2440; --t4:#f0c26a; --t4-soft:#3a2e17;
+    --c-par:#8ec0e2; --c-nar:#c6a9ef; --c-tex:#f29a7a; --c-apo:#7fd1a6; --c-con:#f0c26a;
+  }
+}
+:root[data-theme="dark"]{
+  --hl-p:#6b4a12; --hl-p-ink:#ffe3b0; --hl-s:#1f4a70; --hl-s-ink:#d4e9ff; --hl-c:#1f4a33; --hl-c-ink:#c9f2d8;
+  --t1:#8ec0e2; --t1-soft:#1b3649; --t2:#7fd1a6; --t2-soft:#183a2a; --t3:#c6a9ef; --t3-soft:#2e2440; --t4:#f0c26a; --t4-soft:#3a2e17;
+  --c-par:#8ec0e2; --c-nar:#c6a9ef; --c-tex:#f29a7a; --c-apo:#7fd1a6; --c-con:#f0c26a;
+}
+.chain-steps{grid-template-columns:repeat(7,minmax(0,1fr))}
+@media (max-width:900px){
+  .chain-steps{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .chain-step:nth-child(3n)::after,.chain-step:last-child::after{display:none}
+  .chain-step:nth-child(3)::after{display:none}
+}
+.chain-step.hot{background:#d6a44a;color:#1c1c1c}
+
+/* Subrayado */
+mark.hp,mark.hs,mark.hc{border-radius:4px;padding:0 2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.demo mark{background:transparent;color:inherit;transition:background .2s}
+.demo.on mark.hp,mark.hp.fixed{background:var(--hl-p);color:var(--hl-p-ink)}
+.demo.on mark.hs,mark.hs.fixed{background:var(--hl-s);color:var(--hl-s-ink)}
+.demo.on mark.hc,mark.hc.fixed{background:var(--hl-c);color:var(--hl-c-ink)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:10px 0;font-size:.92rem}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:18px;height:12px;border-radius:3px;display:inline-block}
+.sw.p{background:var(--hl-p)} .sw.s{background:var(--hl-s)} .sw.c{background:var(--hl-c)}
+.obj-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:10px 0}
+.obj-box h4{margin:0 0 6px;font-size:.92rem;color:var(--blue-700)}
+.obj-box ol{margin:0;padding-left:1.3em}
+.obj-box li{margin:4px 0}
+.mode-bar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.mode-bar button{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:700;font-size:.9rem;display:inline-flex;gap:8px;align-items:center;color:var(--ink)}
+.mode-bar button[aria-pressed="true"]{border-color:var(--navy-800);box-shadow:0 0 0 2px var(--blue-200)}
+.w{cursor:pointer;border-radius:4px;padding:1px 1px}
+.w:hover{outline:1.5px dashed var(--blue-600)}
+.w.p{background:var(--hl-p);color:var(--hl-p-ink)} .w.s{background:var(--hl-s);color:var(--hl-s-ink)} .w.c{background:var(--hl-c);color:var(--hl-c-ink)}
+.fb ul{margin:6px 0 0;padding-left:1.2em}
+
+/* Árbol del esquema */
+.tree-wrap{overflow-x:auto;margin:14px 0}
+.tree{display:grid;grid-template-columns:190px minmax(0,1fr);gap:26px;align-items:center;min-width:640px}
+.tree-root{background:#10344f;color:#fff;border-radius:14px;padding:16px;font-weight:800;text-align:center;line-height:1.3;position:relative}
+.tree-root::after{content:"";position:absolute;right:-26px;top:50%;width:26px;border-top:2px solid var(--muted)}
+.tree-branches{display:grid;gap:12px;border-left:2px solid var(--muted);padding-left:22px;position:relative}
+.branch{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px;align-items:center;position:relative}
+.branch::before{content:"";position:absolute;left:-22px;top:50%;width:22px;border-top:2px solid var(--muted)}
+.b-main{border:2px solid var(--tc);background:var(--ts);border-radius:12px;padding:10px 12px;font-weight:800;color:var(--ink);line-height:1.25}
+.b-main small{display:block;color:var(--tc);font-weight:900;font-size:.82rem}
+.b-subs{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.b-subs li{border:1px solid var(--line);border-left:4px solid var(--tc);border-radius:8px;padding:5px 10px;background:var(--surface);font-size:.92rem}
+.b-subs li b{color:var(--tc);margin-right:6px;font-variant-numeric:tabular-nums}
+.b-subs li.l3{margin-left:22px;font-style:italic}
+.k1{--tc:var(--t1);--ts:var(--t1-soft)} .k2{--tc:var(--t2);--ts:var(--t2-soft)} .k3{--tc:var(--t3);--ts:var(--t3-soft)} .k4{--tc:var(--t4);--ts:var(--t4-soft)}
+
+/* Índice tipo Word */
+.outline{font-family:Arial,Helvetica,sans-serif;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:.95rem;line-height:1.7}
+.outline .h1{text-align:center;font-weight:700}
+.outline .h2{font-weight:700;margin-top:6px}
+.outline .h3{padding-left:2em}
+.outline .h4{padding-left:4em;font-style:italic}
+
+/* Marco teórico de ejemplo */
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,4vw,44px);font-family:"Source Serif 4",Georgia,serif;font-size:1.03rem;line-height:1.85;color:var(--ink)}
+.paper h4{font-family:Arial,Helvetica,sans-serif;font-size:1rem;margin:22px 0 8px;color:var(--ink)}
+.paper h4.c{text-align:center}
+.paper h5{font-family:Arial,Helvetica,sans-serif;font-size:.98rem;margin:16px 0 6px;color:var(--ink)}
+.paper p{text-indent:2.2em;text-align:justify;hyphens:auto;margin:0 0 .7em}
+.paper blockquote{margin:10px 0 12px 2.6em;padding:0;text-align:justify}
+.paper .fig-mini{margin:12px 0;text-indent:0}
+.ann .c-par{text-decoration:underline 2.5px var(--c-par);text-underline-offset:4px}
+.ann .c-nar{background:color-mix(in srgb,var(--c-nar) 20%,transparent);border-radius:3px}
+.ann .c-tex{text-decoration:underline wavy 1.5px var(--c-tex);text-underline-offset:4px}
+.ann blockquote.c-tex{text-decoration:none;border-left:4px solid var(--c-tex);padding-left:12px;margin-left:2em}
+.ann .c-apo{background:color-mix(in srgb,var(--c-apo) 18%,transparent);border-radius:3px}
+.ann .c-con{font-weight:700;color:var(--c-con)}
+.ann .c-del{outline:2px dashed var(--accent);outline-offset:2px;border-radius:3px}
+.ann-legend{display:none;flex-wrap:wrap;gap:8px 16px;font-size:.88rem;margin:10px 0}
+.ann-on .ann-legend{display:flex}
+.ann-legend span{display:inline-flex;align-items:center;gap:6px}
+.ann-legend i{display:inline-block;width:26px;height:12px;border-radius:3px}
+.refs p{padding-left:2.2em;text-indent:-2.2em;text-align:left}
+.fict{color:var(--muted);font-size:.85em}
+.toggle-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.switch{display:inline-flex;align-items:center;gap:8px;font-weight:700;cursor:pointer}
+.switch input{width:18px;height:18px;accent-color:#164563}
+
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:14px 0}
+.flow div{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:10px;position:relative;font-size:.92rem}
+.flow div b{display:block;color:var(--blue-700);font-size:.82rem;margin-bottom:2px}
+.flow div:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translate(50%,-50%);color:var(--accent);font-weight:900}
+.connectors td{font-size:.92rem}
+.task{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:0}
+.task .when{font-weight:900;color:var(--blue-700)}
+.cta-box{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;background:#10344f;color:#fff;border-radius:18px;padding:20px 22px;margin-top:16px}
+.cta-box p{margin:0;max-width:60ch}
+.cta-box a{background:#d6a44a;color:#1c1c1c;text-decoration:none;font-weight:800;padding:11px 18px;border-radius:11px}
+@media (max-width:900px){
+  .flow{grid-template-columns:1fr}
+  .flow div:not(:last-child)::after{content:"↓";right:50%;top:auto;bottom:-14px;transform:translateX(50%)}
+  .task{grid-template-columns:1fr;gap:4px}
+}
+@media (max-width:700px){
+  .tree{grid-template-columns:1fr;min-width:0}
+  .tree-root::after{display:none}
+  .tree-branches{border-left:0;padding-left:0}
+  .branch{grid-template-columns:1fr;gap:6px}
+  .branch::before{display:none}
+  .b-subs{padding-left:14px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">SI</div>
+    <div><strong>Seminario I · Sustento teórico-conceptual</strong><small>Universidad Florencio del Castillo</small></div>
+  </div>
+  <div class="tools">
+    <button class="pill fs-btn" aria-pressed="false">Pantalla completa</button>
+    <button class="pill" id="creditsBtn">Créditos y uso de IA</button>
+    <button class="pill" id="teacherBtn">Acceso docente</button>
+  </div>
+</header>
+
+<div class="chain" aria-label="Ruta para construir el marco teórico">
+  <div class="chain-steps">
+    <div class="chain-step">Tema</div>
+    <div class="chain-step">Pregunta</div>
+    <div class="chain-step">Objetivos</div>
+    <div class="chain-step hot">Conceptos principales</div>
+    <div class="chain-step hot">Conceptos secundarios</div>
+    <div class="chain-step">Esquema</div>
+    <div class="chain-step">Redacción</div>
+  </div>
+  <div class="chain-note"><strong>Idea central:</strong> los conceptos del marco teórico no se eligen al azar. Se desprenden del tema, de la pregunta y de los objetivos de su investigación.</div>
+</div>
+
+<div class="layout">
+<aside class="sidebar">
+  <span class="side-label">Ruta de aprendizaje</span>
+  <h2>Del objetivo al concepto</h2>
+  <div class="progress"><div id="pbar"></div></div>
+  <div id="ptxt">0 de 9 momentos explorados</div>
+  <nav class="side-nav" id="sideNav"></nav>
+</aside>
+
+<main>
+
+<!-- ===================== INICIO ===================== -->
+<section class="view" id="v0">
+  <div class="hero">
+    <div class="panel">
+      <span class="kicker">Capítulo II del Trabajo Final de Graduación</span>
+      <h1>¿De dónde salen los conceptos de mi marco teórico?</h1>
+      <p class="lead">Muchas personas investigadoras empiezan el capítulo II buscando «todo lo que existe» sobre su tema. El resultado suele ser un texto largo, desordenado y desconectado de la investigación. En esta sesión aprenderá un camino distinto: subrayar los conceptos que ya están en su tema, su pregunta y sus objetivos, ordenarlos en un esquema y desarrollarlos con sustento teórico.</p>
+      <p>Todos los ejemplos provienen del campo de la <b>contaduría</b>: control interno, información financiera, facturación electrónica y cumplimiento tributario en pymes costarricenses. Los casos, las personas autoras y las citas marcadas como ficticias se crearon con fines didácticos.</p>
+      <div class="btn-row" style="justify-content:flex-start">
+        <button class="btn primary" data-go="1">Comenzar la sesión</button>
+        <a class="btn secondary" href="plantilla_esquema.html" style="text-decoration:none">Abrir la plantilla del esquema</a>
+        <button class="btn secondary fs-btn" aria-pressed="false">Ver en pantalla completa</button>
+      </div>
+      <p class="fb bad" id="fsMsg">Este navegador no permitió activar la pantalla completa (ocurre en algunos teléfonos, como el iPhone). Puede girar el dispositivo para aprovechar todo el espacio.</p>
+      <p class="profes"><b>Personas docentes:</b> M. Sc. Adrián Murillo-González, Dra. Iria Briceño-Álvarez y M. Sc. Ginnette Guillén Jiménez</p>
+    </div>
+    <div class="qbox">
+      <div class="card"><b>Pregunta guía</b>¿Qué conceptos necesito explicar para que mi pregunta de investigación se entienda y pueda responderse?</div>
+      <div class="card"><b>Decisión central</b>¿Cuáles conceptos son principales y cuáles son secundarios, y cómo se organizan en el esquema?</div>
+      <div class="card"><b>Coherencia</b>¿Cada tema del esquema responde a mis objetivos y me ayuda a definir variables o categorías?</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h2>Al finalizar podrá</h2>
+    <div class="grid3">
+      <div class="card tint"><h3>Identificar</h3><p>Subrayar en su tema, pregunta y objetivos los conceptos principales, los secundarios y el contexto del estudio.</p></div>
+      <div class="card tint"><h3>Organizar</h3><p>Jerarquizar esos conceptos en temas y subtemas, y construir el esquema del marco teórico, que es obligatorio en el TFG.</p></div>
+      <div class="card tint"><h3>Redactar</h3><p>Desarrollar cada tema con citas parentéticas y narrativas, textuales y parafraseadas, y explicar cómo la teoría delimita sus variables o categorías.</p></div>
+    </div>
+    <div class="note"><strong>Cómo usar este sitio.</strong> Recorra los momentos en orden. Cada uno combina teoría, un caso de contaduría y una práctica con retroalimentación. Al terminar, use la plantilla interactiva para construir el esquema de su propio TFG.</div>
+  </div>
+</section>
+
+<!-- ===================== 1. QUÉ ES ===================== -->
+<section class="view" id="v1">
+  <div class="panel">
+    <span class="kicker">Momento 1</span>
+    <h2>¿Qué es el marco teórico?</h2>
+    <div class="prose">
+      <p>El marco teórico es la <b>estructura conceptual</b> que reúne las ideas, teorías, conceptos y modelos relevantes para comprender y abordar el problema de investigación. Es la columna vertebral del estudio: establece el contexto teórico en el que se sitúa la investigación y orienta la interpretación de los resultados.</p>
+      <p>No es un resumen de todo lo que se ha escrito sobre un tema. Es una selección argumentada de los conceptos que <b>su</b> investigación necesita, organizada según su pregunta y sus objetivos.</p>
+    </div>
+    <div class="grid2">
+      <div class="card tint"><h3>Qué hace</h3>
+        <p>Proporciona una base teórica sólida. Incorpora teorías, modelos y conceptos relacionados con el problema. Busca comprender y explicar fenómenos desde una perspectiva teórica y establece el contexto conceptual más amplio del estudio.</p>
+        <p style="margin:0">Además, <b>ayuda a definir las variables y a diseñar la metodología</b>, y permite explicar patrones y relaciones que luego se observarán en los datos.</p></div>
+      <div class="card tint"><h3>Sus funciones</h3>
+        <ol class="steps" style="margin:0">
+          <li><div>Proporciona un contexto histórico y conceptual para el problema.</div></li>
+          <li><div>Establece las bases conceptuales sobre las que se desarrolla el estudio.</div></li>
+          <li><div>Define los términos clave y las variables que se investigarán.</div></li>
+          <li><div>Ofrece una visión general de las teorías y modelos existentes.</div></li>
+          <li><div>Orienta la interpretación de los resultados y la discusión de los hallazgos.</div></li>
+        </ol></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Un ejemplo en contaduría</h3>
+    <div class="case">
+      <span class="case-tag acc">Caso A · contaduría (hipotético)</span>
+      <p>Una estudiante quiere investigar si las pymes comerciales de Cartago que tienen un mejor control interno producen información financiera de mayor calidad.</p>
+      <p style="margin:0">Su marco teórico no necesita explicar la historia de la contabilidad ni todas las normas contables existentes. Necesita explicar con precisión <b>qué es el control interno</b>, <b>qué significa que la información financiera sea de calidad</b> y <b>por qué ambos conceptos podrían estar relacionados</b>. Con esa base podrá diseñar su instrumento e interpretar sus resultados.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ex" data-type="select">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>¿Es una función del marco teórico?</strong></div>
+      <div class="ex-row"><p>Define los términos clave y las variables que se investigarán, como «control interno» o «calidad de la información financiera».</p>
+        <select data-ans="si"><option value="">Seleccione…</option><option value="si">Sí, es una función</option><option value="no">No corresponde al marco teórico</option></select>
+        <p class="why">Es una de sus funciones principales: sin definiciones claras no es posible medir ni interpretar.</p></div>
+      <div class="ex-row"><p>Presenta los porcentajes obtenidos en la encuesta aplicada a las personas contadoras.</p>
+        <select data-ans="no"><option value="">Seleccione…</option><option value="si">Sí, es una función</option><option value="no">No corresponde al marco teórico</option></select>
+        <p class="why">Los datos propios se presentan en el capítulo de resultados, no en el sustento teórico.</p></div>
+      <div class="ex-row"><p>Ofrece una visión general del modelo COSO y de otros modelos de control interno.</p>
+        <select data-ans="si"><option value="">Seleccione…</option><option value="si">Sí, es una función</option><option value="no">No corresponde al marco teórico</option></select>
+        <p class="why">Presentar teorías y modelos relacionados con el tema es parte central del capítulo.</p></div>
+      <div class="ex-row"><p>Describe el cronograma de aplicación del cuestionario.</p>
+        <select data-ans="no"><option value="">Seleccione…</option><option value="si">Sí, es una función</option><option value="no">No corresponde al marco teórico</option></select>
+        <p class="why">El cronograma pertenece al diseño metodológico.</p></div>
+      <div class="ex-row"><p>Orienta la interpretación de los hallazgos y su discusión con otros autores.</p>
+        <select data-ans="si"><option value="">Seleccione…</option><option value="si">Sí, es una función</option><option value="no">No corresponde al marco teórico</option></select>
+        <p class="why">En el análisis se vuelve al marco teórico para contrastar los hallazgos.</p></div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="0">Volver al inicio</button><button class="btn primary" data-go="2">Estructura del capítulo II</button></div>
+</section>
+
+<!-- ===================== 2. ESTRUCTURA ===================== -->
+<section class="view" id="v2">
+  <div class="panel">
+    <span class="kicker">Momento 2</span>
+    <h2>¿Qué contempla el capítulo II?</h2>
+    <p class="prose">El capítulo II del TFG se titula <b>Sustento teórico-conceptual</b>. Debe ofrecer el respaldo teórico que sostiene el estudio y orienta su comprensión. Tiene cinco partes:</p>
+    <ol class="steps">
+      <li><div><strong>Introducción al capítulo</strong>Presenta el propósito del capítulo, explica su relación con el problema, la pregunta y los objetivos, e indica de manera general los temas que se desarrollarán.</div></li>
+      <li><div><strong>Esquema del marco teórico</strong>Muestra la organización jerárquica de los temas y subtemas. Permite visualizar la estructura del sustento teórico y debe ser coherente con los objetivos. <b>Es obligatorio.</b></div></li>
+      <li><div><strong>Desarrollo de los temas</strong>Presenta y analiza las teorías, conceptos, modelos y antecedentes más relevantes. Profundiza en cada tema y subtema del esquema e incluye la relación entre los conceptos, con citas y referencias en APA 7.</div></li>
+      <li><div><strong>Síntesis y relación con la investigación</strong>Vincula los aportes teóricos con el problema, justifica la relevancia de los conceptos y permite fundamentar las variables o categorías y el enfoque metodológico.</div></li>
+      <li><div><strong>Elementos a considerar</strong>Conceptos clave, teorías y modelos, antecedentes de investigación, relación entre conceptos, tendencias y enfoques actuales, y vinculación con los objetivos y el problema.</div></li>
+    </ol>
+  </div>
+
+  <div class="panel">
+    <h3>Cómo se ve en el índice del TFG</h3>
+    <div class="grid2">
+      <div class="outline" aria-label="Estructura general del capítulo">
+        <div class="h1">Capítulo II. Sustento teórico-conceptual</div>
+        <div class="h2">Introducción al capítulo</div>
+        <div class="h2">Esquema del marco teórico</div>
+        <div class="h2">2.1 Tema 1</div>
+        <div class="h3">2.1.1 Subtema</div>
+        <div class="h4">2.1.1.1 Tercer nivel (si es necesario)</div>
+        <div class="h2">2.2 Tema 2</div>
+        <div class="h3">2.2.1 Subtema</div>
+        <div class="h3">2.2.2 Subtema</div>
+      </div>
+      <div>
+        <h3>Lineamientos UCA de formato</h3>
+        <div class="table-wrap"><table style="min-width:0">
+          <tr><th>Fuente</th><td>Arial o Times New Roman, tamaño 11 o 12</td></tr>
+          <tr><th>Interlineado</th><td>1,5 y texto justificado, con sangría al inicio de cada párrafo</td></tr>
+          <tr><th>Títulos principales</th><td>Centrados y en negrita</td></tr>
+          <tr><th>Subtítulos</th><td>Alineados a la izquierda y en negrita</td></tr>
+          <tr><th>Tercer nivel</th><td>En cursiva y alineado a la izquierda</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="note"><strong>Importante:</strong> el capítulo II debe ofrecer el sustento teórico-conceptual que respalda el estudio y orienta su comprensión. Los temas que desarrolle deben ser los mismos que aparecen en su esquema, en el mismo orden y con la misma numeración.</div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="1">Momento anterior</button><button class="btn primary" data-go="3">Subrayar los conceptos</button></div>
+</section>
+
+<!-- ===================== 3. SUBRAYAR ===================== -->
+<section class="view" id="v3">
+  <div class="panel">
+    <span class="kicker">Momento 3 · Paso 1 para crear el marco teórico</span>
+    <h2>Los conceptos ya están en sus objetivos</h2>
+    <div class="prose">
+      <p>El primer paso es <b>analizar el tema, la pregunta y los objetivos</b> y preguntarse: ¿cuáles son los grandes temas que se abordarán? La forma más práctica de hacerlo es subrayarlos con colores.</p>
+    </div>
+    <div class="grid3">
+      <div class="card tint"><h3><span class="sw p"></span> Conceptos principales</h3><p>Se toman del tema y del objetivo general. Son los grandes temas del capítulo: cada uno será un apartado 2.1, 2.2…</p></div>
+      <div class="card tint"><h3><span class="sw s"></span> Conceptos secundarios</h3><p>Aparecen en los objetivos específicos. Precisan, descomponen o relacionan los principales y se convierten en subtemas 2.1.1, 2.1.2…</p></div>
+      <div class="card tint"><h3><span class="sw c"></span> Contexto del estudio</h3><p>La unidad de estudio, el lugar o la institución. Suele convertirse en un apartado propio que describe el contexto (por ejemplo, el sector o la empresa).</p></div>
+    </div>
+    <div class="warn"><strong>No se subrayan:</strong> los verbos de los objetivos (analizar, identificar, describir…), los artículos ni las palabras de enlace. Tampoco el periodo, salvo que el tiempo sea en sí mismo un concepto del estudio.</div>
+  </div>
+
+  <div class="panel">
+    <h3>Observe el subrayado del caso A</h3>
+    <div class="case">
+      <span class="case-tag acc">Caso A · contaduría (hipotético)</span>
+      <div class="demo" id="demoA">
+        <div class="obj-box"><h4>Tema</h4><p style="margin:0">El <mark class="hp">control interno</mark> y la <mark class="hp">calidad de la información financiera</mark> en las <mark class="hc">pymes comerciales de Cartago</mark>.</p></div>
+        <div class="obj-box"><h4>Pregunta de investigación</h4><p style="margin:0">¿Cómo se relaciona el <mark class="hp">control interno</mark> con la <mark class="hp">calidad de la información financiera</mark> de las <mark class="hc">pymes comerciales del cantón central de Cartago</mark> durante 2026?</p></div>
+        <div class="obj-box"><h4>Objetivo general</h4><p style="margin:0">Analizar la relación entre el <mark class="hp">control interno</mark> y la <mark class="hp">calidad de la información financiera</mark> en las <mark class="hc">pymes comerciales del cantón central de Cartago</mark> durante 2026.</p></div>
+        <div class="obj-box"><h4>Objetivos específicos</h4><ol>
+          <li>Diagnosticar el estado de los <mark class="hs">componentes del control interno</mark> en las pymes comerciales del cantón central de Cartago.</li>
+          <li>Evaluar la calidad de la información financiera según sus <mark class="hs">características cualitativas fundamentales</mark> y <mark class="hs">de mejora</mark>.</li>
+          <li>Determinar la <mark class="hs">relación entre los componentes del control interno y las características cualitativas</mark> de la información financiera.</li>
+        </ol></div>
+      </div>
+      <div class="legend"><span><i class="sw p"></i>Concepto principal</span><span><i class="sw s"></i>Concepto secundario</span><span><i class="sw c"></i>Contexto</span></div>
+      <button class="btn primary" id="demoBtn" aria-pressed="false">Mostrar el subrayado</button>
+    </div>
+    <h3 style="margin-top:18px">Lo que obtuvimos</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Tipo</th><th>Conceptos subrayados</th><th>Qué serán en el capítulo</th></tr></thead>
+      <tbody>
+        <tr><td style="white-space:nowrap"><span class="sw p"></span> Principal</td><td>Control interno; calidad de la información financiera</td><td>Temas 2.1 y 2.2</td></tr>
+        <tr><td style="white-space:nowrap"><span class="sw s"></span> Secundario</td><td>Componentes del control interno; características cualitativas fundamentales y de mejora; relación entre ambos conceptos</td><td>Subtemas de 2.1 y 2.2, y un tema 2.3 que explique la relación</td></tr>
+        <tr><td style="white-space:nowrap"><span class="sw c"></span> Contexto</td><td>Pymes comerciales del cantón central de Cartago</td><td>Tema 2.4, que describe el contexto</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Observe que «información financiera» aparece en el objetivo general y en los específicos. Cuando un concepto principal se repite en un objetivo específico, lo nuevo es lo que lo acompaña: en el objetivo 2, lo que se agrega son sus «características cualitativas».</p>
+  </div>
+
+  <div class="panel">
+    <div class="ex" id="hlEx">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Ahora subraye usted: caso B</strong></div>
+      <p>Elija un color y haga clic en cada palabra que forma parte de un concepto. Para quitar una marca, vuelva a hacer clic sobre la palabra con el mismo color o use «Quitar».</p>
+      <div class="mode-bar" role="group" aria-label="Color de subrayado">
+        <button data-mode="p" aria-pressed="true"><i class="sw p"></i>Concepto principal</button>
+        <button data-mode="s" aria-pressed="false"><i class="sw s"></i>Concepto secundario</button>
+        <button data-mode="c" aria-pressed="false"><i class="sw c"></i>Contexto</button>
+        <button data-mode="x" aria-pressed="false">Quitar</button>
+      </div>
+      <div id="hlTarget"></div>
+      <div class="btn-row" style="justify-content:flex-start"><button class="btn primary" id="hlCheck">Comprobar</button><button class="btn secondary" id="hlReset">Borrar marcas</button><button class="btn secondary" id="hlShow">Ver una propuesta</button></div>
+      <div class="fb" id="hlFb"></div>
+      <div class="clave">Propuesta de subrayado: principales «facturación electrónica» y «cumplimiento tributario» (tema y objetivo general); contexto «microempresas comerciales de Turrialba»; secundarios «barreras de adopción», «tipos de comprobantes electrónicos» y «cumplimiento tributario formal». En el objetivo 3 se aceptan principal o secundario. Conviene discutir con el grupo por qué «Analizar», «Identificar» o «durante 2026» no se subrayan.</div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="2">Momento anterior</button><button class="btn primary" data-go="4">Construir el esquema</button></div>
+</section>
+
+<!-- ===================== 4. ESQUEMA ===================== -->
+<section class="view" id="v4">
+  <div class="panel">
+    <span class="kicker">Momento 4 · Paso 2 para crear el marco teórico</span>
+    <h2>Del subrayado al esquema</h2>
+    <div class="prose">
+      <p>Con los conceptos identificados, el siguiente paso es <b>ordenarlos jerárquicamente</b>. Los conceptos principales se convierten en temas; los secundarios, en subtemas. También puede agregar subtemas que no aparecen literalmente en los objetivos, pero que son necesarios para desarrollarlos. Por ejemplo, casi todo tema principal empieza por su <b>concepto</b>.</p>
+      <p>El esquema es un <b>resumen visual</b> de lo que se encontrará en el capítulo II. Se incluye después de la introducción del capítulo, como una figura con número, título y fuente.</p>
+    </div>
+    <div class="grid3">
+      <div class="card tint"><h3>Pregúntese</h3><p>¿Qué necesita saber la persona lectora sobre este concepto para entender mi objetivo?</p></div>
+      <div class="card tint"><h3>Profundidad</h3><p>Use hasta tres niveles (2.1, 2.1.1, 2.1.1.1). Más niveles suelen indicar que un tema debería dividirse.</p></div>
+      <div class="card tint"><h3>Coherencia</h3><p>Cada tema principal debe poder vincularse con al menos un objetivo. Si no, sobra.</p></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Esquema del caso A</h3>
+    <div class="tree-wrap"><div class="tree" aria-label="Esquema del marco teórico del caso A">
+      <div class="tree-root">Capítulo II.<br>Sustento teórico-conceptual</div>
+      <div class="tree-branches">
+        <div class="branch k1"><div class="b-main"><small>2.1</small>Control interno</div><ul class="b-subs"><li><b>2.1.1</b>Concepto de control interno</li><li><b>2.1.2</b>Marco integrado COSO</li><li><b>2.1.3</b>Componentes del control interno</li><li class="l3"><b>2.1.3.1</b>Entorno de control y evaluación de riesgos</li><li class="l3"><b>2.1.3.2</b>Actividades de control y supervisión</li></ul></div>
+        <div class="branch k2"><div class="b-main"><small>2.2</small>Información financiera</div><ul class="b-subs"><li><b>2.2.1</b>Concepto y personas usuarias</li><li><b>2.2.2</b>Características cualitativas fundamentales</li><li><b>2.2.3</b>Características cualitativas de mejora</li></ul></div>
+        <div class="branch k3"><div class="b-main"><small>2.3</small>Relación entre control interno y calidad de la información financiera</div><ul class="b-subs"><li><b>2.3.1</b>Debilidades de control y errores en los registros</li><li><b>2.3.2</b>Estudios previos</li></ul></div>
+        <div class="branch k4"><div class="b-main"><small>2.4</small>Las pymes comerciales en Cartago</div><ul class="b-subs"><li><b>2.4.1</b>Caracterización de las pymes comerciales</li><li><b>2.4.2</b>Marco normativo contable aplicable</li></ul></div>
+      </div>
+    </div></div>
+    <div class="good"><strong>Por qué funciona:</strong> los temas 2.1 y 2.2 vienen del objetivo general; sus subtemas, de los objetivos específicos 1 y 2; el tema 2.3 responde al objetivo específico 3, y el 2.4 desarrolla el contexto. Nada en el esquema es ajeno a la investigación.</div>
+  </div>
+
+  <div class="panel">
+    <div class="ex" data-type="select">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Ubique cada subtema del caso B en su tema principal</strong></div>
+      <p class="muted">Temas principales: 2.1 Facturación electrónica; 2.2 Cumplimiento tributario; 2.3 Microempresas comerciales de Turrialba.</p>
+      <div class="ex-row"><p>Tipos de comprobantes electrónicos</p>
+        <select data-ans="a"><option value="">Seleccione…</option><option value="a">2.1 Facturación electrónica</option><option value="b">2.2 Cumplimiento tributario</option><option value="c">2.3 Microempresas comerciales</option></select>
+        <p class="why">Describe en qué consiste la facturación electrónica: es parte de su concepto.</p></div>
+      <div class="ex-row"><p>Barreras de adopción de la facturación electrónica</p>
+        <select data-ans="a"><option value="">Seleccione…</option><option value="a">2.1 Facturación electrónica</option><option value="b">2.2 Cumplimiento tributario</option><option value="c">2.3 Microempresas comerciales</option></select>
+        <p class="why">Viene del objetivo específico 1 y precisa el concepto de facturación electrónica.</p></div>
+      <div class="ex-row"><p>Cumplimiento tributario formal</p>
+        <select data-ans="b"><option value="">Seleccione…</option><option value="a">2.1 Facturación electrónica</option><option value="b">2.2 Cumplimiento tributario</option><option value="c">2.3 Microempresas comerciales</option></select>
+        <p class="why">Es una forma de cumplimiento: declarar y registrar a tiempo, emitir comprobantes, llevar libros.</p></div>
+      <div class="ex-row"><p>Cumplimiento tributario material</p>
+        <select data-ans="b"><option value="">Seleccione…</option><option value="a">2.1 Facturación electrónica</option><option value="b">2.2 Cumplimiento tributario</option><option value="c">2.3 Microempresas comerciales</option></select>
+        <p class="why">Se refiere al pago correcto del impuesto; se contrasta con el formal dentro del mismo tema.</p></div>
+      <div class="ex-row"><p>Caracterización del sector comercial de Turrialba</p>
+        <select data-ans="c"><option value="">Seleccione…</option><option value="a">2.1 Facturación electrónica</option><option value="b">2.2 Cumplimiento tributario</option><option value="c">2.3 Microempresas comerciales</option></select>
+        <p class="why">Describe el contexto del estudio.</p></div>
+      <div class="ex-row"><p>Obligaciones tributarias de las microempresas</p>
+        <select data-ans="b|c"><option value="">Seleccione…</option><option value="a">2.1 Facturación electrónica</option><option value="b">2.2 Cumplimiento tributario</option><option value="c">2.3 Microempresas comerciales</option></select>
+        <p class="why">Puede ubicarse en 2.2 (qué se debe cumplir) o en 2.3 (qué aplica a este tipo de empresa). Lo importante es justificar la decisión y no repetir el subtema en ambos lugares.</p></div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ex" data-type="mcq">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>¿Qué tema NO debería aparecer en el esquema del caso B?</strong></div>
+      <div class="opts">
+        <button class="opt" data-ok="0" data-fb="Este concepto sí es necesario: precisa el objetivo específico 2.">Cumplimiento tributario formal</button>
+        <button class="opt" data-ok="1" data-fb="Correcto. Es interesante, pero no responde a ningún objetivo. Incluirlo alarga el capítulo sin aportar a la investigación.">Historia de la contabilidad desde la antigua Mesopotamia</button>
+        <button class="opt" data-ok="0" data-fb="Este tema describe el contexto del estudio, por lo que sí corresponde.">Caracterización de las microempresas comerciales de Turrialba</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="3">Momento anterior</button><button class="btn primary" data-go="5">La teoría delimita</button></div>
+</section>
+
+<!-- ===================== 5. DELIMITA ===================== -->
+<section class="view" id="v5">
+  <div class="panel">
+    <span class="kicker">Momento 5</span>
+    <h2>La teoría delimita sus variables, categorías y formas de medición</h2>
+    <div class="prose">
+      <p>El marco teórico no es un capítulo decorativo que se escribe y se olvida. Las definiciones y los modelos que usted elija determinan <b>qué observará</b> y <b>cómo lo medirá o analizará</b>. Si dos personas investigan el control interno con modelos distintos, construirán instrumentos distintos.</p>
+    </div>
+    <div class="flow" aria-label="Cadena de delimitación">
+      <div><b>Concepto</b>Control interno</div>
+      <div><b>Teoría o modelo</b>Marco integrado COSO (2013)</div>
+      <div><b>Dimensiones</b>Los cinco componentes del modelo</div>
+      <div><b>Indicadores</b>Prácticas observables de cada componente</div>
+      <div><b>Medición</b>Ítems del cuestionario y escala</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>En un estudio cuantitativo: variables</h3>
+    <div class="case"><span class="case-tag acc">Caso A</span><p style="margin:0">El modelo COSO organiza el control interno en cinco componentes. La investigadora los adopta como dimensiones de la variable. Del Marco Conceptual del IASB toma las características cualitativas de la información financiera.</p></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Variable</th><th>Teoría que la delimita</th><th>Dimensiones</th><th>Indicador de ejemplo</th><th>Forma de medición</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2"><b>Control interno</b></td><td rowspan="2">Marco integrado de control interno (COSO, 2013)</td><td>Actividades de control</td><td>Existencia de una política escrita para autorizar gastos</td><td>Ítem dicotómico (sí/no)</td></tr>
+        <tr><td>Actividades de supervisión</td><td>Frecuencia con que la persona propietaria revisa las conciliaciones bancarias</td><td>Escala ordinal (nunca a mensualmente)</td></tr>
+        <tr><td rowspan="2"><b>Calidad de la información financiera</b></td><td rowspan="2">Marco Conceptual para la Información Financiera (IASB, 2018)</td><td>Características fundamentales</td><td>Representación fiel: diferencias detectadas entre registros y documentos de respaldo</td><td>Cantidad de diferencias en una muestra de transacciones</td></tr>
+        <tr><td>Características de mejora</td><td>Oportunidad: días entre el cierre del mes y la emisión de los estados financieros</td><td>Número de días (razón)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <h3>En un estudio cualitativo: categorías</h3>
+    <div class="case"><span class="case-tag acc">Caso C · contaduría (hipotético)</span><p style="margin:0"><b>Objetivo:</b> comprender las percepciones de personas contadoras independientes sobre la adopción de sistemas contables en la nube. El Modelo de Aceptación Tecnológica (Davis, 1989) propone que la adopción depende de la utilidad percibida y de la facilidad de uso percibida.</p></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Categoría</th><th>Origen teórico</th><th>Subcategorías</th><th>Pregunta guía de la entrevista</th></tr></thead>
+      <tbody>
+        <tr><td><b>Utilidad percibida</b></td><td>Modelo de Aceptación Tecnológica (Davis, 1989)</td><td>Ahorro de tiempo; reducción de errores; acceso remoto a la información</td><td>¿De qué manera el sistema en la nube ha cambiado su trabajo con los clientes?</td></tr>
+        <tr><td><b>Facilidad de uso percibida</b></td><td>Modelo de Aceptación Tecnológica (Davis, 1989)</td><td>Aprendizaje inicial; claridad de la interfaz; soporte técnico</td><td>¿Cómo fue su experiencia al aprender a usar el sistema?</td></tr>
+        <tr><td><b>Categoría emergente</b></td><td>Surge de los datos</td><td>Por ejemplo, confianza en la seguridad de los datos de los clientes</td><td>Se incorpora si aparece de forma recurrente en las entrevistas</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><strong>Categorías deductivas y emergentes.</strong> En la investigación cualitativa, la teoría ofrece categorías iniciales (deductivas), pero no cierra la posibilidad de que surjan otras durante el análisis (emergentes). Ambas son válidas si se documenta su origen.</div>
+  </div>
+
+  <div class="panel">
+    <div class="ex" data-type="mcq">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>En el caso A, ¿de dónde deben salir las dimensiones de la variable «calidad de la información financiera»?</strong></div>
+      <div class="opts">
+        <button class="opt" data-ok="0" data-fb="Las preguntas se redactan después; si se escriben primero, las dimensiones terminan ajustándose al instrumento y no a la teoría.">De las preguntas que la investigadora ya redactó para el cuestionario.</button>
+        <button class="opt" data-ok="1" data-fb="Correcto. El modelo teórico elegido y desarrollado en el capítulo II define las dimensiones; luego estas se traducen en indicadores e ítems.">Del modelo teórico que se desarrolla en el capítulo II, en este caso las características cualitativas del Marco Conceptual del IASB.</button>
+        <button class="opt" data-ok="0" data-fb="La opinión de la persona investigadora no sustituye la fundamentación teórica.">De lo que la investigadora considera más importante según su experiencia laboral.</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="4">Momento anterior</button><button class="btn primary" data-go="6">Redactar y citar</button></div>
+</section>
+
+<!-- ===================== 6. REDACCIÓN ===================== -->
+<section class="view" id="v6">
+  <div class="panel">
+    <span class="kicker">Momento 6</span>
+    <h2>Redactar el marco teórico</h2>
+    <div class="grid2">
+      <div class="card tint"><h3>Redacción</h3><p>Se redacta en prosa, con un tono académico, objetivo e impersonal. No se escribe en primera persona. Los párrafos deben ser claros, coherentes, bien articulados y de 7 a 10 renglones.</p></div>
+      <div class="card tint"><h3>Citas y análisis</h3><p>Toda afirmación se sustenta con fuentes confiables y actualizadas en formato APA 7. Después de una cita textual o de un párrafo clave, la persona investigadora debe dar su aporte e interpretación.</p></div>
+      <div class="card tint"><h3>Contenido</h3><p>Expone teorías, supuestos teóricos y conceptos clave. Desarrolla los temas y subtemas del esquema e incluye la introducción y el esquema.</p></div>
+      <div class="card tint"><h3>Recomendaciones</h3><p>Evite redundancias y muletillas. Use conectores de forma adecuada, sin repetir siempre los mismos. Revise ortografía, gramática y estilo. Mantenga la coherencia con el problema y los objetivos.</p></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Sin primera persona</h3>
+    <div class="grid2">
+      <div class="warn" style="margin:0"><strong>Evite</strong><br>«Yo considero que el control interno es fundamental para las pymes.»<br>«En mi opinión, la facturación electrónica mejoró el cumplimiento.»</div>
+      <div class="good" style="margin:0"><strong>Prefiera</strong><br>«El control interno es fundamental para las pymes, pues…»<br>«La evidencia disponible sugiere que la facturación electrónica… (Autor, año).»</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Formas de citar en APA 7</h3>
+    <p class="prose">Hay dos decisiones independientes. La primera es <b>dónde aparece la autoría</b>: dentro del paréntesis (cita parentética) o como parte de la oración (cita narrativa). La segunda es <b>si copia las palabras exactas</b> (cita textual) o las expresa con sus propias palabras (paráfrasis).</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th></th><th>Paráfrasis</th><th>Cita textual</th></tr></thead>
+      <tbody>
+        <tr><th>Parentética</th><td>La segregación de funciones es limitada en las pymes (Vargas Quesada y Mora Chaves, 2023).</td><td>Las características de mejora «solo amplían el valor de una información que ya es relevante y fiel» (Calderón Arias, 2024, p. 112).</td></tr>
+        <tr><th>Narrativa</th><td>Vargas Quesada y Mora Chaves (2023) señalan que la segregación de funciones es limitada en las pymes.</td><td>Araya Solís (2021) afirma que el control interno «no es un documento que se archiva» (p. 34).</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grid2">
+      <div class="card"><h3>Cita textual corta</h3><p>Menos de 40 palabras. Va entre comillas dentro del párrafo y siempre lleva el número de página (p. 34) o de párrafo (párr. 2).</p></div>
+      <div class="card"><h3>Cita textual en bloque</h3><p>40 palabras o más. Va en un párrafo aparte, con sangría izquierda, sin comillas, y el número de página va al final, después del punto.</p></div>
+    </div>
+    <p class="muted" style="margin-top:12px">En APA 7 en español, dos personas autoras se unen con «y». Con tres o más, se cita solo la primera seguida de «et al.» desde la primera cita. Todas las obras citadas deben aparecer en la lista de referencias.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Conectores para articular las ideas</h3>
+    <div class="table-wrap"><table class="connectors">
+      <thead><tr><th>Función</th><th>Conectores</th></tr></thead>
+      <tbody>
+        <tr><td>Agregar una idea</td><td>Además, asimismo, de igual manera, por otra parte</td></tr>
+        <tr><td>Contrastar</td><td>Sin embargo, no obstante, por el contrario, en cambio</td></tr>
+        <tr><td>Expresar causa</td><td>Debido a que, puesto que, dado que, ya que</td></tr>
+        <tr><td>Expresar consecuencia</td><td>Por lo tanto, en consecuencia, de ahí que, por esta razón</td></tr>
+        <tr><td>Ejemplificar</td><td>Por ejemplo, tal es el caso de, como muestra de ello</td></tr>
+        <tr><td>Relacionar autores</td><td>En esta misma línea, al respecto, por su parte, desde otra perspectiva</td></tr>
+        <tr><td>Sintetizar</td><td>En síntesis, en suma, de esta manera, a partir de lo anterior</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <div class="ex" data-type="select">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>Identifique el tipo de cita</strong></div>
+      <div class="ex-row"><p>«…lo cual limita la segregación de funciones que recomiendan los modelos tradicionales (Vargas Quesada y Mora Chaves, 2023).»</p>
+        <select data-ans="pp"><option value="">Seleccione…</option><option value="pp">Parentética, paráfrasis</option><option value="pt">Parentética, textual</option><option value="np">Narrativa, paráfrasis</option><option value="nt">Narrativa, textual</option></select>
+        <p class="why">La autoría está entre paréntesis y la idea está expresada con palabras propias, sin comillas ni página.</p></div>
+      <div class="ex-row"><p>«Araya Solís (2021) señala que el control interno “no es un documento que se archiva, sino un conjunto de prácticas cotidianas” (p. 34).»</p>
+        <select data-ans="nt"><option value="">Seleccione…</option><option value="pp">Parentética, paráfrasis</option><option value="pt">Parentética, textual</option><option value="np">Narrativa, paráfrasis</option><option value="nt">Narrativa, textual</option></select>
+        <p class="why">La autora forma parte de la oración y las palabras exactas van entre comillas con página.</p></div>
+      <div class="ex-row"><p>«Según Brenes Ulate (2022), los controles deben adaptarse a la escala de cada empresa.»</p>
+        <select data-ans="np"><option value="">Seleccione…</option><option value="pp">Parentética, paráfrasis</option><option value="pt">Parentética, textual</option><option value="np">Narrativa, paráfrasis</option><option value="nt">Narrativa, textual</option></select>
+        <p class="why">El autor está en la oración y la idea está parafraseada.</p></div>
+      <div class="ex-row"><p>«…pues las características de mejora “solo amplían el valor de una información que ya es relevante y fiel” (Calderón Arias, 2024, p. 112).»</p>
+        <select data-ans="pt"><option value="">Seleccione…</option><option value="pp">Parentética, paráfrasis</option><option value="pt">Parentética, textual</option><option value="np">Narrativa, paráfrasis</option><option value="nt">Narrativa, textual</option></select>
+        <p class="why">Texto exacto entre comillas, con autoría, año y página dentro del paréntesis.</p></div>
+      <button class="btn primary check">Comprobar</button>
+      <div class="fb"></div>
+    </div>
+    <div class="ex" data-type="mcq">
+      <div class="ex-head"><span class="badge">Práctica</span><strong>¿Qué le falta a esta cita?</strong></div>
+      <p class="quote">Ramírez Soto et al. (2020) indican que los principales usuarios de los estados financieros de una pyme son «la persona propietaria, los bancos y la Administración Tributaria».</p>
+      <div class="opts">
+        <button class="opt" data-ok="1" data-fb="Correcto. Toda cita textual debe indicar la página o el párrafo, por ejemplo (p. 27).">El número de página, porque es una cita textual.</button>
+        <button class="opt" data-ok="0" data-fb="Con tres o más autores, APA 7 usa «et al.» desde la primera cita.">Los nombres de las tres personas autoras.</button>
+        <button class="opt" data-ok="0" data-fb="Una cita narrativa es correcta; no necesita ir entre paréntesis.">Poner a los autores entre paréntesis.</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="5">Momento anterior</button><button class="btn primary" data-go="7">Ejemplo desarrollado</button></div>
+</section>
+
+<!-- ===================== 7. EJEMPLO ===================== -->
+<section class="view" id="v7">
+  <div class="panel">
+    <span class="kicker">Momento 7</span>
+    <h2>Ejemplo desarrollado: un marco teórico breve</h2>
+    <p class="prose">Este es un fragmento del capítulo II del caso A: la introducción, el esquema, dos conceptos principales con dos subtemas cada uno, y la síntesis. Active las anotaciones para ver dónde se usa cada tipo de cita, dónde aporta la persona investigadora y dónde la teoría delimita las variables.</p>
+    <div class="warn"><strong>Aviso:</strong> las personas autoras, obras y citas marcadas con asterisco (*) son ficticias y se crearon solo para este ejemplo. No las use en su TFG. COSO (2013), IASB (2018) y Davis (1989) son fuentes reales, que aquí se parafrasean.</div>
+    <div id="annWrap">
+      <div class="toggle-row"><label class="switch"><input type="checkbox" id="annToggle"> Mostrar anotaciones</label></div>
+      <div class="ann-legend" aria-label="Leyenda de anotaciones">
+        <span><i style="border-bottom:3px solid var(--c-par)"></i>Cita parentética</span>
+        <span><i style="background:color-mix(in srgb,var(--c-nar) 25%,transparent)"></i>Cita narrativa</span>
+        <span><i style="border-bottom:2px dotted var(--c-tex)"></i>Cita textual</span>
+        <span><i style="background:color-mix(in srgb,var(--c-apo) 25%,transparent)"></i>Aporte de la persona investigadora</span>
+        <span><i style="background:transparent;color:var(--c-con);font-style:normal;font-weight:800;width:auto">Conector</i></span>
+        <span><i style="outline:2px dashed var(--accent)"></i>La teoría delimita la variable</span>
+      </div>
+      <article class="paper" id="paper">
+        <h4 class="c">Capítulo II. Sustento teórico-conceptual</h4>
+        <h4>Introducción al capítulo</h4>
+        <p>El presente capítulo expone el sustento teórico-conceptual que orienta el análisis de la relación entre el control interno y la calidad de la información financiera en las pymes comerciales del cantón central de Cartago. Su propósito es definir los conceptos centrales del estudio, presentar los modelos que permiten abordarlos y explicar su vínculo con la pregunta y los objetivos de investigación. <span class="c-con">En primer lugar</span>, se desarrolla el control interno desde el marco integrado propuesto por el Committee of Sponsoring Organizations of the Treadway Commission. <span class="c-con">Posteriormente</span>, se aborda la información financiera y sus características cualitativas. <span class="c-con">Finalmente</span>, se analiza la relación entre ambos conceptos. La Figura 1 presenta la organización de los temas que se desarrollan en este capítulo.</p>
+        <p class="fig-mini" style="text-indent:0;margin-bottom:0"><b>Figura 1</b><br><i>Esquema del marco teórico</i></p>
+        <div class="fig-paper" style="font-family:var(--sans);font-size:.92rem;line-height:1.4"><div class="tree-wrap"><div class="tree" aria-label="Figura 1, esquema del marco teórico">
+      <div class="tree-root">Capítulo II.<br>Sustento teórico-conceptual</div>
+      <div class="tree-branches">
+        <div class="branch k1"><div class="b-main"><small>2.1</small>Control interno</div><ul class="b-subs"><li><b>2.1.1</b>Concepto de control interno</li><li><b>2.1.2</b>Marco integrado COSO</li><li><b>2.1.3</b>Componentes del control interno</li><li class="l3"><b>2.1.3.1</b>Entorno de control y evaluación de riesgos</li><li class="l3"><b>2.1.3.2</b>Actividades de control y supervisión</li></ul></div>
+        <div class="branch k2"><div class="b-main"><small>2.2</small>Información financiera</div><ul class="b-subs"><li><b>2.2.1</b>Concepto y personas usuarias</li><li><b>2.2.2</b>Características cualitativas fundamentales</li><li><b>2.2.3</b>Características cualitativas de mejora</li></ul></div>
+        <div class="branch k3"><div class="b-main"><small>2.3</small>Relación entre control interno y calidad de la información financiera</div><ul class="b-subs"><li><b>2.3.1</b>Debilidades de control y errores en los registros</li><li><b>2.3.2</b>Estudios previos</li></ul></div>
+        <div class="branch k4"><div class="b-main"><small>2.4</small>Las pymes comerciales en Cartago</div><ul class="b-subs"><li><b>2.4.1</b>Caracterización de las pymes comerciales</li><li><b>2.4.2</b>Marco normativo contable aplicable</li></ul></div>
+      </div>
+    </div></div>
+</div>
+        <p style="text-indent:0;font-size:.95rem"><i>Nota.</i> Elaboración propia.</p>
+        <p style="text-indent:0;text-align:center" class="muted">[Por extensión, este fragmento desarrolla solo los temas 2.1 y 2.2 del esquema.]</p>
+
+        <h4>2.1 Control interno</h4>
+        <h5>2.1.1 Concepto de control interno</h5>
+        <p>El control interno constituye uno de los pilares de la gestión contable de cualquier organización, independientemente de su tamaño. De acuerdo con el <span class="c-nar">Committee of Sponsoring Organizations of the Treadway Commission (COSO, 2013)</span>, el control interno es un proceso que llevan a cabo la dirección y el personal de una entidad, diseñado para proporcionar un grado de seguridad razonable sobre el logro de los objetivos relacionados con las operaciones, la información y el cumplimiento. <span class="c-con">En esta misma línea</span>, <span class="c-nar">Araya Solís (2021)</span> señala que el control interno <span class="c-tex">«no es un documento que se archiva, sino un conjunto de prácticas cotidianas que protegen los recursos de la empresa y dan confiabilidad a sus registros» (p. 34)</span>. <span class="c-apo">A partir de estas definiciones, se entiende que el control interno trasciende la elaboración de manuales y se manifiesta en las acciones diarias de quienes registran, autorizan y revisan las operaciones.</span></p>
+        <p><span class="c-con">No obstante</span>, la aplicación del control interno en las pequeñas y medianas empresas presenta particularidades. En estas organizaciones, una misma persona suele asumir funciones de registro, custodia y autorización, lo cual limita la segregación de funciones que recomiendan los modelos tradicionales <span class="c-par">(Vargas Quesada y Mora Chaves, 2023)</span>. <span class="c-con">Por esta razón</span>, diversos autores proponen adaptar los controles a la escala de cada empresa, en lugar de trasladar sin ajustes los procedimientos diseñados para grandes corporaciones <span class="c-par">(Brenes Ulate, 2022; Calderón Arias, 2024)</span>. <span class="c-apo">Esta discusión resulta pertinente para la presente investigación, ya que el diagnóstico del control interno en las pymes comerciales de Cartago debe considerar las limitaciones propias de su tamaño y estructura.</span></p>
+        <h5>2.1.2 Componentes del control interno</h5>
+        <p>El modelo COSO organiza el control interno en cinco componentes interrelacionados: el entorno de control, la evaluación de riesgos, las actividades de control, la información y comunicación, y las actividades de supervisión <span class="c-par">(COSO, 2013)</span>. El entorno de control comprende las normas, los procesos y las estructuras que sirven de base para el control en la organización; la evaluación de riesgos consiste en identificar y analizar los riesgos que podrían impedir el logro de los objetivos; y las actividades de control son las acciones establecidas mediante políticas y procedimientos para mitigarlos. <span class="c-con">Por su parte</span>, la información y la comunicación permiten que los datos relevantes lleguen oportunamente a quienes los necesitan, mientras que la supervisión evalúa de forma continua si los demás componentes funcionan.</p>
+        <p><span class="c-del"><span class="c-apo">Para efectos de este estudio, los cinco componentes del modelo COSO se asumen como las dimensiones de la variable control interno. En consecuencia, el instrumento de recolección incluirá indicadores para cada componente, por ejemplo, la existencia de una política escrita de autorización de gastos (actividades de control) o la frecuencia con que la persona propietaria revisa las conciliaciones bancarias (actividades de supervisión).</span></span> <span class="c-con">De esta manera</span>, <span class="c-apo">la teoría no solo define el concepto, sino que también determina qué se observará y cómo se medirá.</span></p>
+
+        <h4>2.2 Información financiera</h4>
+        <h5>2.2.1 Concepto de información financiera</h5>
+        <p>La información financiera es el producto final del proceso contable y el insumo principal para la toma de decisiones económicas. El Marco Conceptual del <span class="c-nar">International Accounting Standards Board (IASB, 2018)</span> establece que la información financiera con propósito general tiene como objetivo brindar datos útiles a inversionistas, prestamistas y otros acreedores para que tomen decisiones sobre el suministro de recursos a la entidad. <span class="c-con">Sin embargo</span>, en el caso de las pymes, <span class="c-nar">Ramírez Soto et al. (2020)</span> advierten que las principales personas usuarias de los estados financieros suelen ser la propia persona propietaria, las entidades financieras y la Administración Tributaria. <span class="c-apo">Así, la calidad de la información financiera no puede evaluarse en abstracto, sino en relación con las decisiones que efectivamente se toman a partir de ella.</span></p>
+        <h5>2.2.2 Características cualitativas de la información financiera</h5>
+        <p>El Marco Conceptual distingue dos tipos de características cualitativas. Las fundamentales, que son la relevancia y la representación fiel, determinan si la información es útil; las de mejora, es decir, la comparabilidad, la verificabilidad, la oportunidad y la comprensibilidad, incrementan esa utilidad <span class="c-par">(IASB, 2018)</span>. <span class="c-con">Al respecto</span>, <span class="c-nar">Calderón Arias (2024)</span> explica:</p>
+        <blockquote class="c-tex">Una información puede ser oportuna y fácil de leer, pero si no representa fielmente las transacciones de la empresa, su utilidad desaparece. Por ello, las características de mejora no compensan la ausencia de las fundamentales; solo amplían el valor de una información que ya es relevante y fiel. (p. 112)</blockquote>
+        <p><span class="c-apo">Esta precisión es clave para la presente investigación, pues implica que la evaluación de la calidad de la información financiera debe iniciar por las características fundamentales y, solo después, valorar las de mejora.</span> <span class="c-con">En consecuencia</span>, <span class="c-del"><span class="c-apo">la variable calidad de la información financiera se operacionalizará en dos dimensiones, características fundamentales y características de mejora, y cada característica se convertirá en un indicador. Por ejemplo, la oportunidad se medirá con el número de días que transcurren entre el cierre del mes y la emisión de los estados financieros.</span></span></p>
+
+        <h4>Síntesis y relación con la investigación</h4>
+        <p>La revisión teórica permite establecer que el control interno y la calidad de la información financiera están estrechamente vinculados. Cuando las actividades de control y la supervisión son débiles, aumenta la probabilidad de errores u omisiones en los registros, lo cual afecta directamente la representación fiel de la información <span class="c-par">(Vargas Quesada y Mora Chaves, 2023)</span>. <span class="c-con">Desde esta perspectiva</span>, <span class="c-apo">el sustento teórico-conceptual orienta el estudio en tres sentidos: define las variables, establece sus dimensiones e indicadores, y ofrece los criterios para interpretar los resultados. Así, cada hallazgo sobre las pymes comerciales de Cartago podrá contrastarse con lo que plantean los modelos de COSO y del IASB.</span></p>
+
+        <div class="refs">
+          <h4 class="c">Referencias</h4>
+          <p>Araya Solís, M. (2021). <i>Control interno para pequeñas empresas: Guía práctica</i>. Editorial Ejemplo. <span class="fict">*</span></p>
+          <p>Brenes Ulate, R. (2022). Control interno proporcional en pymes latinoamericanas. <i>Revista Ejemplo de Contabilidad</i>, <i>14</i>(2), 45–63. <span class="fict">*</span></p>
+          <p>Calderón Arias, L. (2024). <i>Calidad de la información financiera en empresas pequeñas</i> (2.ª ed.). Editorial Ejemplo. <span class="fict">*</span></p>
+          <p>Committee of Sponsoring Organizations of the Treadway Commission. (2013). <i>Internal control—Integrated framework: Executive summary</i>. COSO.</p>
+          <p>International Accounting Standards Board. (2018). <i>Marco conceptual para la información financiera</i>. IFRS Foundation.</p>
+          <p>Ramírez Soto, P., Soto Vega, A. y Quirós Mata, D. (2020). Usuarios de la información financiera en pymes costarricenses. <i>Revista Ejemplo de Ciencias Económicas</i>, <i>8</i>(1), 22–40. <span class="fict">*</span></p>
+          <p>Vargas Quesada, J. y Mora Chaves, K. (2023). Segregación de funciones y errores contables en pequeñas empresas. <i>Revista Ejemplo de Contabilidad</i>, <i>15</i>(1), 10–29. <span class="fict">*</span></p>
+          <p class="fict" style="text-indent:0;padding-left:0">* Referencia ficticia, creada solo con fines didácticos.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Qué observar en el ejemplo</h3>
+    <div class="grid2">
+      <div class="card tint"><h3>Estructura</h3><p>Los títulos siguen exactamente el esquema: 2.1 con sus subtemas 2.1.1 y 2.1.2; 2.2 con 2.2.1 y 2.2.2. Cada párrafo tiene entre 7 y 10 renglones en formato Word.</p></div>
+      <div class="card tint"><h3>Voces</h3><p>Ninguna cita queda sola. Después de citar, la persona investigadora explica qué significa para su estudio. Esa voz propia es lo que convierte una recopilación de citas en un marco teórico.</p></div>
+      <div class="card tint"><h3>Delimitación</h3><p>Los párrafos con borde punteado muestran el momento en que la teoría se convierte en dimensiones, indicadores y formas de medición.</p></div>
+      <div class="card tint"><h3>Referencias</h3><p>Cada obra citada aparece en la lista, en orden alfabético, con sangría francesa y en formato APA 7.</p></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="6">Momento anterior</button><button class="btn primary" data-go="8">Repaso</button></div>
+</section>
+
+<!-- ===================== 8. REPASO ===================== -->
+<section class="view" id="v8">
+  <div class="panel">
+    <span class="kicker">Momento 8</span>
+    <h2>Repaso: un reto a la vez</h2>
+    <p class="prose">Responda cada pregunta. Si falla, lea la explicación y vuelva a intentarlo antes de avanzar.</p>
+    <div class="ex" id="quiz">
+      <div class="quiz-top"><span id="qNum"></span><span id="qScore"></span></div>
+      <p class="quiz-q" id="qText"></p>
+      <div class="opts" id="qOpts"></div>
+      <div class="fb" id="qFb"></div>
+      <div class="btn-row"><span></span><button class="btn primary" id="qNext" disabled>Siguiente pregunta</button></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="7">Momento anterior</button><button class="btn primary" data-go="9">Cierre y tarea</button></div>
+</section>
+
+<!-- ===================== 9. CIERRE ===================== -->
+<section class="view" id="v9">
+  <div class="panel">
+    <span class="kicker">Momento 9</span>
+    <h2>Cierre: complete la idea central</h2>
+    <div class="ex" data-type="select" style="line-height:2.4">
+      <p>Los conceptos del marco teórico se desprenden del
+        <select style="width:auto" data-ans="a"><option value="">…</option><option value="a">tema, la pregunta y los objetivos</option><option value="b">índice de un libro</option><option value="c">buscador de internet</option></select>.
+        Los conceptos del objetivo general son
+        <select style="width:auto" data-ans="b"><option value="">…</option><option value="a">secundarios</option><option value="b">principales</option><option value="c">opcionales</option></select>
+        y se convierten en temas; los de los objetivos específicos se convierten en
+        <select style="width:auto" data-ans="c"><option value="">…</option><option value="a">conclusiones</option><option value="b">anexos</option><option value="c">subtemas</option></select>.
+        Con ellos se construye el
+        <select style="width:auto" data-ans="a"><option value="">…</option><option value="a">esquema</option><option value="b">cronograma</option><option value="c">presupuesto</option></select>,
+        que es obligatorio en el TFG. Al redactar, cada idea se sustenta con
+        <select style="width:auto" data-ans="b"><option value="">…</option><option value="a">opiniones personales</option><option value="b">citas en APA 7</option><option value="c">frases en primera persona</option></select>,
+        y la teoría permite
+        <select style="width:auto" data-ans="c"><option value="">…</option><option value="a">alargar el capítulo</option><option value="b">evitar la metodología</option><option value="c">delimitar las variables o categorías</option></select>.</p>
+      <button class="btn primary check">Comprobar frase</button>
+      <div class="fb"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Tarea del capítulo II</h3>
+    <div class="task"><div class="when">Semana 5<br><span class="muted" style="font-weight:600">19 al 23 de octubre</span></div><div>Subir al Aula Virtual el documento trabajado en clase: el tema, la pregunta y los objetivos con los conceptos subrayados, y el esquema del marco teórico.</div></div>
+    <div class="task"><div class="when">Semana 7<br><span class="muted" style="font-weight:600">2 al 6 de noviembre</span></div><div>Entregar el capítulo II completo: introducción, esquema, desarrollo de los temas y subtemas del diagrama con citas actualizadas de fuentes confiables, lineamientos UCA y lista de referencias actualizada. La fecha depende de su día de clase.</div></div>
+    <div class="cta-box">
+      <p><b>Construya ahora el esquema de su TFG.</b> La plantilla interactiva le permite pegar su tema, pregunta y objetivos, subrayar los conceptos con colores, organizarlos en temas y subtemas, y obtener el esquema listo para pegar en su documento.</p>
+      <a href="plantilla_esquema.html">Abrir la plantilla</a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Referencias metodológicas para profundizar</h3>
+    <div style="padding-left:2em;text-indent:-2em">
+      <p>American Psychological Association. (2020). <i>Publication manual of the American Psychological Association</i> (7.ª ed.). APA.</p>
+      <p>Davis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. <i>MIS Quarterly</i>, <i>13</i>(3), 319–340.</p>
+      <p>Hernández-Sampieri, R. y Mendoza Torres, C. P. (2018). <i>Metodología de la investigación: Las rutas cuantitativa, cualitativa y mixta</i>. McGraw-Hill Education.</p>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn secondary" data-go="8">Momento anterior</button><button class="btn secondary" data-go="0">Volver al inicio</button></div>
+</section>
+
+<footer class="site-footer">
+  <p><b>Seminario I</b>, Universidad Florencio del Castillo. Personas docentes: M. Sc. Adrián Murillo-González, Dra. Iria Briceño-Álvarez y M. Sc. Ginnette Guillén Jiménez.</p>
+  <p class="lic"><span class="cc" aria-hidden="true">cc by</span><span>Esta obra está bajo una licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" target="_blank" rel="license noopener">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>. Puede compartirla y adaptarla citando la autoría.</span></p>
+</footer>
+</main>
+</div>
+
+<div class="modal-bg" id="modalBg" role="dialog" aria-modal="true">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" id="modalClose" aria-label="Cerrar">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+<template id="m-creditos">
+  <h3>Créditos y declaración de uso de IA</h3>
+  <p>Recurso didáctico del curso Seminario I, Universidad Florencio del Castillo. Personas docentes: M. Sc. Adrián Murillo-González, Dra. Iria Briceño-Álvarez y M. Sc. Ginnette Guillén Jiménez. Contenido basado en la presentación «Sustento teórico-conceptual» del curso.</p>
+  <p>Este recurso se elaboró con apoyo de inteligencia artificial generativa para la organización de contenidos, la redacción de casos y ejercicios, y la programación del sitio. Las decisiones pedagógicas y la revisión final de los contenidos corresponden al criterio docente.</p>
+  <p>Los casos de contaduría son hipotéticos. Las personas autoras y obras marcadas con asterisco (*) son ficticias y se crearon con fines didácticos. COSO (2013), IASB (2018) y Davis (1989) son fuentes reales, citadas mediante paráfrasis.</p>
+  <p><b>Licencia.</b> Esta obra está bajo una licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" target="_blank" rel="license noopener">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>.</p>
+</template>
+<template id="m-docente">
+  <h3>Activar modo docente</h3>
+  <p>Ingrese la clave para mostrar las claves y orientaciones docentes.</p>
+  <input type="text" id="teacherKey" autocomplete="off" aria-label="Clave docente">
+  <p id="teacherMsg" class="muted"></p>
+  <button class="btn primary" id="teacherOk">Ingresar</button>
+</template>
+
+<script>
+(function(){
+  const VIEWS=[
+    ["Inicio","Propósito y ruta"],["Qué es el marco teórico","Definición y funciones"],["Estructura del capítulo II","Partes y formato"],
+    ["Subrayar los conceptos","Paso 1"],["Construir el esquema","Paso 2"],["La teoría delimita","Variables y categorías"],
+    ["Redactar y citar","Lineamientos y APA 7"],["Ejemplo desarrollado","Marco teórico breve"],["Repaso","Reto interactivo"],["Cierre y tarea","Idea central y entrega"]
+  ];
+  const TOTAL=VIEWS.length-1;
+  const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+  const nav=document.getElementById('sideNav');
+  let visited=new Set(store.get('si2-visitados',[]));
+  VIEWS.forEach((v,i)=>{
+    const b=document.createElement('button');b.className='side-link';b.dataset.go=i;
+    b.innerHTML=`<span class="side-num">${String(i).padStart(2,'0')}</span><span><strong>${v[0]}</strong><small>${v[1]}</small></span>`;
+    nav.appendChild(b);
+  });
+  function go(i){
+    i=+i;
+    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='v'+i));
+    nav.querySelectorAll('.side-link').forEach(b=>b.classList.toggle('active',+b.dataset.go===i));
+    if(i>0){visited.add(i);store.set('si2-visitados',[...visited])}
+    nav.querySelectorAll('.side-link').forEach(b=>b.classList.toggle('done',visited.has(+b.dataset.go)));
+    const n=visited.size;document.getElementById('pbar').style.width=(n/TOTAL*100)+'%';
+    document.getElementById('ptxt').textContent=`${n} de ${TOTAL} momentos explorados`;
+    const act=nav.querySelector('.side-link.active');if(act&&window.innerWidth<=900)act.scrollIntoView({block:'nearest',inline:'center'});
+    try{history.replaceState(null,'','#m'+i)}catch(e){}
+    window.scrollTo({top:0});
+  }
+  document.addEventListener('click',e=>{const t=e.target.closest('button[data-go]');if(t)go(t.dataset.go)});
+  const start=parseInt((location.hash||'').replace('#m',''));go(isNaN(start)?0:Math.min(TOTAL,Math.max(0,start)));
+
+  // Ejercicios de selección
+  document.querySelectorAll('.ex[data-type="select"]').forEach(ex=>{
+    const btn=ex.querySelector('.check'),fb=ex.querySelector(':scope > .fb');
+    btn.addEventListener('click',()=>{
+      let ok=0,tot=0,empty=false;
+      ex.querySelectorAll('select[data-ans]').forEach(s=>{tot++;s.classList.remove('ok','bad');if(!s.value){empty=true;return}const g=s.dataset.ans.split('|').includes(s.value);s.classList.add(g?'ok':'bad');if(g)ok++});
+      if(empty){fb.className='fb show bad';fb.textContent='Complete todas las decisiones antes de comprobar.';return}
+      ex.classList.add('checked');
+      const all=ok===tot;fb.className='fb show '+(all?'ok':'bad');
+      fb.textContent=all?'Excelente: todas las decisiones son correctas. Lea las explicaciones para reforzar el porqué.':`Tiene ${ok} de ${tot} correctas. Revise las marcadas en rojo y lea la explicación de cada fila.`;
+    });
+  });
+  document.querySelectorAll('.ex[data-type="mcq"]').forEach(ex=>{
+    const fb=ex.querySelector(':scope > .fb');
+    ex.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',()=>{
+      ex.querySelectorAll('.opt').forEach(x=>x.classList.remove('ok','bad'));
+      const g=o.dataset.ok==='1';o.classList.add(g?'ok':'bad');fb.className='fb show '+(g?'ok':'bad');fb.textContent=o.dataset.fb;
+    }));
+  });
+
+  // Demostración del subrayado
+  const demo=document.getElementById('demoA'),demoBtn=document.getElementById('demoBtn');
+  demoBtn.addEventListener('click',()=>{const on=demo.classList.toggle('on');demoBtn.setAttribute('aria-pressed',on);demoBtn.textContent=on?'Ocultar el subrayado':'Mostrar el subrayado'});
+
+  // Práctica de subrayado (caso B)
+  const CASE_B=[
+    {id:'tema',label:'Tema',text:'La facturación electrónica y el cumplimiento tributario en las microempresas comerciales de Turrialba.'},
+    {id:'og',label:'Objetivo general',text:'Analizar la incidencia de la facturación electrónica en el cumplimiento tributario de las microempresas comerciales de Turrialba durante 2026.'},
+    {id:'oe1',label:'Objetivo específico 1',text:'Identificar las barreras de adopción de la facturación electrónica en las microempresas comerciales de Turrialba.'},
+    {id:'oe2',label:'Objetivo específico 2',text:'Describir los tipos de comprobantes electrónicos que emiten las microempresas comerciales de Turrialba.'},
+    {id:'oe3',label:'Objetivo específico 3',text:'Determinar el nivel de cumplimiento tributario formal de las microempresas comerciales de Turrialba.'}
+  ];
+  const KEY=[
+    {f:'tema',ph:'facturación electrónica',ok:['p']},{f:'tema',ph:'cumplimiento tributario',ok:['p']},{f:'tema',ph:'microempresas comerciales de Turrialba',ok:['c']},
+    {f:'og',ph:'facturación electrónica',ok:['p']},{f:'og',ph:'cumplimiento tributario',ok:['p']},{f:'og',ph:'microempresas comerciales de Turrialba',ok:['c']},
+    {f:'oe1',ph:'barreras de adopción',ok:['s']},
+    {f:'oe2',ph:'tipos de comprobantes electrónicos',ok:['s']},
+    {f:'oe3',ph:'cumplimiento tributario formal',ok:['s','p']}
+  ];
+  const OPT=[{f:'oe1',ph:'facturación electrónica'},{f:'oe1',ph:'microempresas comerciales de Turrialba'},{f:'oe2',ph:'microempresas comerciales de Turrialba'},{f:'oe3',ph:'microempresas comerciales de Turrialba'},{f:'og',ph:'incidencia'}];
+  const STOP=new Set(['de','la','el','en','y','los','las','del','que','a','al','un','una','durante','2026']);
+  const VERBS=new Set(['analizar','identificar','describir','determinar','emiten']);
+  const norm=w=>w.toLowerCase().replace(/[.,;:¿?¡!«»"]/g,'');
+  const target=document.getElementById('hlTarget');
+  let mode='p';const marks={};
+  CASE_B.forEach(f=>{
+    const box=document.createElement('div');box.className='obj-box';
+    box.innerHTML=`<h4>${f.label}</h4>`;
+    const p=document.createElement('p');p.style.margin='0';
+    f.words=f.text.split(' ');
+    f.words.forEach((w,i)=>{const s=document.createElement('span');s.className='w';s.textContent=w;s.dataset.f=f.id;s.dataset.i=i;s.tabIndex=0;s.setAttribute('role','button');p.appendChild(s);p.appendChild(document.createTextNode(' '))});
+    box.appendChild(p);target.appendChild(box);
+  });
+  function setMark(span,m){const k=span.dataset.f+':'+span.dataset.i;span.classList.remove('p','s','c');if(m&&m!=='x'){marks[k]=m;span.classList.add(m)}else delete marks[k]}
+  function clickWord(span){const k=span.dataset.f+':'+span.dataset.i;if(mode==='x'||marks[k]===mode)setMark(span,null);else setMark(span,mode)}
+  target.addEventListener('click',e=>{const s=e.target.closest('.w');if(s)clickWord(s)});
+  target.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('w')){e.preventDefault();clickWord(e.target)}});
+  document.querySelectorAll('#hlEx .mode-bar button').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;document.querySelectorAll('#hlEx .mode-bar button').forEach(x=>x.setAttribute('aria-pressed',x===b))}));
+  const hlFb=document.getElementById('hlFb');
+  function findIdx(f,ph){const fw=CASE_B.find(x=>x.id===f).words.map(norm),pw=ph.split(' ').map(norm);for(let i=0;i<=fw.length-pw.length;i++){if(pw.every((w,j)=>fw[i+j]===w))return pw.map((_,j)=>i+j)}return[]}
+  document.getElementById('hlCheck').addEventListener('click',()=>{
+    let ok=0;const miss=[];const used=new Set();
+    KEY.forEach(k=>{const idx=findIdx(k.f,k.ph);idx.forEach(i=>used.add(k.f+':'+i));
+      const good=idx.filter(i=>!STOP.has(norm(CASE_B.find(x=>x.id===k.f).words[i]))).every(i=>k.ok.includes(marks[k.f+':'+i]));
+      if(good)ok++;else miss.push(`«${k.ph}» en ${CASE_B.find(x=>x.id===k.f).label.toLowerCase()} (${k.ok.map(c=>({p:'principal',s:'secundario',c:'contexto'})[c]).join(' o ')})`)});
+    OPT.forEach(k=>findIdx(k.f,k.ph).forEach(i=>used.add(k.f+':'+i)));
+    const verbs=Object.keys(marks).filter(k=>{const[f,i]=k.split(':');return VERBS.has(norm(CASE_B.find(x=>x.id===f).words[i]))});
+    const extra=Object.keys(marks).filter(k=>!used.has(k)&&!verbs.includes(k));
+    let html='';
+    if(ok===KEY.length&&!verbs.length){hlFb.className='fb show ok';html='<b>Muy bien.</b> Identificó todos los conceptos clave del caso B.'}
+    else{hlFb.className='fb show bad';html=`<b>Lleva ${ok} de ${KEY.length} conceptos bien subrayados.</b>`;if(miss.length)html+='<ul>'+miss.map(m=>'<li>Revise '+m+'</li>').join('')+'</ul>'}
+    if(verbs.length)html+='<p style="margin:8px 0 0">Subrayó un verbo. Los verbos indican la acción del objetivo, no son conceptos del marco teórico.</p>';
+    if(extra.length)html+=`<p style="margin:8px 0 0">También marcó ${extra.length} palabra(s) adicional(es). Revise si forman parte de un concepto o si son palabras de enlace.</p>`;
+    hlFb.innerHTML=html;
+  });
+  document.getElementById('hlReset').addEventListener('click',()=>{target.querySelectorAll('.w').forEach(s=>setMark(s,null));hlFb.className='fb'});
+  document.getElementById('hlShow').addEventListener('click',()=>{
+    target.querySelectorAll('.w').forEach(s=>setMark(s,null));
+    KEY.forEach(k=>findIdx(k.f,k.ph).forEach(i=>{const s=target.querySelector(`.w[data-f="${k.f}"][data-i="${i}"]`);setMark(s,k.ok[0])}));
+    hlFb.className='fb show ok';hlFb.innerHTML='Esta es una propuesta de subrayado. Compárela con la suya: en el objetivo 3, «cumplimiento tributario formal» también puede marcarse como principal, porque repite el concepto del objetivo general y le agrega una precisión.';
+  });
+
+  // Anotaciones del ejemplo
+  const annT=document.getElementById('annToggle'),annW=document.getElementById('annWrap'),paper=document.getElementById('paper');
+  annT.addEventListener('change',()=>{paper.classList.toggle('ann',annT.checked);annW.classList.toggle('ann-on',annT.checked)});
+
+  // Repaso
+  const Q=[
+    ["¿Qué es el marco teórico?",["Un resumen de todo lo publicado sobre el tema.","La estructura conceptual que reúne las teorías, conceptos y modelos necesarios para comprender el problema de investigación.","La lista de referencias del TFG."],1,"Es una selección argumentada de lo que la investigación necesita, no una recopilación exhaustiva."],
+    ["¿De dónde se toman los conceptos principales?",["Del tema y del objetivo general.","De los antecedentes de otras tesis.","De los objetivos específicos únicamente."],0,"Los conceptos principales están en el tema y en el objetivo general; se convierten en los temas 2.1, 2.2…"],
+    ["En el objetivo «Identificar las barreras de adopción de la facturación electrónica», ¿qué NO se subraya?",["«barreras de adopción»","«facturación electrónica»","«Identificar»"],2,"Los verbos de los objetivos indican la acción, no son conceptos."],
+    ["¿Qué parte del capítulo II es obligatoria y muestra la jerarquía de temas y subtemas?",["La síntesis","El esquema del marco teórico","El glosario"],1,"El esquema es un resumen visual obligatorio que se ubica después de la introducción del capítulo."],
+    ["¿Cuál es una cita narrativa con paráfrasis?",["(Brenes Ulate, 2022)","Brenes Ulate (2022) propone adaptar los controles a la escala de cada empresa.","«…adaptar los controles» (Brenes Ulate, 2022, p. 50)."],1,"La autoría forma parte de la oración y la idea está expresada con palabras propias."],
+    ["Una cita textual de 45 palabras se presenta…",["entre comillas dentro del párrafo.","en bloque, con sangría y sin comillas, con la página al final.","sin número de página."],1,"A partir de 40 palabras, APA 7 indica cita en bloque."],
+    ["¿Cómo delimita la teoría una variable?",["Aumentando la cantidad de páginas del capítulo.","Definiendo sus dimensiones e indicadores, que luego se convierten en ítems del instrumento.","Reemplazando la metodología."],1,"El modelo teórico define qué se observa y cómo se mide."],
+    ["¿Cuál oración respeta los lineamientos de redacción?",["Yo considero que el control interno es fundamental.","En mi opinión, las pymes no tienen controles.","El control interno es fundamental para la confiabilidad de los registros (Araya Solís, 2021)."],2,"Tono impersonal y afirmación sustentada con una cita."]
+  ];
+  let qi=0,score=0;
+  const qText=document.getElementById('qText'),qOpts=document.getElementById('qOpts'),qFb=document.getElementById('qFb'),qNext=document.getElementById('qNext');
+  function showQ(){
+    qNext.disabled=true;qFb.className='fb';
+    if(qi>=Q.length){qText.textContent=`Terminó el repaso: ${score} de ${Q.length} respuestas correctas al primer intento.`;qOpts.innerHTML='';qNext.textContent='Reiniciar repaso';qNext.disabled=false;document.getElementById('qNum').textContent='';return}
+    qNext.textContent='Siguiente pregunta';
+    const q=Q[qi];document.getElementById('qNum').textContent=`Pregunta ${qi+1} de ${Q.length}`;document.getElementById('qScore').textContent=`${score} correctas`;
+    qText.textContent=q[0];qOpts.innerHTML='';let first=true,done=false;
+    q[1].forEach((t,j)=>{const b=document.createElement('button');b.className='opt';b.textContent=t;b.addEventListener('click',()=>{
+      qOpts.querySelectorAll('.opt').forEach(x=>x.classList.remove('ok','bad'));
+      const g=j===q[2];b.classList.add(g?'ok':'bad');qFb.className='fb show '+(g?'ok':'bad');qFb.textContent=(g?'Correcto. ':'Revise: ')+q[3];
+      if(g&&first&&!done)score++;first=false;if(g){done=true;qNext.disabled=false;document.getElementById('qScore').textContent=`${score} correctas`}
+    });qOpts.appendChild(b)});
+  }
+  qNext.addEventListener('click',()=>{if(qi>=Q.length){qi=0;score=0}else qi++;showQ()});
+  showQ();
+
+  // Pantalla completa
+  const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
+  function fsUpdate(){document.querySelectorAll('.fs-btn').forEach(b=>{const on=!!fsEl();b.setAttribute('aria-pressed',on);b.textContent=on?'Salir de pantalla completa':(b.classList.contains('pill')?'Pantalla completa':'Ver en pantalla completa')})}
+  document.querySelectorAll('.fs-btn').forEach(b=>b.addEventListener('click',async()=>{
+    try{if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{const el=document.documentElement;const req=el.requestFullscreen||el.webkitRequestFullscreen;if(!req)throw new Error('no');await req.call(el)}}
+    catch(e){go(0);document.getElementById('fsMsg').classList.add('show')}
+  }));
+  document.addEventListener('fullscreenchange',fsUpdate);document.addEventListener('webkitfullscreenchange',fsUpdate);
+
+  // Modales y modo docente
+  const bg=document.getElementById('modalBg'),mc=document.getElementById('modalContent');
+  function openModal(id){mc.innerHTML='';mc.appendChild(document.getElementById(id).content.cloneNode(true));bg.classList.add('show');const f=mc.querySelector('input,button');(f||document.getElementById('modalClose')).focus()}
+  function closeModal(){bg.classList.remove('show')}
+  document.getElementById('modalClose').addEventListener('click',closeModal);
+  bg.addEventListener('click',e=>{if(e.target===bg)closeModal()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+  document.getElementById('creditsBtn').addEventListener('click',()=>openModal('m-creditos'));
+  const TB=document.getElementById('teacherBtn');
+  TB.addEventListener('click',()=>{
+    if(document.body.classList.contains('teacher')){document.body.classList.remove('teacher');TB.textContent='Acceso docente';return}
+    openModal('m-docente');
+    const tryKey=()=>{const k=document.getElementById('teacherKey').value.trim();
+      if(k==='SI-marco'){document.body.classList.add('teacher');TB.textContent='Salir del modo docente';closeModal()}
+      else document.getElementById('teacherMsg').textContent='Clave incorrecta. Verifique e intente de nuevo.'};
+    document.getElementById('teacherOk').addEventListener('click',tryKey);
+    document.getElementById('teacherKey').addEventListener('keydown',e=>{if(e.key==='Enter')tryKey()});
+  });
+})();
+</script>
+</body>
+</html>

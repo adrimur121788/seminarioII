@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plantilla del esquema · Seminario I</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --navy-950:#0b2940; --navy-900:#10344f; --navy-800:#164563;
+  --blue-700:#2c668f; --blue-600:#3f7da7; --blue-200:#dbeaf3; --blue-100:#eaf3f8; --blue-050:#f4f8fb;
+  --ink:#183344; --muted:#5c717b; --paper:#f5f8f8; --surface:#ffffff; --surface-2:#f2f7f9;
+  --line:#d8e2e6; --anno:#b4472b; --accent:#d6a44a; --accent-soft:#fbf3e2;
+  --ok-bg:#e9f4ee; --ok-line:#3d8a63; --bad-bg:#f8eef0; --bad-line:#a35d6a;
+  --shadow:0 16px 42px rgba(23,52,79,.09); --radius:22px;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy-950:#e6f0f6; --navy-900:#0f2a3e; --navy-800:#9cc6e4;
+    --blue-700:#8ec0e2; --blue-600:#6fa8d0; --blue-200:#24455c; --blue-100:#1b3649; --blue-050:#16303f;
+    --ink:#e2ecf1; --muted:#9db1bb; --paper:#0e1d27; --surface:#142734; --surface-2:#1a3141;
+    --line:#2b4555; --anno:#f29a7a; --accent:#e0b65e; --accent-soft:#3a3120;
+    --ok-bg:#163428; --ok-line:#5fb889; --bad-bg:#3a2026; --bad-line:#d38593;
+    --shadow:0 16px 42px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --navy-950:#e6f0f6; --navy-900:#0f2a3e; --navy-800:#9cc6e4;
+  --blue-700:#8ec0e2; --blue-600:#6fa8d0; --blue-200:#24455c; --blue-100:#1b3649; --blue-050:#16303f;
+  --ink:#e2ecf1; --muted:#9db1bb; --paper:#0e1d27; --surface:#142734; --surface-2:#1a3141;
+  --line:#2b4555; --anno:#f29a7a; --accent:#e0b65e; --accent-soft:#3a3120;
+  --ok-bg:#163428; --ok-line:#5fb889; --bad-bg:#3a2026; --bad-line:#d38593;
+  --shadow:0 16px 42px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.6;font-size:16px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+img,svg{max-width:100%}
+h1,h2,h3{font-family:var(--serif);color:var(--navy-950);line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2rem,4vw,3rem)}
+h2{font-size:clamp(1.55rem,2.6vw,2.1rem)}
+h3{font-size:1.25rem}
+p{margin:0 0 .9em}
+.prose{max-width:74ch}
+.muted{color:var(--muted)}
+.hidden{display:none!important}
+
+/* Encabezado */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px clamp(16px,3vw,34px);background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{flex-shrink:0;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:var(--navy-900);color:#fff;font-weight:900;letter-spacing:.04em}
+.brand strong{display:block;font-size:1.08rem}
+.brand small{display:block;color:var(--muted);font-size:.92rem}
+.tools{display:flex;gap:10px;flex-wrap:wrap}
+.pill{border:1.5px solid var(--blue-700);background:var(--surface);color:var(--navy-800);padding:9px 16px;border-radius:999px;font-weight:800;font-size:.92rem}
+body.teacher .pill#teacherBtn{background:var(--accent);border-color:var(--accent);color:#1c1c1c}
+
+/* Cadena del análisis */
+.chain{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px;align-items:center;padding:14px clamp(16px,3vw,34px);background:#10344f;color:#fff}
+.chain-steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
+.chain-step{position:relative;display:grid;place-items:center;text-align:center;min-height:44px;padding:8px;border-radius:9px;background:#24536f;font-size:.8rem;font-weight:800;line-height:1.2}
+.chain-step:not(:last-child)::after{content:"→";position:absolute;right:-9px;color:#e0b65e;font-weight:900;transform:translateX(50%)}
+.chain-note{padding-left:20px;border-left:1px solid rgba(255,255,255,.25);color:#dce9ef;font-size:.9rem;line-height:1.4}
+.chain-note strong{color:#fff}
+
+/* Estructura */
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);align-items:start}
+.sidebar{position:sticky;top:env(safe-area-inset-top,0px);max-height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--line);padding:26px 18px;min-height:100%}
+.sidebar h2{font-size:1.7rem;margin:6px 0 12px}
+.side-label{font-size:.82rem;font-weight:800;color:var(--blue-700)}
+.progress{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin:10px 0 6px}
+.progress>div{height:100%;width:0;background:var(--accent);transition:width .25s}
+#ptxt{color:var(--muted);font-size:.88rem}
+.side-nav{display:grid;gap:6px;margin-top:20px}
+.side-link{display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:center;width:100%;padding:9px 10px;border:0;border-radius:13px;background:transparent;text-align:left;color:var(--muted)}
+.side-link:hover{background:var(--blue-050)}
+.side-link.active{background:var(--blue-100);color:var(--ink)}
+.side-num{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);font-weight:900;color:var(--blue-700)}
+.side-link.active .side-num{background:var(--navy-900);color:#fff}
+.side-link.done .side-num::after{content:"";}
+.side-link strong{display:block;font-size:.97rem;color:var(--ink)}
+.side-link small{display:block;font-size:.8rem}
+.side-link.done strong::after{content:" ✓";color:var(--ok-line)}
+main{padding:28px clamp(16px,3vw,40px) 60px;min-width:0}
+.view{display:none}
+.view.active{display:block}
+
+/* Componentes */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(20px,3vw,38px);margin-bottom:22px}
+.kicker{display:inline-block;font-size:.85rem;font-weight:800;color:var(--blue-700);margin-bottom:8px}
+.lead{font-size:1.12rem;color:var(--ink);max-width:70ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.card h3{font-size:1.1rem;margin-bottom:.4em}
+.card.tint{background:var(--surface-2)}
+.note{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:14px;padding:14px 16px;margin:16px 0}
+.note strong{color:var(--ink)}
+.warn{background:var(--bad-bg);border:1px solid color-mix(in srgb,var(--bad-line) 40%,transparent);border-radius:14px;padding:14px 16px;margin:16px 0}
+.good{background:var(--ok-bg);border:1px solid color-mix(in srgb,var(--ok-line) 40%,transparent);border-radius:14px;padding:14px 16px;margin:16px 0}
+.case{border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--surface-2);margin:16px 0}
+.case .case-tag{display:inline-block;font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:999px;background:var(--blue-100);color:var(--blue-700);margin-bottom:8px}
+.case .case-tag.law{background:#efe6f6;color:#6b3f8f}
+.case .case-tag.acc{background:#e5f2ea;color:#2f6d4c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .case .case-tag.law{background:#3a2a48;color:#d7b8ef} :root:not([data-theme="light"]) .case .case-tag.acc{background:#1f3a2c;color:#9fd8b8}}
+:root[data-theme="dark"] .case .case-tag.law{background:#3a2a48;color:#d7b8ef}
+:root[data-theme="dark"] .case .case-tag.acc{background:#1f3a2c;color:#9fd8b8}
+.steps{counter-reset:s;display:grid;gap:12px;margin:14px 0;padding:0;list-style:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
+.steps li::before{content:counter(s);width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--navy-900);color:#fff;font-weight:900}
+.steps li strong{display:block}
+details.acc{border:1px solid var(--line);border-radius:14px;background:var(--surface);margin:10px 0}
+details.acc summary{cursor:pointer;padding:13px 16px;font-weight:800;color:var(--navy-800);list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"+";font-size:1.2rem;line-height:1}
+details.acc[open] summary::after{content:"–"}
+details.acc .acc-body{padding:0 16px 14px}
+.quote{border-left:4px solid var(--blue-600);background:var(--surface-2);padding:12px 16px;border-radius:0 12px 12px 0;margin:10px 0;font-style:normal}
+.quote b{color:var(--blue-700)}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:11px;padding:10px 16px;font-weight:800;border:1.5px solid transparent}
+.btn.primary{background:#164563;color:#fff}
+.btn.secondary{background:var(--surface);color:var(--navy-800);border-color:var(--blue-700)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;margin-top:18px}
+.chip-btn{border:1px solid var(--line);background:var(--surface);color:var(--navy-800);border-radius:999px;padding:7px 13px;font-weight:700;font-size:.9rem;margin:4px 6px 4px 0}
+.chip-btn:hover{border-color:var(--blue-600)}
+
+/* Tablas */
+.table-wrap{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.93rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--blue-100);color:var(--ink);font-weight:800}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:800;background:var(--surface-2)}
+.apa-title{margin:16px 0 2px;font-weight:800}
+.apa-sub{margin:0 0 6px;font-style:italic}
+.apa-note{font-size:.88rem;color:var(--muted);margin-top:4px}
+.apa table{border:0;min-width:520px}
+.apa th,.apa td{border:0;border-bottom:1px solid var(--line)}
+.apa thead th{border-top:2px solid var(--ink);border-bottom:1.5px solid var(--ink);background:transparent}
+.apa tr.total td{border-top:1.5px solid var(--ink);border-bottom:2px solid var(--ink);background:transparent}
+
+/* Ejercicios */
+.ex{border:1.5px dashed var(--blue-600);border-radius:18px;padding:18px;margin:18px 0;background:var(--blue-050)}
+.ex-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+.ex-head .badge{background:#164563;color:#fff;font-size:.78rem;font-weight:800;padding:3px 10px;border-radius:999px}
+.ex-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ex-row:last-of-type{border-bottom:0}
+.ex-row.two{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,.8fr)}
+select,input[type=text],textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+textarea{min-height:84px;resize:vertical}
+select.ok,.opt.ok{border-color:var(--ok-line);background:var(--ok-bg)}
+select.bad,.opt.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.why{grid-column:1/-1;font-size:.9rem;color:var(--muted);display:none}
+.ex.checked .why{display:block}
+.fb{margin-top:12px;padding:12px 14px;border-radius:12px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--ok-bg);border-left:4px solid var(--ok-line)}
+.fb.bad{background:var(--bad-bg);border-left:4px solid var(--bad-line)}
+.opts{display:grid;gap:8px;margin:10px 0}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 14px}
+.opt:hover{border-color:var(--blue-600)}
+.checks{display:grid;gap:8px;margin:10px 0}
+.checks label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.checks label.ok{border-color:var(--ok-line);background:var(--ok-bg)}
+.checks label.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.checks input{margin-top:5px;accent-color:#164563}
+.clave{display:none;margin-top:12px;border:1.5px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:12px 14px}
+.clave::before{content:"Clave docente";display:block;font-weight:900;font-size:.85rem;color:var(--ink);margin-bottom:4px}
+body.teacher .clave{display:block}
+
+/* Calculadora */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat span{display:block;font-size:.82rem;color:var(--muted)}
+.stat b{font-size:1.3rem;font-variant-numeric:tabular-nums}
+.dotplot{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px}
+
+/* Quiz */
+.quiz-top{display:flex;justify-content:space-between;color:var(--muted);font-weight:700;font-size:.9rem}
+.quiz-q{font-size:1.1rem;font-weight:700;margin:10px 0}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(8,25,38,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:500}
+.modal-bg.show{display:flex}
+.modal{background:var(--surface);color:var(--ink);border-radius:20px;max-width:640px;width:100%;max-height:85vh;overflow:auto;padding:26px;box-shadow:var(--shadow)}
+.modal-close{float:right;border:0;background:var(--surface-2);border-radius:10px;width:36px;height:36px;font-size:1.2rem}
+.ficha-preview{white-space:pre-wrap;background:var(--surface-2);border-radius:12px;padding:14px;font-size:.9rem;border:1px solid var(--line)}
+
+/* Inicio */
+.hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.8fr);gap:20px}
+.hero h1{margin-bottom:.35em}
+.qbox{display:grid;gap:12px;align-content:start}
+.qbox .card b{display:block;color:var(--blue-700);font-size:.9rem}
+
+@media (max-width:1100px){
+  .chain{grid-template-columns:1fr}
+  .chain-note{border-left:0;padding-left:0}
+}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);padding:14px}
+  .sidebar h2,.sidebar .side-label{display:none}
+  .side-nav{display:flex;overflow-x:auto;gap:6px;margin-top:8px;padding-bottom:4px}
+  .side-link{min-width:200px}
+  .grid2,.grid3,.hero{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ex-row,.ex-row.two{grid-template-columns:1fr}
+  .chain-steps{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .chain-step:nth-child(3)::after{display:none}
+  .brand-mark{width:44px;height:44px;border-radius:12px;font-size:.85rem}
+  .brand small{display:none}
+  .pill{padding:7px 12px;font-size:.84rem}
+  .chain{padding:12px 16px;gap:10px}
+  .chain-step{font-size:.72rem;min-height:38px}
+  .chain-note{font-size:.84rem}
+}
+
+.profes{margin-top:16px;color:var(--muted);font-size:.95rem}
+.site-footer{margin-top:30px;padding:20px 4px 4px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+.site-footer p{margin:0 0 8px}
+.site-footer a,.modal a{color:var(--blue-700)}
+.lic{display:flex;gap:12px;align-items:center}
+.cc{flex-shrink:0;border:2px solid currentColor;border-radius:8px;padding:2px 8px;font-weight:900;font-size:.8rem;text-transform:lowercase}
+.ficha-table-wrap{overflow-x:auto;margin:8px 0}
+.ficha-table{min-width:760px}
+.ficha-table td{padding:4px}
+.ficha-table td.n{text-align:center;font-weight:800;width:44px;vertical-align:middle}
+.ficha-table textarea{min-height:96px;border:0;border-radius:6px;background:var(--surface-2)}
+.ficha-preview{white-space:normal}
+.ficha-preview table{min-width:640px;color:#000;background:#fff}
+:fullscreen{overflow-y:auto;background:var(--paper)}
+@media (max-width:700px){
+  .ficha-table{min-width:0}
+  .ficha-table thead{display:none}
+  .ficha-table,.ficha-table tbody,.ficha-table tr,.ficha-table td{display:block;width:100%}
+  .ficha-table tr{border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:12px;background:var(--surface)}
+  .ficha-table td{border:0;padding:4px 0}
+  .ficha-table td::before{content:attr(data-label);display:block;font-weight:800;font-size:.85rem;margin-bottom:3px}
+  .ficha-table td.n{text-align:left;width:auto}
+  .ficha-table td.n::before{content:"N.º";display:inline;margin-right:6px}
+  .ficha-table textarea{min-height:70px}
+  .tools{width:100%}
+  .lic{align-items:flex-start}
+}
+@media (max-width:420px){
+  .tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .tools .pill{padding:7px 6px;font-size:.74rem;border-radius:12px;text-align:center;line-height:1.2}
+  .topbar{padding:12px}
+  main{padding:18px 12px 40px}
+  .panel{padding:18px 16px;border-radius:18px}
+  .chain-steps{gap:14px}
+  .stats{grid-template-columns:1fr 1fr}
+  .btn{padding:9px 13px}
+  .btn-row .btn{flex:1 1 auto;justify-content:center}
+}
+
+.anno-fig{margin:10px 0 0}
+.anno-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:10px}
+.anno-svg{display:block;width:100%;min-width:720px;height:auto}
+.anno{fill:var(--anno)}
+.anno-line{stroke:var(--anno);stroke-width:1.6}
+.anno-head{fill:var(--anno)}
+.anno-fig figcaption{font-size:.85rem;color:var(--muted);margin-top:6px}
+@media (min-width:901px){.anno-fig figcaption{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+:root{
+  --hl-p:#fbd38d; --hl-p-ink:#7a4a00;
+  --hl-s:#bcd9f7; --hl-s-ink:#14466e;
+  --hl-c:#c4ecd2; --hl-c-ink:#1f5c39;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--hl-p:#6b4a12;--hl-p-ink:#ffe3b0;--hl-s:#1f4a70;--hl-s-ink:#d4e9ff;--hl-c:#1f4a33;--hl-c-ink:#c9f2d8}
+}
+:root[data-theme="dark"]{--hl-p:#6b4a12;--hl-p-ink:#ffe3b0;--hl-s:#1f4a70;--hl-s-ink:#d4e9ff;--hl-c:#1f4a33;--hl-c-ink:#c9f2d8}
+
+.wrap{max-width:1180px;margin:0 auto;padding:24px clamp(16px,3vw,34px) 60px}
+.intro{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,1fr);gap:20px;align-items:start}
+.stepper{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0 22px}
+.step-btn{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:10px 12px}
+.step-btn .n{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);color:var(--blue-700);font-weight:900}
+.step-btn strong{display:block;font-size:.97rem}
+.step-btn small{display:block;color:var(--muted);font-size:.8rem}
+.step-btn[aria-current="step"]{border-color:#164563;background:var(--blue-100)}
+.step-btn[aria-current="step"] .n{background:#164563;color:#fff}
+.step{display:none}
+.step.active{display:block}
+label.fld{display:block;font-weight:700;margin:12px 0 4px}
+label.fld small{font-weight:500;color:var(--muted)}
+textarea{min-height:64px}
+.oe-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start;margin-bottom:8px}
+.icon-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;min-width:38px;height:38px;padding:0 9px;font-weight:800}
+.icon-btn:hover{border-color:var(--blue-600)}
+.icon-btn:disabled{opacity:.4;cursor:not-allowed}
+.example-banner{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.inline-confirm{display:none;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--bad-bg);border:1px solid color-mix(in srgb,var(--bad-line) 40%,transparent)}
+.inline-confirm.show{display:flex}
+
+/* Subrayado */
+.mode-bar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);padding:8px 0}
+.mode-bar button{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:700;font-size:.9rem;display:inline-flex;gap:8px;align-items:center;color:var(--ink)}
+.mode-bar button[aria-pressed="true"]{border-color:#164563;box-shadow:0 0 0 2px var(--blue-200)}
+.sw{width:18px;height:12px;border-radius:3px;display:inline-block}
+.sw.p{background:var(--hl-p)} .sw.s{background:var(--hl-s)} .sw.c{background:var(--hl-c)}
+.hl-field{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:10px 0}
+.hl-field h4{margin:0 0 6px;font-size:.9rem;color:var(--blue-700);display:flex;justify-content:space-between;gap:10px}
+.hl-field h4 .cov{font-weight:700;font-size:.8rem}
+.cov.ok{color:var(--ok-line)} .cov.no{color:var(--bad-line)}
+.hl-text{line-height:2.1;font-size:1.02rem;-webkit-user-select:text;user-select:text}
+.w{cursor:pointer;border-radius:4px;padding:2px 1px}
+.w:hover{outline:1.5px dashed var(--blue-600)}
+.w.p{background:var(--hl-p);color:var(--hl-p-ink)} .w.s{background:var(--hl-s);color:var(--hl-s-ink)} .w.c{background:var(--hl-c);color:var(--hl-c-ink)}
+.w.pending{outline:2.5px solid var(--accent);outline-offset:1px}
+.hint{min-height:1.6em;color:var(--muted);font-size:.92rem}
+.bank{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:10px}
+.bank-col{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+.bank-col h4{margin:0 0 8px;font-size:.9rem;display:flex;align-items:center;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid transparent;border-radius:999px;padding:5px 11px;font-size:.88rem;font-weight:600}
+.chip.p{background:var(--hl-p);color:var(--hl-p-ink)} .chip.s{background:var(--hl-s);color:var(--hl-s-ink)} .chip.c{background:var(--hl-c);color:var(--hl-c-ink)} .chip.m{background:var(--surface-2);color:var(--ink);border-color:var(--line)}
+.empty{color:var(--muted);font-size:.88rem}
+
+/* Organizar */
+.org{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.6fr);gap:18px;align-items:start}
+.org-bank{position:sticky;top:12px}
+.chip-btn{cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip-btn.used{opacity:.55}
+.chip-btn.used::after{content:"✓"}
+.chip-btn[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--accent);opacity:1}
+.add-manual{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px}
+.tree-ed{display:grid;gap:8px}
+.node{border:1px solid var(--line);border-left:5px solid var(--nc,var(--blue-600));border-radius:12px;background:var(--surface);padding:8px 10px}
+.node-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center}
+.node-row .num{font-weight:900;color:var(--nc,var(--blue-700));font-variant-numeric:tabular-nums;min-width:3.4em}
+.node-row textarea.nt{font-weight:700;min-height:0;resize:none;overflow:hidden;line-height:1.4}
+.node .kids{margin:8px 0 0 18px;display:grid;gap:6px}
+.node .node{border-left-width:3px}
+.node .node .node-row textarea.nt{font-weight:500}
+.node .node .node .node-row textarea.nt{font-style:italic}
+.node-tools{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.place{border:1.5px dashed var(--accent);background:var(--accent-soft);color:var(--ink);border-radius:9px;padding:5px 10px;font-weight:800;font-size:.84rem;display:none}
+.placing .place{display:inline-flex}
+.root-row{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+.warns{margin-top:14px}
+.warns li{margin:4px 0}
+
+/* Esquema final */
+.diagram-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;overflow-x:auto}
+.diagram-card img,.diagram-card svg{display:block;width:100%;min-width:640px;height:auto}
+.outline{font-family:Arial,Helvetica,sans-serif;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:.95rem;line-height:1.7}
+.outline .h1{text-align:center;font-weight:700}
+.outline .h2{font-weight:700;margin-top:6px}
+.outline .h3{padding-left:2em;font-weight:700}
+.outline .h4{padding-left:4em;font-style:italic}
+.export-row{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+#exportMsg{min-height:1.4em}
+
+@media (max-width:900px){
+  .intro,.org{grid-template-columns:1fr}
+  .org-bank{position:static}
+  .stepper{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bank{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .step-btn{grid-template-columns:32px 1fr;padding:8px}
+  .step-btn .n{width:30px;height:30px}
+  .step-btn small{display:none}
+  .node-row{grid-template-columns:auto minmax(0,1fr)}
+  .node-tools{grid-column:1/-1;justify-content:flex-start}
+  .node .kids{margin-left:8px}
+  .tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:100%}
+  .tools .pill{padding:7px 6px;font-size:.78rem;text-align:center}
+  .brand small{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">SI</div>
+    <div><strong>Plantilla del esquema del marco teórico</strong><small>Seminario I · Universidad Florencio del Castillo</small></div>
+  </div>
+  <div class="tools">
+    <button class="pill fs-btn" aria-pressed="false">Pantalla completa</button>
+    <a class="pill" href="marco_teorico.html" style="text-decoration:none">Volver a la teoría</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <div>
+      <h1 style="margin-bottom:.3em">Construya el esquema de su capítulo II</h1>
+      <p class="lead" style="margin:0">En cuatro pasos: pegue su tema, pregunta y objetivos; subraye los conceptos con colores; organícelos en temas y subtemas, y obtenga el esquema listo para pegar en su TFG.</p>
+    </div>
+    <div class="note" style="margin:0"><strong>Su trabajo se guarda en este navegador.</strong> Si cambia de computadora o borra los datos de navegación, se pierde. Al terminar, copie el esquema a su documento.</div>
+  </div>
+
+  <nav class="stepper" aria-label="Pasos">
+    <button class="step-btn" data-step="1"><span class="n">1</span><span><strong>Datos del proyecto</strong><small>Tema, pregunta y objetivos</small></span></button>
+    <button class="step-btn" data-step="2"><span class="n">2</span><span><strong>Subrayar</strong><small>Conceptos por color</small></span></button>
+    <button class="step-btn" data-step="3"><span class="n">3</span><span><strong>Organizar</strong><small>Temas y subtemas</small></span></button>
+    <button class="step-btn" data-step="4"><span class="n">4</span><span><strong>Esquema final</strong><small>Para pegar en el TFG</small></span></button>
+  </nav>
+
+  <!-- PASO 1 -->
+  <section class="step panel" id="s1">
+    <div class="note example-banner hidden" id="exBanner"><span><strong>Está viendo un ejemplo de contaduría.</strong> Use «Empezar con mi proyecto» para borrar el ejemplo y escribir el suyo.</span><button class="btn secondary" id="startOwn">Empezar con mi proyecto</button></div>
+    <h2>Paso 1. Pegue los datos de su anteproyecto</h2>
+    <p class="muted">Copie el texto tal como aparece en su anteproyecto aprobado o en su versión corregida.</p>
+    <label class="fld" for="f-tema">Tema o título provisional</label>
+    <textarea id="f-tema" data-field="tema"></textarea>
+    <label class="fld" for="f-pregunta">Pregunta de investigación</label>
+    <textarea id="f-pregunta" data-field="pregunta"></textarea>
+    <label class="fld" for="f-og">Objetivo general</label>
+    <textarea id="f-og" data-field="og"></textarea>
+    <label class="fld">Objetivos específicos <small>(de 1 a 6)</small></label>
+    <div id="oeList"></div>
+    <button class="btn secondary" id="addOe">Agregar objetivo específico</button>
+    <div class="btn-row">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn secondary" id="loadEx">Cargar ejemplo de contaduría</button>
+        <button class="btn secondary" id="clearAll">Borrar todo</button>
+      </div>
+      <button class="btn primary" data-to="2">Continuar: subrayar</button>
+    </div>
+    <div class="inline-confirm" id="confirmBox"><span id="confirmTxt">¿Borrar todos los datos, el subrayado y el esquema?</span><button class="btn primary" id="confirmYes">Sí, borrar</button><button class="btn secondary" id="confirmNo">Cancelar</button></div>
+  </section>
+
+  <!-- PASO 2 -->
+  <section class="step panel" id="s2">
+    <h2>Paso 2. Subraye los conceptos</h2>
+    <div class="grid3" style="margin-bottom:6px">
+      <div class="card tint"><b><span class="sw p"></span> Concepto principal</b><br><span class="muted">Del tema y del objetivo general. Será un tema 2.1, 2.2…</span></div>
+      <div class="card tint"><b><span class="sw s"></span> Concepto secundario</b><br><span class="muted">De los objetivos específicos. Será un subtema 2.1.1…</span></div>
+      <div class="card tint"><b><span class="sw c"></span> Contexto</b><br><span class="muted">Lugar, institución o población. Suele ser un tema propio.</span></div>
+    </div>
+    <p><b>Cómo subrayar:</b> elija un color, haga clic en la <b>primera palabra</b> del concepto y luego en la <b>última</b>. Si el concepto es una sola palabra, haga clic dos veces en ella. En computadora también puede arrastrar el cursor sobre el texto. Para quitar una marca, elija «Quitar» y haga clic sobre ella. No subraye verbos como analizar o identificar.</p>
+    <div class="mode-bar" role="group" aria-label="Color de subrayado">
+      <button data-mode="p" aria-pressed="true"><i class="sw p"></i>Concepto principal</button>
+      <button data-mode="s" aria-pressed="false"><i class="sw s"></i>Concepto secundario</button>
+      <button data-mode="c" aria-pressed="false"><i class="sw c"></i>Contexto</button>
+      <button data-mode="x" aria-pressed="false">Quitar</button>
+    </div>
+    <p class="hint" id="hint" aria-live="polite"></p>
+    <div id="hlFields"></div>
+    <h3 style="margin-top:20px">Conceptos encontrados</h3>
+    <div class="bank" id="bank2"></div>
+    <div class="btn-row"><button class="btn secondary" data-to="1">Paso anterior</button><button class="btn primary" data-to="3">Continuar: organizar</button></div>
+  </section>
+
+  <!-- PASO 3 -->
+  <section class="step panel" id="s3">
+    <h2>Paso 3. Organice los temas y subtemas</h2>
+    <p class="prose">Los conceptos principales serán los temas (2.1, 2.2…) y los secundarios, sus subtemas (2.1.1, 2.1.2…). Puede escribir subtemas nuevos que no estén en sus objetivos pero que necesite explicar, como el <b>concepto</b> de cada tema. Use hasta tres niveles.</p>
+    <div class="btn-row" style="justify-content:flex-start;margin-top:0">
+      <button class="btn primary" id="suggest">Proponer esquema a partir del subrayado</button>
+      <button class="btn secondary" id="addConceptAll">Agregar «Concepto» a cada tema</button>
+    </div>
+    <div class="inline-confirm" id="confirmSuggest"><span>Ya tiene un esquema. ¿Reemplazarlo por la propuesta?</span><button class="btn primary" id="sugYes">Sí, reemplazar</button><button class="btn secondary" id="sugNo">Cancelar</button></div>
+    <div class="org" style="margin-top:16px">
+      <div class="org-bank card">
+        <h3 style="font-size:1.05rem">Banco de conceptos</h3>
+        <p class="muted" style="font-size:.9rem;margin-bottom:8px">Haga clic en un concepto y luego en «Colocar aquí», en el lugar del esquema donde lo quiere ubicar.</p>
+        <div class="chips" id="bank3"></div>
+        <div class="add-manual"><input type="text" id="manualTxt" aria-label="Nuevo concepto" placeholder="Escribir otro concepto"><button class="icon-btn" id="manualAdd">Agregar</button></div>
+      </div>
+      <div id="treeArea">
+        <label class="fld" for="rootLabel" style="margin-top:0">Nodo central del esquema</label>
+        <input type="text" id="rootLabel">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+          <button class="btn secondary" id="addMain">Agregar tema principal</button>
+          <button class="place" data-place="root">Colocar aquí como tema principal</button>
+        </div>
+        <div class="tree-ed" id="treeEd"></div>
+        <div class="warns" id="warns"></div>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn secondary" data-to="2">Paso anterior</button><button class="btn primary" data-to="4">Ver el esquema final</button></div>
+  </section>
+
+  <!-- PASO 4 -->
+  <section class="step panel" id="s4">
+    <h2>Paso 4. Su esquema del marco teórico</h2>
+    <p class="prose">Este es el esquema que debe incluir en el capítulo II, después de la introducción del capítulo. Insértelo como una figura con número, título y nota, por ejemplo: <b>Figura 1</b>, <i>Esquema del marco teórico</i>, <i>Nota.</i> Elaboración propia.</p>
+    <div class="export-row">
+      <button class="btn primary" id="copyImg">Copiar imagen</button>
+      <button class="btn secondary" id="dlImg">Descargar imagen (PNG)</button>
+      <button class="btn secondary" id="copyWord">Copiar índice para Word</button>
+    </div>
+    <p id="exportMsg" class="muted" aria-live="polite"></p>
+    <div class="diagram-card" id="diagram"></div>
+    <p class="muted" style="font-size:.88rem;margin-top:6px">Si los botones no funcionan en su navegador, haga clic derecho sobre la imagen (o manténgala presionada en el teléfono) y elija «Copiar imagen» o «Guardar imagen».</p>
+    <h3 style="margin-top:20px">Índice del capítulo II</h3>
+    <p class="muted">Use estos títulos, con la misma numeración, para redactar cada apartado del capítulo.</p>
+    <div class="outline" id="outline"></div>
+    <div class="btn-row"><button class="btn secondary" data-to="3">Volver a organizar</button><a class="btn secondary" href="marco_teorico.html" style="text-decoration:none">Volver a la teoría</a></div>
+  </section>
+
+  <footer class="site-footer">
+    <p><b>Seminario I</b>, Universidad Florencio del Castillo. Personas docentes: M. Sc. Adrián Murillo-González, Dra. Iria Briceño-Álvarez y M. Sc. Ginnette Guillén Jiménez.</p>
+    <p class="lic"><span class="cc" aria-hidden="true">cc by</span><span>Esta obra está bajo una licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" target="_blank" rel="license noopener">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>. Puede compartirla y adaptarla citando la autoría.</span></p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const KEY='esquema-tfg-v1';
+  const store={get(){try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):null}catch(e){return null}},set(v){try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}}};
+  const STOP=new Set(['de','la','el','en','y','los','las','del','que','a','al','un','una','por','para','con','su','sus','se','e','o','u','lo','como','entre','según','sobre','durante']);
+  const VERBS=/^(analizar|identificar|describir|determinar|caracterizar|examinar|establecer|proponer|valorar|evaluar|diagnosticar|comparar|explicar|conocer|comprender|interpretar|diseñar|elaborar|definir|indagar|explorar|relacionar|medir|estimar|verificar|construir|desarrollar|implementar|reconocer|distinguir|contrastar|precisar|conocer)$/i;
+  const norm=t=>t.toLowerCase().normalize('NFC').replace(/[.,;:¿?¡!«»"“”()\[\]]/g,'').replace(/\s+/g,' ').trim();
+  const cap=t=>t?t.charAt(0).toUpperCase()+t.slice(1):t;
+  const uid=()=>Math.random().toString(36).slice(2,9);
+
+  const EXAMPLE={
+    tema:'El control interno y la calidad de la información financiera en las pymes comerciales de Cartago.',
+    pregunta:'¿Cómo se relaciona el control interno con la calidad de la información financiera de las pymes comerciales del cantón central de Cartago durante 2026?',
+    og:'Analizar la relación entre el control interno y la calidad de la información financiera en las pymes comerciales del cantón central de Cartago durante 2026.',
+    oe:['Diagnosticar el estado de los componentes del control interno en las pymes comerciales del cantón central de Cartago.','Evaluar la calidad de la información financiera según sus características cualitativas fundamentales y sus características cualitativas de mejora.','Determinar la relación entre los componentes del control interno y las características cualitativas de la información financiera.'],
+    marks:[['tema','control interno','p'],['tema','calidad de la información financiera','p'],['tema','pymes comerciales de Cartago','c'],
+      ['pregunta','control interno','p'],['pregunta','calidad de la información financiera','p'],['pregunta','pymes comerciales del cantón central de Cartago','c'],
+      ['og','control interno','p'],['og','calidad de la información financiera','p'],['og','pymes comerciales del cantón central de Cartago','c'],
+      ['oe0','componentes del control interno','s'],['oe1','características cualitativas fundamentales','s'],['oe1','características cualitativas de mejora','s'],['oe2','relación entre los componentes del control interno y las características cualitativas','s']]
+  };
+
+  let S=store.get();
+  function blank(){return{tema:'',pregunta:'',og:'',oe:['','',''],marks:{},snap:{},root:'Capítulo II. Sustento teórico-conceptual',tree:[],manual:[],example:false,step:1}}
+  function fieldList(){return[['tema','Tema'],['pregunta','Pregunta de investigación'],['og','Objetivo general'],...S.oe.map((_,i)=>['oe'+i,'Objetivo específico '+(i+1)])]}
+  function fieldText(f){if(f.startsWith('oe'))return S.oe[+f.slice(2)]||'';return S[f]||''}
+  function words(t){return t.trim()?t.trim().split(/\s+/):[]}
+  function findPhrase(f,ph){const fw=words(fieldText(f)).map(norm),pw=words(ph).map(norm);for(let i=0;i<=fw.length-pw.length;i++){if(pw.every((w,j)=>fw[i+j]===w))return[i,i+pw.length-1]}return null}
+  function loadExample(){
+    S=blank();S.tema=EXAMPLE.tema;S.pregunta=EXAMPLE.pregunta;S.og=EXAMPLE.og;S.oe=[...EXAMPLE.oe];S.example=true;
+    fieldList().forEach(([f])=>{S.marks[f]=[];S.snap[f]=fieldText(f)});
+    EXAMPLE.marks.forEach(([f,ph,t])=>{const r=findPhrase(f,ph);if(r)S.marks[f].push({s:r[0],e:r[1],t})});
+    const N=(label,kids=[])=>({id:uid(),label,kids});
+    S.tree=[
+      N('Control interno',[N('Concepto de control interno'),N('Marco integrado COSO'),N('Componentes del control interno',[N('Entorno de control y evaluación de riesgos'),N('Actividades de control y supervisión')])]),
+      N('Calidad de la información financiera',[N('Concepto y personas usuarias de la información financiera'),N('Características cualitativas fundamentales'),N('Características cualitativas de mejora')]),
+      N('Relación entre los componentes del control interno y las características cualitativas',[N('Debilidades de control y errores en los registros'),N('Estudios previos')]),
+      N('Pymes comerciales del cantón central de Cartago',[N('Caracterización de las pymes comerciales'),N('Marco normativo contable aplicable')])
+    ];
+    save();
+  }
+  function save(){store.set(S)}
+
+  // ---------- navegación ----------
+  function goStep(n){
+    S.step=n;save();
+    document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active',s.id==='s'+n));
+    document.querySelectorAll('.step-btn').forEach(b=>b.setAttribute('aria-current',+b.dataset.step===n?'step':'false'));
+    if(n===2)renderHL();if(n===3)renderOrg();if(n===4)renderFinal();
+    window.scrollTo({top:0});
+  }
+  document.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>goStep(+b.dataset.step)));
+  document.addEventListener('click',e=>{const t=e.target.closest('[data-to]');if(t)goStep(+t.dataset.to)});
+
+  // ---------- paso 1 ----------
+  const oeList=document.getElementById('oeList');
+  function renderStep1(){
+    document.getElementById('exBanner').classList.toggle('hidden',!S.example);
+    ['tema','pregunta','og'].forEach(f=>{document.getElementById('f-'+f).value=S[f]});
+    oeList.innerHTML='';
+    S.oe.forEach((t,i)=>{
+      const row=document.createElement('div');row.className='oe-row';
+      row.innerHTML=`<textarea id="f-oe${i}" aria-label="Objetivo específico ${i+1}" placeholder="Objetivo específico ${i+1}"></textarea><button class="icon-btn" title="Eliminar este objetivo" aria-label="Eliminar objetivo ${i+1}" ${S.oe.length<=1?'disabled':''}>✕</button>`;
+      const ta=row.querySelector('textarea');ta.value=t;ta.addEventListener('input',()=>{S.oe[i]=ta.value;S.example=false;save()});
+      row.querySelector('button').addEventListener('click',()=>{if(S.oe.length<=1)return;S.oe.splice(i,1);reindexMarks(i);save();renderStep1()});
+      oeList.appendChild(row);
+    });
+    document.getElementById('addOe').disabled=S.oe.length>=6;
+  }
+  function reindexMarks(removed){const nm={},ns={};Object.keys(S.marks).forEach(k=>{if(!k.startsWith('oe')){nm[k]=S.marks[k];ns[k]=S.snap[k];return}const i=+k.slice(2);if(i===removed)return;const nk='oe'+(i>removed?i-1:i);nm[nk]=S.marks[k];ns[nk]=S.snap[k]});S.marks=nm;S.snap=ns}
+  ['tema','pregunta','og'].forEach(f=>document.getElementById('f-'+f).addEventListener('input',e=>{S[f]=e.target.value;S.example=false;save()}));
+  document.getElementById('addOe').addEventListener('click',()=>{if(S.oe.length<6){S.oe.push('');save();renderStep1()}});
+  document.getElementById('loadEx').addEventListener('click',()=>{askConfirm('¿Reemplazar su información por el ejemplo de contaduría?',()=>{loadExample();renderStep1()})});
+  const cBox=document.getElementById('confirmBox');let cAction=null;
+  function askConfirm(txt,fn){document.getElementById('confirmTxt').textContent=txt;cAction=fn;cBox.classList.add('show')}
+  document.getElementById('confirmYes').addEventListener('click',()=>{cBox.classList.remove('show');if(cAction)cAction();cAction=null});
+  document.getElementById('confirmNo').addEventListener('click',()=>{cBox.classList.remove('show');cAction=null});
+  document.getElementById('clearAll').addEventListener('click',()=>askConfirm('¿Borrar todos los datos, el subrayado y el esquema?',()=>{S=blank();save();renderStep1()}));
+  document.getElementById('startOwn').addEventListener('click',()=>{S=blank();save();renderStep1();document.getElementById('f-tema').focus()});
+
+  // ---------- paso 2: subrayado ----------
+  let mode='p',pending=null,justSelected=false;
+  const hint=document.getElementById('hint');
+  document.querySelectorAll('.mode-bar button').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;pending=null;document.querySelectorAll('.mode-bar button').forEach(x=>x.setAttribute('aria-pressed',x===b));hint.textContent='';paintHL()}));
+  function syncSnap(){fieldList().forEach(([f])=>{if(!S.marks[f])S.marks[f]=[];if(S.snap[f]!==fieldText(f)){if(S.marks[f].length&&S.snap[f]!==undefined)S.marks[f]=[];S.snap[f]=fieldText(f)}});save()}
+  function markAt(f,i){return(S.marks[f]||[]).find(r=>i>=r.s&&i<=r.e)}
+  function renderHL(){
+    syncSnap();
+    const box=document.getElementById('hlFields');box.innerHTML='';
+    fieldList().forEach(([f,label])=>{
+      const t=fieldText(f);
+      const d=document.createElement('div');d.className='hl-field';
+      d.innerHTML=`<h4><span>${label}</span><span class="cov" data-cov="${f}"></span></h4>`;
+      const p=document.createElement('div');p.className='hl-text';p.dataset.f=f;
+      if(!t.trim()){p.innerHTML='<span class="empty">Sin texto. Complételo en el paso 1.</span>'}
+      else words(t).forEach((w,i)=>{const s=document.createElement('span');s.className='w';s.textContent=w;s.dataset.f=f;s.dataset.i=i;s.tabIndex=0;s.setAttribute('role','button');p.appendChild(s);p.appendChild(document.createTextNode(' '))});
+      d.appendChild(p);box.appendChild(d);
+    });
+    paintHL();
+  }
+  function paintHL(){
+    document.querySelectorAll('#hlFields .w').forEach(s=>{const m=markAt(s.dataset.f,+s.dataset.i);s.classList.remove('p','s','c','pending');if(m)s.classList.add(m.t);if(pending&&pending.f===s.dataset.f&&pending.i===+s.dataset.i)s.classList.add('pending')});
+    fieldList().forEach(([f])=>{const el=document.querySelector(`[data-cov="${f}"]`);if(!el)return;const n=(S.marks[f]||[]).length;if(!fieldText(f).trim()){el.textContent='';return}
+      if(f==='pregunta'||f==='tema'){el.className='cov '+(n?'ok':'');el.textContent=n?`${n} concepto(s)`:'';return}
+      el.className='cov '+(n?'ok':'no');el.textContent=n?`${n} concepto(s)`:'Sin conceptos subrayados'});
+    renderBank2();
+  }
+  function addRange(f,a,b,t){const s=Math.min(a,b),e=Math.max(a,b);S.marks[f]=(S.marks[f]||[]).filter(r=>r.e<s||r.s>e);S.marks[f].push({s,e,t});S.marks[f].sort((x,y)=>x.s-y.s);S.example=false;save()}
+  function clickWord(f,i){
+    const m=markAt(f,i);
+    if(mode==='x'){if(m){S.marks[f]=S.marks[f].filter(r=>r!==m);save()}pending=null;hint.textContent='';paintHL();return}
+    if(!pending&&m&&m.t===mode){S.marks[f]=S.marks[f].filter(r=>r!==m);save();paintHL();hint.textContent='Marca eliminada.';return}
+    if(pending&&pending.f===f){addRange(f,pending.i,i,mode);pending=null;hint.textContent='Concepto subrayado.';paintHL();return}
+    pending={f,i};const w=words(fieldText(f))[i];
+    hint.textContent=VERBS.test(norm(w))?`«${w}» es un verbo: los verbos no se subrayan. Si de todos modos quiere iniciar aquí, haga clic en la última palabra.`:`Primera palabra: «${w}». Ahora haga clic en la última palabra del concepto (o de nuevo en «${w}» si es una sola).`;
+    paintHL();
+  }
+  const hlBox=document.getElementById('hlFields');
+  hlBox.addEventListener('click',e=>{if(justSelected){justSelected=false;return}const s=e.target.closest('.w');if(s)clickWord(s.dataset.f,+s.dataset.i)});
+  hlBox.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('w')){e.preventDefault();clickWord(e.target.dataset.f,+e.target.dataset.i)}});
+  hlBox.addEventListener('mouseup',()=>{
+    const sel=window.getSelection();if(!sel||sel.isCollapsed||mode==='x')return;
+    const a=(sel.anchorNode.nodeType===3?sel.anchorNode.parentElement:sel.anchorNode).closest('.w'),b=(sel.focusNode.nodeType===3?sel.focusNode.parentElement:sel.focusNode).closest('.w');
+    if(a&&b&&a.dataset.f===b.dataset.f&&a!==b){addRange(a.dataset.f,+a.dataset.i,+b.dataset.i,mode);pending=null;justSelected=true;sel.removeAllRanges();hint.textContent='Concepto subrayado.';paintHL();setTimeout(()=>{justSelected=false},300)}
+  });
+  function concepts(){
+    const out={p:[],s:[],c:[]},seen={p:new Set(),s:new Set(),c:new Set()};
+    fieldList().forEach(([f])=>{const w=words(fieldText(f));(S.marks[f]||[]).forEach(r=>{let ws=w.slice(r.s,r.e+1).map(x=>x.replace(/^[«"“¿¡(]+|[.,;:?!»"”)]+$/g,''));while(ws.length&&STOP.has(norm(ws[0])))ws.shift();while(ws.length&&STOP.has(norm(ws[ws.length-1])))ws.pop();let ph=ws.join(' ');const k=norm(ph);if(k&&!seen[r.t].has(k)){seen[r.t].add(k);out[r.t].push(ph)}})});
+    return out;
+  }
+  function renderBank2(){
+    const c=concepts(),el=document.getElementById('bank2');
+    const col=(t,title)=>`<div class="bank-col"><h4><span class="sw ${t}"></span>${title}</h4><div class="chips">${c[t].length?c[t].map(x=>`<span class="chip ${t}">${esc(x)}</span>`).join(''):'<span class="empty">Todavía no hay conceptos con este color.</span>'}</div></div>`;
+    el.innerHTML=col('p','Principales')+col('s','Secundarios')+col('c','Contexto');
+  }
+  const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  // ---------- paso 3: organizar ----------
+  const stem=w=>w.length>5?w.slice(0,5):w;
+  const content=t=>words(norm(t)).filter(w=>!STOP.has(w)).map(stem);
+  const subset=(a,b)=>a.length>0&&a.every(w=>b.includes(w));
+  function longestUnique(list){const c=list.map(content);return list.filter((x,i)=>!c.some((y,j)=>j!==i&&y.length>c[i].length&&subset(c[i],y)))}
+  function suggestTree(){
+    const c=concepts();
+    const principals=longestUnique(c.p);
+    const tree=principals.map(p=>({id:uid(),label:cap(p),kids:[]}));
+    const left=[];
+    c.s.forEach(s=>{
+      const sw=content(s);let best=-1,score=0;
+      tree.forEach((n,i)=>{const pw=content(n.label);const ov=pw.filter(w=>sw.includes(w)).length/Math.max(1,pw.length);if(ov>score){score=ov;best=i}});
+      const isRel=/^relaci[oó]n\b/i.test(s.trim());
+      if(isRel){tree.push({id:uid(),label:cap(s),kids:[]});return}
+      if(best>=0&&score>=0.5)tree[best].kids.push({id:uid(),label:cap(s),kids:[]});else left.push(s);
+    });
+    const ctx=longestUnique(c.c);
+    if(ctx.length)tree.push({id:uid(),label:cap(ctx[0]),kids:ctx.slice(1).map(x=>({id:uid(),label:cap(x),kids:[]})),ctx:true});
+    return tree;
+  }
+  let placing=null;
+  function allLabels(){const out=[];(function walk(ns){ns.forEach(n=>{out.push(n.label);walk(n.kids)})})(S.tree);return out}
+  function isUsed(x,labels){const cx=content(x);return labels.some(l=>{const cl=content(l);return norm(l)===norm(x)||subset(cx,cl)||(cl.length>=2&&subset(cl,cx))})}
+  function bankItems(){const c=concepts();return[...c.p.map(x=>({t:'p',x})),...c.s.map(x=>({t:'s',x})),...c.c.map(x=>({t:'c',x})),...S.manual.map(x=>({t:'m',x}))]}
+  function renderBank3(){
+    const used=allLabels(),el=document.getElementById('bank3');el.innerHTML='';
+    const items=bankItems();
+    if(!items.length){el.innerHTML='<span class="empty">No hay conceptos. Subráyelos en el paso 2 o escriba uno abajo.</span>';return}
+    items.forEach(it=>{const b=document.createElement('button');b.className=`chip chip-btn ${it.t}`;b.textContent=it.x;const u=isUsed(it.x,used);if(u)b.classList.add('used');b.setAttribute('aria-pressed',placing===it.x);
+      b.addEventListener('click',()=>{placing=placing===it.x?null:it.x;renderOrg()});el.appendChild(b)});
+  }
+  document.getElementById('manualAdd').addEventListener('click',()=>{const i=document.getElementById('manualTxt');const v=i.value.trim();if(!v)return;if(!S.manual.map(norm).includes(norm(v)))S.manual.push(v);i.value='';save();renderOrg()});
+  document.getElementById('manualTxt').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('manualAdd').click()}});
+  const COLORS=['#2c668f','#3d8a63','#7a5aa6','#b07a1f','#b4472b','#2f7f8a'];
+  function findNode(id,ns=S.tree,parent=null){for(let i=0;i<ns.length;i++){if(ns[i].id===id)return{node:ns[i],list:ns,idx:i,parent};const r=findNode(id,ns[i].kids,ns[i]);if(r)return r}return null}
+  function renderOrg(){
+    document.getElementById('treeArea').classList.toggle('placing',!!placing);
+    const root=document.getElementById('rootLabel');root.value=S.root;
+    const ed=document.getElementById('treeEd');ed.innerHTML='';
+    if(!S.tree.length)ed.innerHTML='<p class="empty">El esquema está vacío. Use «Proponer esquema a partir del subrayado» o agregue un tema principal.</p>';
+    S.tree.forEach((n,i)=>ed.appendChild(nodeEl(n,[i+1],1,COLORS[i%COLORS.length])));
+    renderBank3();renderWarns();
+  }
+  function nodeEl(n,path,depth,color){
+    const d=document.createElement('div');d.className='node';d.style.setProperty('--nc',color);
+    const num='2.'+path.join('.');
+    d.innerHTML=`<div class="node-row"><span class="num">${num}</span><textarea rows="1" class="nt" aria-label="Título ${num}"></textarea><div class="node-tools">
+      <button class="icon-btn" data-a="up" title="Subir" aria-label="Subir ${num}">↑</button><button class="icon-btn" data-a="down" title="Bajar" aria-label="Bajar ${num}">↓</button>
+      ${depth<3?`<button class="icon-btn" data-a="kid" title="Agregar subtema" aria-label="Agregar subtema a ${num}">+ subtema</button>`:''}
+      <button class="icon-btn" data-a="del" title="Eliminar" aria-label="Eliminar ${num}">✕</button>
+      ${depth<3?`<button class="place" data-a="place">Colocar aquí</button>`:''}</div></div>`;
+    const inp=d.querySelector('textarea.nt');inp.value=n.label;const fit=()=>{inp.style.height='auto';inp.style.height=inp.scrollHeight+2+'px'};requestAnimationFrame(fit);
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')e.preventDefault()});
+    inp.addEventListener('input',()=>{inp.value=inp.value.replace(/\n/g,' ');n.label=inp.value;fit();save();renderBank3();renderWarns()});
+    d.querySelector('.node-tools').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=findNode(n.id);if(!r)return;
+      const a=b.dataset.a;
+      if(a==='up'&&r.idx>0){[r.list[r.idx-1],r.list[r.idx]]=[r.list[r.idx],r.list[r.idx-1]]}
+      if(a==='down'&&r.idx<r.list.length-1){[r.list[r.idx+1],r.list[r.idx]]=[r.list[r.idx],r.list[r.idx+1]]}
+      if(a==='del'){r.list.splice(r.idx,1)}
+      if(a==='kid'){n.kids.push({id:uid(),label:'',kids:[]})}
+      if(a==='place'&&placing){n.kids.push({id:uid(),label:cap(placing),kids:[]});placing=null}
+      save();renderOrg();
+      if(a==='kid'){const last=[...document.querySelectorAll('#treeEd textarea.nt')].find(x=>x.value==='');if(last)last.focus()}
+    });
+    if(n.kids.length){const k=document.createElement('div');k.className='kids';n.kids.forEach((c,j)=>k.appendChild(nodeEl(c,[...path,j+1],depth+1,color)));d.appendChild(k)}
+    return d;
+  }
+  document.querySelector('[data-place="root"]').addEventListener('click',()=>{if(!placing)return;S.tree.push({id:uid(),label:cap(placing),kids:[]});placing=null;save();renderOrg()});
+  document.getElementById('rootLabel').addEventListener('input',e=>{S.root=e.target.value;save()});
+  document.getElementById('addMain').addEventListener('click',()=>{S.tree.push({id:uid(),label:'',kids:[]});save();renderOrg();const ins=document.querySelectorAll('#treeEd > .node > .node-row textarea.nt');if(ins.length)ins[ins.length-1].focus()});
+  const cs=document.getElementById('confirmSuggest');
+  document.getElementById('suggest').addEventListener('click',()=>{if(S.tree.length)cs.classList.add('show');else applySuggest()});
+  document.getElementById('sugYes').addEventListener('click',()=>{cs.classList.remove('show');applySuggest()});
+  document.getElementById('sugNo').addEventListener('click',()=>cs.classList.remove('show'));
+  function applySuggest(){S.tree=suggestTree();save();renderOrg()}
+  document.getElementById('addConceptAll').addEventListener('click',()=>{S.tree.forEach(n=>{if(!n.kids.some(k=>/^concepto/i.test(k.label.trim())))n.kids.unshift({id:uid(),label:'Concepto',kids:[]})});save();renderOrg()});
+  function renderWarns(){
+    const w=[];const used=allLabels();
+    const missing=bankItems().filter(it=>it.t!=='m'&&!isUsed(it.x,used));
+    if(!S.tree.length)w.push('Todavía no hay temas en el esquema.');
+    if(missing.length)w.push(`Conceptos subrayados que aún no aparecen en el esquema: ${missing.map(m=>'«'+esc(m.x)+'»').join(', ')}. Ubíquelos o justifique por qué no los necesita.`);
+    S.tree.forEach((n,i)=>{if(!n.label.trim())w.push(`El tema 2.${i+1} no tiene título.`);else if(!n.kids.length)w.push(`El tema 2.${i+1} «${esc(n.label)}» no tiene subtemas. ¿Qué necesita explicar sobre él?`)});
+    (function walk(ns,p){ns.forEach((n,i)=>{const num=p+'.'+(i+1);if(p!=='2'&&!n.label.trim())w.push(`El subtema ${num} no tiene título.`);walk(n.kids,num)})})(S.tree,'2');
+    if(S.tree.length>6)w.push('Tiene más de seis temas principales. Revise si alguno puede integrarse como subtema de otro.');
+    const el=document.getElementById('warns');
+    el.innerHTML=w.length?`<div class="note"><strong>Revise antes de continuar</strong><ul>${w.map(x=>'<li>'+x+'</li>').join('')}</ul></div>`:'<div class="good"><strong>Esquema completo.</strong> Todos los conceptos subrayados están ubicados y cada tema tiene subtemas.</div>';
+  }
+
+  // ---------- paso 4: esquema final ----------
+  function wrap(text,maxChars){const ws=String(text).split(/\s+/);const lines=[];let cur='';ws.forEach(w=>{if((cur+' '+w).trim().length>maxChars&&cur){lines.push(cur);cur=w}else cur=(cur+' '+w).trim()});if(cur)lines.push(cur);return lines.length?lines:['']}
+  const xesc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  function buildSVG(){
+    const W=1120,F='Arial, Helvetica, sans-serif';
+    const rootX=24,rootW=210,spineX=262,mainX=290,mainW=250,subSpineX=566,subX=590,subW=W-590-24;
+    const LH=17,PADY=9,GAPROW=8,GAPBLOCK=22,TOP=24;
+    let y=TOP;const parts=[];const mains=[];
+    const tree=S.tree.filter(n=>n.label.trim());
+    tree.forEach((n,i)=>{
+      const color=COLORS[i%COLORS.length];
+      const rows=[];
+      (function walk(ks,p,depth){ks.forEach((k,j)=>{if(!k.label.trim())return;const num=p+'.'+(j+1);rows.push({num,label:k.label,depth});walk(k.kids,num,depth+1)})})(n.kids,'2.'+(i+1),2);
+      const mainLines=wrap(n.label,26);const mainH=Math.max(54,mainLines.length*LH+30);
+      let rh=0;rows.forEach(r=>{const ind=(r.depth-2)*28;r.lines=wrap(`${r.num}  ${r.label}`,Math.floor((subW-ind-24)/7.1));r.h=r.lines.length*LH+PADY*2;r.ind=ind;rh+=r.h+GAPROW});rh=Math.max(0,rh-GAPROW);
+      const blockH=Math.max(mainH,rh);
+      const mainY=y+(blockH-mainH)/2;
+      mains.push({cy:mainY+mainH/2});
+      parts.push(`<rect x="${mainX}" y="${mainY}" width="${mainW}" height="${mainH}" rx="12" fill="${color}" fill-opacity="0.12" stroke="${color}" stroke-width="2"/>`);
+      parts.push(`<text x="${mainX+mainW/2}" y="${mainY+19}" text-anchor="middle" font-family="${F}" font-size="13" font-weight="700" fill="${color}">2.${i+1}</text>`);
+      mainLines.forEach((l,k)=>parts.push(`<text x="${mainX+mainW/2}" y="${mainY+37+k*LH}" text-anchor="middle" font-family="${F}" font-size="14" font-weight="700" fill="#1b2b36">${xesc(l)}</text>`));
+      parts.push(`<line x1="${spineX}" y1="${mainY+mainH/2}" x2="${mainX}" y2="${mainY+mainH/2}" stroke="#5c717b" stroke-width="2"/>`);
+      if(rows.length){
+        let ry=y+(blockH-rh)/2;const cys=[];
+        rows.forEach(r=>{const x=subX+r.ind;
+          parts.push(`<rect x="${x}" y="${ry}" width="${subW-r.ind}" height="${r.h}" rx="8" fill="#ffffff" stroke="${color}" stroke-opacity="0.55"/>`);
+          parts.push(`<rect x="${x}" y="${ry}" width="5" height="${r.h}" rx="2" fill="${color}"/>`);
+          r.lines.forEach((l,k)=>{const isFirst=k===0;const sp=l.indexOf('  ');
+            if(isFirst&&sp>0){parts.push(`<text x="${x+14}" y="${ry+PADY+13+k*LH}" font-family="${F}" font-size="13" fill="#1b2b36"${r.depth>=3?' font-style="italic"':''}><tspan font-weight="700" fill="${color}">${xesc(l.slice(0,sp))}</tspan><tspan>  ${xesc(l.slice(sp+2))}</tspan></text>`)}
+            else parts.push(`<text x="${x+14}" y="${ry+PADY+13+k*LH}" font-family="${F}" font-size="13" fill="#1b2b36"${r.depth>=3?' font-style="italic"':''}>${xesc(l)}</text>`)});
+          const cy=ry+r.h/2;if(r.depth===2)cys.push(cy);else parts.push(`<line x1="${subX+12}" y1="${cy}" x2="${x}" y2="${cy}" stroke="${color}" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="3 3"/>`);
+          if(r.depth===2)parts.push(`<line x1="${subSpineX}" y1="${cy}" x2="${subX}" y2="${cy}" stroke="${color}" stroke-width="1.5"/>`);
+          ry+=r.h+GAPROW});
+        const mcy=mainY+mainH/2;const top=Math.min(mcy,...cys),bot=Math.max(mcy,...cys);
+        parts.push(`<line x1="${mainX+mainW}" y1="${mcy}" x2="${subSpineX}" y2="${mcy}" stroke="${color}" stroke-width="1.5"/>`);
+        parts.push(`<line x1="${subSpineX}" y1="${top}" x2="${subSpineX}" y2="${bot}" stroke="${color}" stroke-width="1.5"/>`);
+      }
+      y+=blockH+GAPBLOCK;
+    });
+    const H=Math.max(y-GAPBLOCK+TOP,180);
+    const rootLines=wrap(S.root||'Capítulo II',20);const rootH=Math.max(70,rootLines.length*19+30);const rootY=H/2-rootH/2;
+    const head=[];
+    head.push(`<rect x="0" y="0" width="${W}" height="${H}" fill="#ffffff"/>`);
+    if(mains.length){const top=Math.min(...mains.map(m=>m.cy),H/2),bot=Math.max(...mains.map(m=>m.cy),H/2);head.push(`<line x1="${spineX}" y1="${top}" x2="${spineX}" y2="${bot}" stroke="#5c717b" stroke-width="2"/>`)}
+    head.push(`<line x1="${rootX+rootW}" y1="${H/2}" x2="${spineX}" y2="${H/2}" stroke="#5c717b" stroke-width="2"/>`);
+    head.push(`<rect x="${rootX}" y="${rootY}" width="${rootW}" height="${rootH}" rx="14" fill="#10344f"/>`);
+    rootLines.forEach((l,k)=>head.push(`<text x="${rootX+rootW/2}" y="${rootY+rootH/2-(rootLines.length-1)*9.5+5+k*19}" text-anchor="middle" font-family="${F}" font-size="15" font-weight="700" fill="#ffffff">${xesc(l)}</text>`));
+    return {svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Esquema del marco teórico">${head.join('')}${parts.join('')}</svg>`,W,H,empty:!tree.length};
+  }
+  let lastPNG=null;
+  function svgToPNG(svg,W,H){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{try{const sc=2;const c=document.createElement('canvas');c.width=W*sc;c.height=H*sc;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);c.toBlob(b=>b?res({blob:b,url:c.toDataURL('image/png')}):rej(new Error('blob')),'image/png')}catch(e){rej(e)}};img.onerror=rej;img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)})}
+  function outlineData(){const out=[];(function walk(ns,p,d){ns.forEach((n,i)=>{if(!n.label.trim())return;const num=p+'.'+(i+1);out.push({num,label:n.label.trim(),d});walk(n.kids,num,d+1)})})(S.tree,'2',1);return out}
+  async function renderFinal(){
+    const {svg,W,H,empty}=buildSVG();const box=document.getElementById('diagram');const msg=document.getElementById('exportMsg');
+    if(empty){box.innerHTML='<p class="empty" style="color:#5c717b">El esquema está vacío. Vuelva al paso 3 para agregar temas.</p>';document.getElementById('outline').innerHTML='';lastPNG=null;return}
+    box.innerHTML=svg;lastPNG=null;msg.textContent='';
+    try{lastPNG=await svgToPNG(svg,W,H);box.innerHTML=`<img src="${lastPNG.url}" alt="Esquema del marco teórico: ${esc(S.root)}" width="${W}" height="${H}">`}catch(e){}
+    const o=outlineData();
+    document.getElementById('outline').innerHTML=`<div class="h1">${esc(S.root)}</div><div class="h2">Introducción al capítulo</div><div class="h2">Esquema del marco teórico</div>`+o.map(r=>`<div class="h${Math.min(r.d+1,4)}">${r.num} ${esc(r.label)}</div>`).join('');
+  }
+  const msg=t=>{document.getElementById('exportMsg').textContent=t};
+  document.getElementById('copyImg').addEventListener('click',async()=>{
+    if(!lastPNG){msg('Primero agregue temas al esquema.');return}
+    try{await navigator.clipboard.write([new ClipboardItem({'image/png':lastPNG.blob})]);msg('Imagen copiada. Péguela en Word después del título «Esquema del marco teórico».')}
+    catch(e){msg('Su navegador no permitió copiar la imagen. Haga clic derecho sobre el esquema y elija «Copiar imagen».')}
+  });
+  document.getElementById('dlImg').addEventListener('click',()=>{
+    if(!lastPNG){msg('Primero agregue temas al esquema.');return}
+    try{const a=document.createElement('a');a.href=URL.createObjectURL(lastPNG.blob);a.download='esquema_marco_teorico.png';document.body.appendChild(a);a.click();a.remove();msg('Si la descarga no inicia, haga clic derecho sobre el esquema y elija «Guardar imagen».')}
+    catch(e){msg('No se pudo descargar. Haga clic derecho sobre el esquema y elija «Guardar imagen».')}
+  });
+  document.getElementById('copyWord').addEventListener('click',async()=>{
+    const o=outlineData();const base='font-family:Arial;font-size:11pt;line-height:150%;margin:0';
+    const sty={1:base+';font-weight:bold',2:base+';font-weight:bold;margin-left:0.5in',3:base+';font-style:italic;margin-left:1in'};
+    const html=`<p style="${base};text-align:center;font-weight:bold">${esc(S.root)}</p><p style="${base};font-weight:bold">Introducción al capítulo</p><p style="${base};font-weight:bold">Esquema del marco teórico</p>`+o.map(r=>`<p style="${sty[Math.min(r.d,3)]}">${r.num} ${esc(r.label)}</p>`).join('');
+    const txt=[S.root,'Introducción al capítulo','Esquema del marco teórico',...o.map(r=>'    '.repeat(r.d-1)+r.num+' '+r.label)].join('\n');
+    try{
+      if(window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write){await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([txt],{type:'text/plain'})})])}
+      else await navigator.clipboard.writeText(txt);
+      msg('Índice copiado. Péguelo en Word para usarlo como guía de títulos.');
+    }catch(e){const r=document.createRange();r.selectNodeContents(document.getElementById('outline'));const s=getSelection();s.removeAllRanges();s.addRange(r);msg('No se pudo copiar automáticamente: el índice quedó seleccionado; presione Ctrl + C.')}
+  });
+
+  // Pantalla completa
+  const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
+  const fsb=document.querySelector('.fs-btn');
+  fsb.addEventListener('click',async()=>{try{if(fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document);else{const el=document.documentElement;const rq=el.requestFullscreen||el.webkitRequestFullscreen;if(!rq)throw 0;await rq.call(el)}}catch(e){fsb.textContent='No disponible en este navegador'}});
+  const fsUp=()=>{fsb.textContent=fsEl()?'Salir de pantalla completa':'Pantalla completa'};
+  document.addEventListener('fullscreenchange',fsUp);document.addEventListener('webkitfullscreenchange',fsUp);
+
+  if(!S){S=blank();loadExample()}
+  renderStep1();
+  const hs=(location.hash||'').match(/^#paso([1-4])$/);
+  goStep(hs?+hs[1]:(S.step||1));
+})();
+</script>
+</body>
+</html>

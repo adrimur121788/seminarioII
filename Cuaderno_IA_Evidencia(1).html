@@ -1,0 +1,480 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style></head><body>
+<title>Cuaderno IA-Evidencia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap" rel="stylesheet">
+<style>
+/* Layout: formulario clínico (CRF) — riel de pasos a la izquierda, hoja de trabajo a la derecha; sellos de "control ético" por paso */
+:root{
+  --bg:#f3f5f6; --sheet:#ffffff; --ink:#15232b; --muted:#56656e; --line:#d5dde1; --field:#f8fafb;
+  --accent:#0d6e6e; --accent-ink:#ffffff; --accent-soft:#e1f0ef;
+  --stamp:#b3372b; --stamp-soft:#fbe9e6; --ok:#2f7d4f; --ok-soft:#e3f2e8; --warn:#9a6a00; --warn-soft:#fdf3d8;
+  --display:"Literata", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --mono:"IBM Plex Mono", Consolas, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1719; --sheet:#162125; --ink:#e4ecee; --muted:#9fb0b6; --line:#2c3b40; --field:#1b282c;
+  --accent:#4fb3ad; --accent-ink:#082022; --accent-soft:#17332f;
+  --stamp:#f08a7d; --stamp-soft:#3a1f1c; --ok:#6cc690; --ok-soft:#173023; --warn:#e6bb55; --warn-soft:#352c14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1719; --sheet:#162125; --ink:#e4ecee; --muted:#9fb0b6; --line:#2c3b40; --field:#1b282c;
+  --accent:#4fb3ad; --accent-ink:#082022; --accent-soft:#17332f;
+  --stamp:#f08a7d; --stamp-soft:#3a1f1c; --ok:#6cc690; --ok-soft:#173023; --warn:#e6bb55; --warn-soft:#352c14; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+h1,h2,h3{font-family:var(--display);line-height:1.2;text-wrap:balance;margin:0}
+h1{font-size:clamp(1.7rem,3.2vw,2.4rem)}
+h2{font-size:clamp(1.4rem,2.4vw,1.85rem)}
+p{margin:0}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto}
+header.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:end;justify-content:space-between;padding:28px 0 18px;border-bottom:2px solid var(--ink)}
+.eyebrow{font:600 .74rem/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.top .meta{display:flex;gap:18px;flex-wrap:wrap;font:.82rem var(--mono);color:var(--muted)}
+.top .meta b{color:var(--ink);font-weight:600}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;margin-top:24px;align-items:start}
+nav.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-direction:column;gap:4px}
+nav.rail a{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;text-decoration:none;color:var(--ink);padding:9px 10px;border-radius:8px;font-size:.93rem}
+nav.rail a:hover{background:var(--sheet)}
+nav.rail a.on{background:var(--sheet);box-shadow:inset 3px 0 0 var(--accent);font-weight:600}
+nav.rail .k{font:600 .78rem var(--mono);color:var(--muted)}
+nav.rail .st{width:12px;height:12px;border-radius:50%;border:2px solid var(--line)}
+nav.rail .st.done{background:var(--ok);border-color:var(--ok)}
+nav.rail .st.part{background:var(--warn);border-color:var(--warn)}
+nav.rail .sep{height:1px;background:var(--line);margin:8px 0}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:clamp(18px,3vw,36px);min-width:0}
+.view{display:flex;flex-direction:column;gap:22px}
+.stephead{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:14px}
+.lead{color:var(--muted);max-width:68ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:.86rem;font-weight:600;min-width:0}
+label.f span.h{font-weight:400;color:var(--muted);font-size:.8rem}
+input[type=text],select,textarea{width:100%;background:var(--field);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-weight:400;font-size:.95rem}
+textarea{min-height:84px;resize:vertical;line-height:1.5}
+textarea.mono,input.mono{font-family:var(--mono);font-size:.86rem}
+.box{border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.box h3{font-family:var(--body);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.tool{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--field);display:flex;flex-direction:column;gap:4px;font-size:.88rem}
+.tool.main{border:2px solid var(--accent);background:var(--accent-soft)}
+.tool b{font-size:.95rem}
+.tool a{font:.78rem var(--mono);word-break:break-all}
+ol.how{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.prompt{position:relative;background:var(--field);border:1px dashed var(--accent);border-radius:10px;padding:46px 16px 14px;font:.86rem/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere}
+.prompt .copy{position:absolute;top:8px;right:8px}
+.prompt .tag{position:absolute;top:12px;left:16px;font:700 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.btn{border:1px solid var(--line);background:var(--sheet);border-radius:8px;padding:8px 14px;font-weight:600;font-size:.86rem;cursor:pointer;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.small{padding:4px 10px;font-size:.78rem}
+.btn.danger{color:var(--stamp)}
+.btn[hidden]{display:none!important}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.gate{border:2px solid var(--stamp);background:var(--stamp-soft);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.gate.done{border-color:var(--ok);background:var(--ok-soft)}
+.gate .gt{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.gate .gt b{font:700 .8rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--stamp)}
+.gate.done .gt b{color:var(--ok)}
+.gate .stampmark{font:700 .74rem var(--mono);letter-spacing:.1em;text-transform:uppercase;border:2px solid currentColor;border-radius:6px;padding:3px 8px;transform:rotate(-3deg);color:var(--stamp)}
+.gate.done .stampmark{color:var(--ok)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.93rem;cursor:pointer}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ok);flex:none}
+.empty{color:var(--muted);font-size:.9rem;font-style:italic}
+.study{border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.study .full{grid-column:1/-1}
+.study .sh{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.study .num{font:600 .8rem var(--mono);color:var(--muted)}
+.vbadge{font:700 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:6px}
+.vbadge.y{background:var(--ok-soft);color:var(--ok)}.vbadge.n{background:var(--warn-soft);color:var(--warn)}
+.scen{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.scen button{text-align:left;border:1px solid var(--line);background:var(--field);border-radius:10px;padding:14px 16px;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.scen button.on{border:2px solid var(--accent);background:var(--accent-soft)}
+.scen .t{font-weight:700}
+.scen .d{font-size:.85rem;color:var(--muted)}
+.roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.role{border-left:4px solid var(--accent);background:var(--field);border-radius:0 10px 10px 0;padding:12px 14px;font-size:.9rem}
+.role b{display:block;font-size:.98rem;margin-bottom:2px}
+.member{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:10px}
+.rules{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
+.banner{border-radius:10px;padding:12px 16px;font-size:.92rem}
+.banner.warn{background:var(--warn-soft);border:1px solid var(--warn)}
+.banner.ok{background:var(--ok-soft);border:1px solid var(--ok)}
+.banner.info{background:var(--accent-soft);border:1px solid var(--accent)}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table.t{border-collapse:collapse;width:100%;font-size:.85rem;min-width:560px}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.t th{background:var(--ok-soft);color:var(--ok)}
+.aidchips{display:flex;flex-wrap:wrap;gap:8px}
+.aidchips button{border:1px solid var(--line);background:var(--field);border-radius:999px;padding:7px 14px;font-size:.85rem;font-weight:600;cursor:pointer}
+.aidchips button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.aidrow{display:grid;grid-template-columns:240px minmax(0,1fr);gap:12px;align-items:center;border-top:1px solid var(--line);padding-top:10px}
+.aidrow b{font-size:.9rem}
+.aidout{background:var(--field);border:1px solid var(--line);border-radius:10px;padding:16px 18px;font-size:.93rem;display:flex;flex-direction:column;gap:8px}
+.aidout b{color:var(--accent)}
+.doc{border:1px solid var(--line);border-radius:10px;padding:clamp(18px,3vw,40px);background:var(--sheet);font-size:.97rem;max-width:860px}
+.doc h1{font-size:1.6rem;margin-bottom:6px;color:var(--ok)}
+.doc h2{font-size:1rem;margin:22px 0 8px;font-family:var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--ok);border-bottom:2px solid var(--ok-soft);padding-bottom:4px}
+.doc p{margin:0 0 8px}
+.doc code{font-family:var(--mono);font-size:.82rem;background:var(--field);padding:2px 4px;border-radius:4px;overflow-wrap:anywhere}
+.doc .small{font-size:.84rem;color:var(--muted)}
+.doc ol{margin:0;padding-left:20px}
+.progress{display:flex;gap:6px;flex-wrap:wrap}
+.progress span{font:600 .76rem var(--mono);padding:4px 9px;border-radius:6px;background:var(--stamp-soft);color:var(--stamp)}
+.progress span.ok{background:var(--ok-soft);color:var(--ok)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.88rem;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20;max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1}
+.foot{margin-top:28px;font-size:.8rem;color:var(--muted)}
+@media (max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  nav.rail{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:6px}
+  nav.rail a{grid-template-columns:auto auto auto;white-space:nowrap;border:1px solid var(--line);background:var(--sheet)}
+  nav.rail .sep{display:none}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .aidrow{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){.grid2,.grid4,.member,.study{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">Taller · IA aplicada a la investigación científica</p>
+      <h1>Cuaderno IA-Evidencia</h1>
+      <p class="lead" style="margin-top:6px">De la pregunta clínica a una síntesis rápida de evidencia, con herramientas de IA y un control ético en cada paso.</p>
+    </div>
+    <div class="meta"><span>Equipo: <b id="mTeam">sin nombre</b></span><span>Controles éticos: <b id="mGates">0/6</b></span><span id="mSave">Borrador guardado en este navegador</span></div>
+  </header>
+  <div class="layout">
+    <nav class="rail" id="rail" aria-label="Pasos del taller"></nav>
+    <main class="sheet" id="sheet"></main>
+  </div>
+  <p class="foot">Material del taller del M.Sc. Adrián Murillo-González. El borrador se guarda solo en este navegador; descargue el producto en Word al terminar.</p>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+const STEPS=[
+ {id:'inicio',k:'00',t:'Inicio y equipo'},
+ {id:'paso-1',k:'01',t:'Pregunta PICO'},
+ {id:'paso-2',k:'02',t:'Cadena de búsqueda'},
+ {id:'paso-3',k:'03',t:'Búsqueda y selección'},
+ {id:'paso-4',k:'04',t:'Lectura y extracción'},
+ {id:'paso-5',k:'05',t:'Síntesis y redacción'},
+ {id:'paso-6',k:'06',t:'Declaración de uso de IA'},
+ {sep:true},
+ {id:'producto',k:'▣',t:'Producto final'}
+];
+const ROLES=['Investigador/a principal','Operador/a de IA','Verificador/a','Guardián/a ética'];
+const SCEN=[
+ {id:'rd',t:'IA para detectar retinopatía diabética',d:'Diagnóstico · ¿Qué tan precisos son los algoritmos de aprendizaje profundo en fotografías de fondo de ojo frente a la evaluación por especialistas?'},
+ {id:'dengue',t:'Signos de alarma en dengue',d:'Pronóstico · ¿Los signos de alarma de la OMS predicen dengue grave en población adulta?'},
+ {id:'dm2',t:'Mensajes de texto y diabetes tipo 2',d:'Terapia · ¿Las intervenciones por mensajería móvil mejoran la HbA1c en atención primaria?'},
+ {id:'burnout',t:'Burnout en estudiantes de medicina',d:'Prevalencia · ¿Cuál es la prevalencia de burnout en estudiantes de medicina de América Latina?'},
+ {id:'proa',t:'Programas de optimización de antimicrobianos',d:'Intervención · ¿Los PROA hospitalarios reducen el consumo de antibióticos?'},
+ {id:'libre',t:'Pregunta propia del equipo',d:'Elija un tema de su área docente o investigativa (sin datos de pacientes).'}
+];
+const GATES={
+ 'paso-1':['La pregunta final fue elegida y ajustada por el equipo, no copiada tal cual de la IA.','No se ingresaron datos de pacientes ni casos identificables en el prompt.'],
+ 'paso-2':['La cadena se ejecutó en PubMed y el equipo revisó que los primeros resultados fueran pertinentes.','Se anotaron la fecha de la búsqueda y el número de resultados.'],
+ 'paso-3':['Cada estudio incluido tiene un PMID o DOI que lleva a la publicación correcta.','El equipo leyó al menos el resumen de cada estudio incluido.','Ninguna referencia proviene únicamente de la respuesta de un chat.'],
+ 'paso-4':['Cada cifra de la tabla fue cotejada con el documento original por la persona verificadora.','Solo se cargaron documentos de acceso abierto o con licencia institucional.','Se anotaron las diferencias encontradas entre la IA y el documento original.'],
+ 'paso-5':['El primer borrador de la síntesis lo escribió el equipo.','Cada afirmación de la síntesis remite a un estudio de la tabla.','Los cambios sugeridos por la IA se revisaron uno por uno.'],
+ 'paso-6':['La declaración incluye todas las herramientas de IA que usó el equipo.','Todo el equipo leyó y aprueba el producto final.']
+};
+const AIDC=[
+ ['Conceptualización','ChatGPT','generar ideas iniciales y reformular la pregunta de investigación en formato PICO; la pregunta final fue definida por el equipo'],
+ ['Metodología','ChatGPT','proponer un borrador de la cadena de búsqueda booleana, que el equipo ejecutó y ajustó en PubMed'],
+ ['Recopilación de información','Consensus','identificar estudios potencialmente relevantes; cada referencia se verificó en PubMed'],
+ ['Método de recolección de datos','ChatGPT','revisar la redacción de los instrumentos de recolección'],
+ ['Ejecución','ChatGPT','apoyar procedimientos de la investigación'],
+ ['Curaduría de datos','ChatGPT','organizar y depurar datos anonimizados'],
+ ['Análisis de datos','ChatGPT','sugerir código de análisis, revisado y ejecutado por el equipo'],
+ ['Privacidad y seguridad','—',''],
+ ['Interpretación','NotebookLM','extraer y resumir datos de los artículos incluidos; cada cifra se cotejó con el documento original'],
+ ['Visualización','ChatGPT','proponer el diseño de tablas o gráficos a partir de datos verificados'],
+ ['Redacción — revisión y edición','ChatGPT','revisar la claridad y la gramática de un texto escrito por el equipo'],
+ ['Redacción — traducción','ChatGPT','traducir el resumen; la traducción fue revisada por el equipo'],
+ ['Administración del proyecto','ChatGPT','organizar el cronograma de trabajo']
+];
+const TOOLS=['ChatGPT','Claude','Gemini','Copilot','Perplexity','Consensus','Elicit','NotebookLM','SciSpace','ChatPDF','Connected Papers','ResearchRabbit','QuillBot'];
+
+/* ---------- Estado ---------- */
+const KEY='cuaderno-ia-evidencia-v2';
+function blank(){return{team:'',fecha:new Date().toLocaleDateString('es-CR',{day:'numeric',month:'long',year:'numeric'}),members:ROLES.map(r=>({name:'',role:r})),scenario:'',tema:'',
+ p1:{P:'',I:'',C:'',O:'',tipo:'',pregunta:''},p2:{cadena:'',resultados:'',fechaBusqueda:''},p3:{inc:'',exc:''},studies:[],p4:{tabla:'',discrepancias:''},
+ p5:{titulo:'',sintesis:'',limitaciones:'',implicaciones:''},p6:{error:'',nodelegar:''},aid:{},gates:{}};}
+let S=blank();
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(blank(),JSON.parse(raw));}catch(e){}
+let saveT=null;
+function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S));document.getElementById('mSave').textContent='Borrador guardado en este navegador';}catch(e){document.getElementById('mSave').textContent='Este navegador no permite guardar el borrador';}},250);updateMeta();}
+function get(path){return path.split('.').reduce((o,k)=>o==null?undefined:o[k],S);}
+function set(path,v){const ks=path.split('.');let o=S;ks.slice(0,-1).forEach(k=>{if(o[k]==null)o[k]={};o=o[k];});o[ks[ks.length-1]]=v;save();}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nl=t=>esc(t).replace(/\n/g,'<br>');
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2200);}
+async function copyText(txt){try{await navigator.clipboard.writeText(txt);toast('Copiado');}catch(e){toast('No se pudo copiar: seleccione el texto y cópielo manualmente');}}
+function gateState(id){const g=GATES[id];if(!g)return null;const v=S.gates[id]||[];const n=g.filter((_,i)=>v[i]).length;return n===g.length?'done':n?'part':'none';}
+function gatesDone(){return Object.keys(GATES).filter(id=>gateState(id)==='done').length;}
+function updateMeta(){document.getElementById('mTeam').textContent=S.team||'sin nombre';document.getElementById('mGates').textContent=gatesDone()+'/'+Object.keys(GATES).length;renderRail();}
+
+/* ---------- Tabla pegada ---------- */
+function parseTable(text){const lines=(text||'').split(/\r?\n/).map(l=>l.trimEnd()).filter(l=>l.trim());if(lines.length<2)return null;
+ let rows;
+ if(lines.filter(l=>l.includes('|')).length>=lines.length*0.6){rows=lines.filter(l=>!/^[\s|:\-–]+$/.test(l)).map(l=>{let c=l.split('|').map(x=>x.trim());if(c[0]==='')c.shift();if(c.length&&c[c.length-1]==='')c.pop();return c.map(x=>x.replace(/\*\*/g,''));});}
+ else if(lines.some(l=>l.includes('\t'))){rows=lines.map(l=>l.split('\t').map(x=>x.trim()));}
+ else return null;
+ const w=Math.max(...rows.map(r=>r.length));if(w<2)return null;return rows.map(r=>{while(r.length<w)r.push('');return r;});}
+function tableHTML(rows){return`<div class="tblwrap"><table class="t"><thead><tr>${rows[0].map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.slice(1).map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
+
+/* ---------- Componentes ---------- */
+function fid(p){return'f-'+p.replace(/\./g,'-');}
+function field(label,path,o={}){const v=esc(get(path)??'');const ph=esc(o.ph||'');const hint=o.hint?`<span class="h">${esc(o.hint)}</span>`:'';const cls=o.mono?'mono':'';
+ if(o.area)return`<label class="f">${label}${hint}<textarea class="${cls}" data-bind="${path}" id="${fid(path)}" placeholder="${ph}"${o.h?` style="min-height:${o.h}px"`:''}>${v}</textarea></label>`;
+ if(o.select)return`<label class="f">${label}${hint}<select data-bind="${path}" id="${fid(path)}"><option value="">Seleccione…</option>${o.select.map(x=>`<option${x===get(path)?' selected':''}>${esc(x)}</option>`).join('')}</select></label>`;
+ return`<label class="f">${label}${hint}<input type="text" class="${cls}" data-bind="${path}" id="${fid(path)}" value="${v}" placeholder="${ph}"></label>`;}
+function promptBox(txt,tag){return`<div class="prompt"><span class="tag">${tag||'Prompt sugerido'}</span><button class="btn small copy" data-copy="${esc(txt)}">Copiar prompt</button>${esc(txt)}</div>`;}
+function gateBox(id){const g=GATES[id],v=S.gates[id]||[];const st=gateState(id);
+ return`<section class="gate ${st==='done'?'done':''}" id="gate-${id}"><div class="gt"><b>Control ético del paso</b><span class="stampmark">${st==='done'?'Aprobado':'Pendiente'}</span></div>${g.map((t,i)=>`<label class="check"><input type="checkbox" data-gate="${id}" data-i="${i}" id="g-${id}-${i}"${v[i]?' checked':''}><span>${esc(t)}</span></label>`).join('')}</section>`;}
+function toolsBox(list,title){return`<div class="box"><h3>${title||'Herramientas sugeridas'}</h3><div class="tools">${list.map(t=>`<div class="tool${t[3]?' main':''}"><b>${esc(t[0])}</b><span>${esc(t[1])}</span>${t[2]?`<a href="${t[2]}" target="_blank" rel="noopener">${t[2].replace('https://','')}</a>`:''}</div>`).join('')}</div></div>`;}
+function head(k,t,time,lead){return`<div class="stephead"><div><p class="eyebrow">Paso ${k} · ${time}</p><h2>${t}</h2></div></div><p class="lead">${lead}</p>`;}
+
+/* ---------- Vistas ---------- */
+const V={};
+V.inicio=()=>`<div class="stephead"><div><p class="eyebrow">Antes de empezar · 10 min</p><h2>El reto del equipo</h2></div></div>
+<p class="lead">En 90 minutos, su equipo producirá una <b>síntesis rápida de evidencia</b> sobre una pregunta clínica. Las herramientas de IA ayudan en cada paso; ningún paso se cierra sin su control ético.</p>
+<div class="banner info row">¿Quiere ver un producto terminado? <button class="btn small" id="loadEx">Cargar ejemplo resuelto</button><span style="color:var(--muted)">Reemplaza el borrador actual (escenario de retinopatía diabética).</span></div>
+<div class="grid2">${field('Nombre del equipo','team',{ph:'p. ej., Equipo Fondo de Ojo'})}${field('Fecha','fecha')}</div>
+<div class="box"><h3>Integrantes y roles</h3>
+<div class="roles">
+<div class="role"><b>Investigador/a principal</b>Conduce el proceso y toma las decisiones finales.</div>
+<div class="role"><b>Operador/a de IA</b>Escribe los prompts en las herramientas de IA.</div>
+<div class="role"><b>Verificador/a</b>Coteja cada referencia y cada cifra con la fuente original.</div>
+<div class="role"><b>Guardián/a ética</b>Vigila la privacidad y aprueba el control ético de cada paso.</div></div>
+${S.members.map((m,i)=>`<div class="member"><input type="text" data-bind="members.${i}.name" id="m-${i}" value="${esc(m.name)}" placeholder="Nombre de la persona ${i+1}" aria-label="Nombre de la persona ${i+1}"><select data-bind="members.${i}.role" id="mr-${i}" aria-label="Rol de la persona ${i+1}">${ROLES.map(r=>`<option${r===m.role?' selected':''}>${r}</option>`).join('')}</select></div>`).join('')}
+<p style="color:var(--muted);font-size:.84rem">En equipos de 3, una persona combina «Verificador/a» y «Guardián/a ética».</p></div>
+<div class="box"><h3>Escenario de investigación</h3><div class="scen">${SCEN.map(s=>`<button data-scen="${s.id}" class="${S.scenario===s.id?'on':''}"><span class="t">${esc(s.t)}</span><span class="d">${esc(s.d)}</span></button>`).join('')}</div>
+${field('Tema del equipo','tema',{ph:'Se completa al elegir un escenario; puede ajustarlo'})}</div>
+<div class="box"><h3>Reglas del taller</h3><ol class="rules"><li>No se ingresan datos de pacientes ni información que identifique a una persona.</li><li>Toda referencia y todo dato se verifica en su fuente original.</li><li>Las decisiones y la redacción final son del equipo.</li><li>Todo uso de IA se declara al final.</li></ol></div>`;
+
+V['paso-1']=()=>head('01','Formular la pregunta PICO','10 min','Use un asistente conversacional como interlocutor metodológico. La IA propone; el equipo decide.')+
+toolsBox([['ChatGPT','Asistente general sugerido para este paso.','https://chatgpt.com',1],['Claude, Gemini o Copilot','Alternativas equivalentes. Prefiera la cuenta institucional si existe.']])+
+promptBox(`Actúa como metodólogo en investigación clínica. Nuestro tema es: ${S.tema||'[tema del equipo]'}.\nPropón 3 formulaciones de la pregunta en formato PICO. Para cada una indica el tipo de pregunta (terapia, diagnóstico, pronóstico, etiología o prevalencia) y el diseño de estudio más adecuado.\nNo incluyas referencias bibliográficas ni datos de estudios.`)+
+`<div class="grid4">${field('P · Población','p1.P',{area:true,h:70})}${field('I · Intervención o prueba','p1.I',{area:true,h:70})}${field('C · Comparador','p1.C',{area:true,h:70})}${field('O · Desenlace','p1.O',{area:true,h:70})}</div>
+<div class="grid2">${field('Tipo de pregunta','p1.tipo',{select:['Terapia / intervención','Diagnóstico','Pronóstico','Etiología / riesgo','Prevalencia']})}</div>
+${field('Pregunta final del equipo','p1.pregunta',{area:true,ph:'En [población], ¿[intervención] comparada con [comparador] …?'})}
+${gateBox('paso-1')}`;
+
+V['paso-2']=()=>head('02','Construir la cadena de búsqueda','15 min','Pida a la IA una cadena booleana para PubMed a partir de su pregunta, ejecútela en PubMed y ajústela hasta que los resultados sean pertinentes.')+
+toolsBox([['ChatGPT','Para generar la cadena booleana.','https://chatgpt.com',1],['PubMed','Para ejecutar y ajustar la cadena.','https://pubmed.ncbi.nlm.nih.gov']])+
+promptBox(`Para esta pregunta de investigación: ${S.p1.pregunta||'[pregunta final del equipo]'}\nConstruye una cadena de búsqueda booleana para PubMed. Combina con OR los sinónimos de cada concepto y une los conceptos con AND. Usa términos MeSH con la etiqueta [Mesh] y palabras clave en inglés con [tiab].\nDevuelve solo la cadena, lista para copiar y pegar en PubMed.`)+
+`<ol class="how"><li>Copie la cadena que propone la IA y péguela en PubMed.</li><li>Revise los primeros 10 resultados: ¿responden a su pregunta?</li><li>Si hay muy pocos o demasiados resultados, pida a la IA que amplíe o restrinja la cadena.</li></ol>
+${field('Cadena final ejecutada en PubMed','p2.cadena',{area:true,mono:true,h:110,ph:'("término"[Mesh] OR término[tiab]) AND (…)'})}
+<div class="grid2">${field('Número de resultados','p2.resultados',{ph:'p. ej., 412'})}${field('Fecha de la búsqueda','p2.fechaBusqueda',{ph:'p. ej., 29 de octubre de 2026'})}</div>
+${gateBox('paso-2')}`;
+
+V['paso-3']=()=>head('03','Buscar y seleccionar estudios','15 min','Combine PubMed con un buscador asistido por IA. Un estudio solo se incluye si existe, tiene PMID o DOI y el equipo leyó al menos su resumen.')+
+toolsBox([['PubMed','Resultados de su cadena de búsqueda.','https://pubmed.ncbi.nlm.nih.gov',1],['Consensus','Busca en artículos científicos y resume en qué coinciden.','https://consensus.app'],['Elicit','Busca artículos y los presenta en una tabla.','https://elicit.com']])+
+`<div class="grid2">${field('Criterios de inclusión','p3.inc',{area:true,ph:'Diseño, población, idioma, años…'})}${field('Criterios de exclusión','p3.exc',{area:true})}</div>
+<div class="box"><div class="row" style="justify-content:space-between"><h3>Estudios incluidos (3 a 5)</h3><button class="btn small primary" id="addStudy">+ Agregar estudio</button></div>
+${S.studies.length?S.studies.map(studyCard).join(''):'<p class="empty">Agregue los estudios que cumplan sus criterios.</p>'}</div>
+${gateBox('paso-3')}`;
+function studyCard(s,i){return`<div class="study"><div class="sh"><span class="num">Estudio ${i+1}</span><span class="row"><span class="vbadge ${s.ver?'y':'n'}">${s.ver?'Verificado':'Sin verificar'}</span><button class="btn small danger" data-delstudy="${i}">Quitar</button></span></div>
+<div class="full">${field('Referencia (autores, año, título, revista)','studies.'+i+'.ref',{area:true,h:60})}</div>
+${field('PMID o DOI','studies.'+i+'.id',{mono:true})}${field('Dónde se encontró','studies.'+i+'.fuente',{ph:'PubMed, Consensus…'})}
+<div class="full"><label class="check"><input type="checkbox" data-bind-check="studies.${i}.ver" id="sv-${i}"${s.ver?' checked':''}><span><b>Verificado:</b> el PMID o DOI lleva a esta publicación y el equipo leyó su resumen.</span></label></div></div>`;}
+
+V['paso-4']=()=>{const rows=parseTable(S.p4.tabla);return head('04','Leer y extraer datos','20 min','Cargue los artículos de acceso abierto en NotebookLM, pida la tabla de extracción y péguela abajo. La persona verificadora coteja cada cifra con el PDF.')+
+toolsBox([['NotebookLM','Responde solo con base en los documentos que usted carga y cita el pasaje.','https://notebooklm.google.com',1],['PubMed Central','Texto completo de acceso abierto.','https://pmc.ncbi.nlm.nih.gov'],['SciSpace, Elicit o ChatPDF','Alternativas para leer y extraer datos.']])+
+promptBox(`Elabora una tabla con una fila por cada documento cargado y estas columnas: Estudio (primer autor y año) | Diseño | País | Población y n | Intervención o prueba | Comparador | Resultado principal (con cifras) | Limitaciones.\nUsa solo información de los documentos. Si un dato no aparece, escribe «no reportado».`)+
+`${field('Pegue aquí la tabla de extracción','p4.tabla',{area:true,mono:true,h:150,hint:'Copie la tabla desde NotebookLM, Word, Excel u otra herramienta y péguela. Se mostrará como tabla debajo.'})}
+<div id="tablaPrev">${rows?tableHTML(rows):(S.p4.tabla.trim()?'<p class="empty">No se reconoció una tabla. Copie la tabla completa (con columnas separadas) e inténtelo de nuevo.</p>':'')}</div>
+${field('Diferencias entre la IA y el documento original','p4.discrepancias',{area:true,ph:'p. ej., la IA mezcló cifras de dos conjuntos de validación; omitió un intervalo de confianza…'})}
+${gateBox('paso-4')}`;};
+
+V['paso-5']=()=>head('05','Sintetizar y redactar','15 min','Escriban primero la síntesis con sus propias palabras. Después usen ChatGPT para revisar la claridad, con límites explícitos.')+
+toolsBox([['ChatGPT','Sugerido para revisar la claridad del texto que escribió el equipo.','https://chatgpt.com',1],['Claude o Gemini','Alternativas equivalentes.']],'IA sugerida para este paso')+
+promptBox(`Revisa la claridad y concisión del siguiente párrafo, escrito por nuestro equipo. Señala en una lista los problemas de redacción y las ambigüedades, sin reescribir el texto completo.\nNo agregues datos, cifras ni referencias que no estén en el texto.\n\n[pegue aquí su síntesis]`)+
+`${field('Título del producto','p5.titulo',{ph:'p. ej., Precisión de la IA para detectar retinopatía diabética: síntesis rápida de evidencia'})}
+${field('Síntesis de la evidencia (150–250 palabras)','p5.sintesis',{area:true,h:180,hint:'Cada afirmación debe remitir a un estudio: (Estudio 1), (Estudio 2)…'})}
+<div class="grid2">${field('Limitaciones','p5.limitaciones',{area:true,h:110})}${field('Implicaciones para la práctica, la docencia o la investigación','p5.implicaciones',{area:true,h:110})}</div>
+<p style="color:var(--muted);font-size:.85rem">Palabras en la síntesis: <b id="wc">${wc(S.p5.sintesis)}</b></p>
+${gateBox('paso-5')}`;
+function wc(t){return(t||'').trim()?t.trim().split(/\s+/).length:0;}
+
+V['paso-6']=()=>head('06','Declarar el uso de IA','10 min','Toque cada uso que hizo el equipo e indique la herramienta. La declaración se escribe sola siguiendo el marco AID (Weaver, 2024).')+
+`<div class="box"><h3>¿Para qué usaron IA?</h3><div class="aidchips">${AIDC.map((a,i)=>`<button data-aid="${i}" class="${S.aid[i]!=null?'on':''}">${esc(a[0])}</button>`).join('')}</div>
+${aidRows()}
+<datalist id="toolList">${TOOLS.map(t=>`<option value="${t}">`).join('')}</datalist></div>
+<div class="box"><div class="row" style="justify-content:space-between"><h3>Declaración generada</h3><button class="btn small" id="copyAid">Copiar declaración</button></div><div class="aidout" id="aidOut">${aidHTML()}</div></div>
+${field('¿Qué error, sesgo o alucinación de la IA detectó el equipo?','p6.error',{area:true})}
+${field('¿Qué tarea de este proceso no delegaría nunca a una IA? ¿Por qué?','p6.nodelegar',{area:true})}
+${gateBox('paso-6')}`;
+function aidRows(){const ks=Object.keys(S.aid).map(Number).sort((a,b)=>a-b).filter(i=>AIDC[i][1]!=='—');
+ if(!Object.keys(S.aid).length)return'<p class="empty">Toque al menos un uso.</p>';
+ return ks.map(i=>`<div class="aidrow"><b>${esc(AIDC[i][0])}</b><label class="f" style="font-weight:400">Herramienta utilizada<input type="text" list="toolList" data-aidtool="${i}" id="aid-${i}" value="${esc(S.aid[i])}"></label></div>`).join('');}
+
+V.producto=()=>{const d=gatesDone(),n=Object.keys(GATES).length;
+ return`<div class="stephead"><div><p class="eyebrow">Resultado</p><h2>Síntesis rápida de evidencia</h2></div>
+ <div class="row"><button class="btn primary" id="dlDoc" hidden>⬇ Descargar Word</button><button class="btn" id="copyDoc">Copiar como texto</button></div></div>
+ <div class="progress">${Object.keys(GATES).map(id=>`<span class="${gateState(id)==='done'?'ok':''}">${STEPS.find(s=>s.id===id).k} ${gateState(id)==='done'?'✓':'✕'}</span>`).join('')}</div>
+ ${d<n?`<div class="banner warn"><b>Borrador:</b> faltan ${n-d} controles éticos por aprobar. El documento se marcará como borrador hasta completarlos.</div>`:`<div class="banner ok"><b>Listo:</b> todos los controles éticos están aprobados.</div>`}
+ ${S.studies.some(s=>!s.ver)?`<div class="banner warn">Hay estudios sin verificar. No aparecen en el producto hasta marcarlos como verificados (paso 3).</div>`:''}
+ <article class="doc">${docHTML()}</article>`;};
+
+/* ---------- Declaración y producto ---------- */
+function aidItems(){return Object.keys(S.aid).map(Number).sort((a,b)=>a-b).map(i=>{const a=AIDC[i];if(a[1]==='—')return[a[0],'No se ingresaron datos de pacientes ni información identificable en ninguna herramienta; solo se cargaron documentos de acceso abierto.'];return[a[0],`Se utilizó ${S.aid[i]||'[herramienta]'} para ${a[2]}.`];});}
+function aidTools(){return[...new Set(Object.keys(S.aid).map(i=>S.aid[i]).filter(t=>t&&t!=='—'))];}
+function ylist(a){return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' y '+a[a.length-1];}
+function aidHTML(){const it=aidItems();if(!it.length)return'<p class="empty">Aún no hay usos seleccionados.</p>';const t=aidTools();
+ return(t.length?`<p><b>Herramienta(s) de IA:</b> ${esc(ylist(t))}, ${esc(S.fecha)}.</p>`:'')+it.map(x=>`<p><b>${esc(x[0])}:</b> ${esc(x[1])}</p>`).join('')+`<p><b>Responsabilidad:</b> las decisiones metodológicas, la síntesis y las conclusiones son responsabilidad de las personas autoras.</p>`;}
+function aidText(){const it=aidItems();if(!it.length)return'';const t=aidTools();return(t.length?`Herramienta(s) de IA: ${ylist(t)}, ${S.fecha}.\n`:'')+it.map(x=>`${x[0]}: ${x[1]}`).join('\n')+'\nResponsabilidad: las decisiones metodológicas, la síntesis y las conclusiones son responsabilidad de las personas autoras.';}
+function team(){return S.members.filter(m=>m.name).map(m=>`${m.name} (${m.role})`).join(' · ');}
+function docHTML(){const d=gatesDone(),n=Object.keys(GATES).length;const vs=S.studies.filter(s=>s.ver);const rows=parseTable(S.p4.tabla);
+ return`${d<n?'<p class="small"><b>BORRADOR</b> · controles éticos aprobados: '+d+' de '+n+'</p>':''}
+ <h1>${esc(S.p5.titulo||'Título pendiente')}</h1>
+ <p class="small">${esc(S.team||'Equipo sin nombre')} · ${esc(S.fecha)}${team()?'<br>'+esc(team()):''}</p>
+ <h2>Pregunta de investigación</h2><p>${nl(S.p1.pregunta||'—')}</p>
+ <p class="small"><b>P:</b> ${esc(S.p1.P||'—')} · <b>I:</b> ${esc(S.p1.I||'—')} · <b>C:</b> ${esc(S.p1.C||'—')} · <b>O:</b> ${esc(S.p1.O||'—')}${S.p1.tipo?' · <b>Tipo:</b> '+esc(S.p1.tipo):''}</p>
+ <h2>Métodos</h2><p>Búsqueda en PubMed el ${esc(S.p2.fechaBusqueda||'—')} (${esc(S.p2.resultados||'—')} resultados) con la siguiente cadena:</p>
+ <p><code>${esc(S.p2.cadena||'Cadena pendiente')}</code></p>
+ <p><b>Inclusión:</b> ${esc(S.p3.inc||'—')}<br><b>Exclusión:</b> ${esc(S.p3.exc||'—')}</p>
+ <h2>Resultados</h2>${rows?tableHTML(rows):'<p>Tabla de extracción pendiente.</p>'}
+ <p style="margin-top:12px"><b>Estudios incluidos</b></p>${vs.length?`<ol>${vs.map(s=>`<li>${esc(s.ref)} ${s.id?`<code>${esc(s.id)}</code>`:''}</li>`).join('')}</ol>`:'<p>Aún no hay estudios verificados.</p>'}
+ <h2>Síntesis</h2><p>${nl(S.p5.sintesis||'—')}</p>
+ <h2>Limitaciones</h2><p>${nl(S.p5.limitaciones||'—')}</p>
+ <h2>Implicaciones</h2><p>${nl(S.p5.implicaciones||'—')}</p>
+ <h2>Declaración de uso de inteligencia artificial</h2>${aidHTML()}
+ ${S.p4.discrepancias?`<p><b>Diferencias detectadas entre la IA y las fuentes:</b> ${nl(S.p4.discrepancias)}</p>`:''}`;}
+function docText(){const vs=S.studies.filter(s=>s.ver);const rows=parseTable(S.p4.tabla);const L=[];
+ L.push((S.p5.titulo||'Título pendiente').toUpperCase(),`${S.team||'Equipo'} · ${S.fecha}`,team(),'','PREGUNTA DE INVESTIGACIÓN',S.p1.pregunta||'—',`P: ${S.p1.P} | I: ${S.p1.I} | C: ${S.p1.C} | O: ${S.p1.O}`,'',
+ 'MÉTODOS',`Búsqueda en PubMed el ${S.p2.fechaBusqueda||'—'} (${S.p2.resultados||'—'} resultados).`,S.p2.cadena||'',`Inclusión: ${S.p3.inc}`,`Exclusión: ${S.p3.exc}`,'','RESULTADOS');
+ if(rows)rows.forEach(r=>L.push(r.join(' | ')));L.push('','Estudios incluidos:',...vs.map((s,i)=>`${i+1}. ${s.ref} ${s.id}`),'',
+ 'SÍNTESIS',S.p5.sintesis||'—','','LIMITACIONES',S.p5.limitaciones||'—','','IMPLICACIONES',S.p5.implicaciones||'—','','DECLARACIÓN DE USO DE INTELIGENCIA ARTIFICIAL',aidText()||'—');
+ if(S.p4.discrepancias)L.push('',`Diferencias detectadas: ${S.p4.discrepancias}`);return L.join('\n');}
+
+/* ---------- Word (.docx) sin dependencias ---------- */
+const GREEN='1E7B4F',GREEN_LIGHT='E3F2E8',GREY='5F6B66';
+const X=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function run(t,o={}){const pr=(o.b?'<w:b/>':'')+(o.color?`<w:color w:val="${o.color}"/>`:'')+(o.sz?`<w:sz w:val="${o.sz}"/>`:'');
+ return String(t??'').split('\n').map((l,i)=>(i?'<w:r><w:br/></w:r>':'')+`<w:r>${pr?'<w:rPr>'+pr+'</w:rPr>':''}<w:t xml:space="preserve">${X(l)}</w:t></w:r>`).join('');}
+function P(content,style){return`<w:p>${style?`<w:pPr><w:pStyle w:val="${style}"/></w:pPr>`:''}${content||''}</w:p>`;}
+function cell(t,hdr,w){return`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${hdr?`<w:shd w:val="clear" w:color="auto" w:fill="${GREEN_LIGHT}"/>`:''}</w:tcPr>${P(run(t,hdr?{b:true,color:GREEN}:{}),'Tabla')}</w:tc>`;}
+function table(rows){const cols=rows[0].length,W=9972,w=Math.floor(W/cols);const b=`<w:tblBorders>${['top','left','bottom','right','insideH','insideV'].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="B7D3C2"/>`).join('')}</w:tblBorders>`;
+ return`<w:tbl><w:tblPr><w:tblW w:w="${W}" w:type="dxa"/>${b}<w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="90" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="90" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${Array(cols).fill(`<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>${rows.map((r,ri)=>`<w:tr><w:trPr><w:cantSplit/>${ri===0?'<w:tblHeader/>':''}</w:trPr>${r.map(c=>cell(c,ri===0,w)).join('')}</w:tr>`).join('')}</w:tbl>`;}
+function lv(label,val){return P(run(label+' ',{b:true,color:GREEN})+run(val||'—'));}
+function buildDocXML(){const d=gatesDone(),n=Object.keys(GATES).length;const vs=S.studies.filter(s=>s.ver);const rows=parseTable(S.p4.tabla);let b='';
+ if(d<n)b+=P(run(`BORRADOR · controles éticos aprobados: ${d} de ${n}`,{b:true,color:'B3372B',sz:18}));
+ b+=P(run('SÍNTESIS RÁPIDA DE EVIDENCIA'),'Eyebrow');
+ b+=P(run(S.p5.titulo||'Título pendiente'),'Title');
+ b+=P(run(`${S.team||'Equipo sin nombre'} · ${S.fecha}`+(team()?'\n'+team():'')),'Subtitle');
+ b+=P(run('Pregunta de investigación'),'Heading1')+P(run(S.p1.pregunta||'—'));
+ b+=P(run('P: ',{b:true,color:GREEN})+run(S.p1.P||'—')+run('\nI: ',{b:true,color:GREEN})+run(S.p1.I||'—')+run('\nC: ',{b:true,color:GREEN})+run(S.p1.C||'—')+run('\nO: ',{b:true,color:GREEN})+run(S.p1.O||'—'),'Small');
+ if(S.p1.tipo)b+=lv('Tipo de pregunta:',S.p1.tipo);
+ b+=P(run('Métodos'),'Heading1')+P(run(`Búsqueda en PubMed el ${S.p2.fechaBusqueda||'—'} (${S.p2.resultados||'—'} resultados) con la siguiente cadena:`));
+ b+=P(run(S.p2.cadena||'Cadena pendiente'),'Code')+lv('Criterios de inclusión:',S.p3.inc)+lv('Criterios de exclusión:',S.p3.exc);
+ b+=P(run('Resultados'),'Heading1')+(rows?table(rows)+P(''):P(run('Tabla de extracción pendiente.')));
+ b+=P(run('Estudios incluidos'),'Heading2')+(vs.length?vs.map((s,i)=>P(run(`${i+1}. `,{b:true,color:GREEN})+run(s.ref)+(s.id?run('  '+s.id,{color:GREY}):''),'Ref')).join(''):P(run('Aún no hay estudios verificados.')));
+ b+=P(run('Síntesis'),'Heading1')+P(run(S.p5.sintesis||'—'));
+ b+=P(run('Limitaciones'),'Heading1')+P(run(S.p5.limitaciones||'—'));
+ b+=P(run('Implicaciones'),'Heading1')+P(run(S.p5.implicaciones||'—'));
+ b+=P(run('Declaración de uso de inteligencia artificial'),'Heading1');const it=aidItems(),t=aidTools();
+ if(it.length){if(t.length)b+=lv('Herramienta(s) de IA:',`${ylist(t)}, ${S.fecha}.`);it.forEach(x=>b+=lv(x[0]+':',x[1]));b+=lv('Responsabilidad:','las decisiones metodológicas, la síntesis y las conclusiones son responsabilidad de las personas autoras.');}else b+=P(run('Sin usos declarados.'));
+ if(S.p4.discrepancias)b+=lv('Diferencias detectadas entre la IA y las fuentes:',S.p4.discrepancias);
+ return`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${b}<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;}
+function stylesXML(){const st=(id,name,ppr,rpr)=>`<w:style w:type="paragraph" w:customStyle="1" w:styleId="${id}"><w:name w:val="${name}"/><w:basedOn w:val="Normal"/><w:qFormat/><w:pPr>${ppr}</w:pPr><w:rPr>${rpr}</w:rPr></w:style>`;
+ return`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri" w:cs="Calibri"/><w:sz w:val="22"/><w:szCs w:val="22"/><w:color w:val="1F2A27"/><w:lang w:val="es-CR"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="120" w:line="288" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>`+
+ `<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style>`+
+ `<w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:after="80" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/><w:b/><w:color w:val="${GREEN}"/><w:sz w:val="40"/><w:szCs w:val="40"/></w:rPr></w:style>`+
+ `<w:style w:type="paragraph" w:styleId="Subtitle"><w:name w:val="Subtitle"/><w:basedOn w:val="Normal"/><w:qFormat/><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="12" w:space="8" w:color="${GREEN}"/></w:pBdr><w:spacing w:after="240"/></w:pPr><w:rPr><w:color w:val="${GREY}"/><w:sz w:val="20"/></w:rPr></w:style>`+
+ `<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:pBdr><w:bottom w:val="single" w:sz="6" w:space="3" w:color="B7D3C2"/></w:pBdr><w:spacing w:before="320" w:after="100"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:b/><w:caps/><w:color w:val="${GREEN}"/><w:spacing w:val="10"/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:style>`+
+ `<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:spacing w:before="200" w:after="80"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:b/><w:color w:val="${GREEN}"/><w:sz w:val="22"/></w:rPr></w:style>`+
+ st('Eyebrow','Etiqueta','<w:spacing w:after="40"/>',`<w:b/><w:color w:val="${GREY}"/><w:spacing w:val="20"/><w:sz w:val="18"/>`)+
+ st('Small','Texto pequeño','','<w:sz w:val="20"/>')+
+ st('Ref','Referencia','<w:spacing w:after="80"/><w:ind w:left="284" w:hanging="284"/>','<w:sz w:val="20"/>')+
+ st('Tabla','Texto de tabla','<w:spacing w:after="0" w:line="252" w:lineRule="auto"/>','<w:sz w:val="18"/><w:szCs w:val="18"/>')+
+ st('Code','Cadena de búsqueda','<w:shd w:val="clear" w:color="auto" w:fill="F1F6F3"/><w:spacing w:before="60" w:after="160"/><w:ind w:left="142" w:right="142"/>','<w:rFonts w:ascii="Consolas" w:hAnsi="Consolas"/><w:sz w:val="18"/>')+
+ `</w:styles>`;}
+const CT='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>';
+const RELS='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>';
+const DRELS='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return d=>{let c=0xFFFFFFFF;for(let i=0;i<d.length;i++)c=t[(c^d[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0;};})();
+function zip(files){const enc=new TextEncoder();const parts=[],cent=[];let off=0;
+ files.forEach(([name,str])=>{const nb=enc.encode(name),db=enc.encode(str),crc=CRC(db);
+  const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint32(14,crc,true);h.setUint32(18,db.length,true);h.setUint32(22,db.length,true);h.setUint16(26,nb.length,true);
+  parts.push(new Uint8Array(h.buffer),nb,db);
+  const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint32(16,crc,true);c.setUint32(20,db.length,true);c.setUint32(24,db.length,true);c.setUint16(28,nb.length,true);c.setUint32(42,off,true);
+  cent.push(new Uint8Array(c.buffer),nb);off+=30+nb.length+db.length;});
+ const cs=cent.reduce((a,b)=>a+b.length,0);const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cent,new Uint8Array(e.buffer)],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});}
+function buildDocx(){return zip([['[Content_Types].xml',CT],['_rels/.rels',RELS],['word/document.xml',buildDocXML()],['word/_rels/document.xml.rels',DRELS],['word/styles.xml',stylesXML()]]);}
+function fname(){return((S.team||'equipo').replace(/[^\wáéíóúñÁÉÍÓÚÑ -]/g,'').trim()||'equipo')+' - sintesis de evidencia.docx';}
+let downloads=null,dlReady=location.protocol==='file:';
+if(window.claude&&window.claude.use){window.claude.use('downloads').then(d=>{downloads=d;dlReady=!!d||location.protocol==='file:';const b=document.getElementById('dlDoc');if(b)b.hidden=!dlReady;}).catch(()=>{});}
+async function download(){const blob=buildDocx();
+ if(downloads){try{await downloads.save({filename:fname(),data:blob});toast('Documento descargado');}catch(e){toast(e&&e.code==='declined'?'Descarga cancelada':'No se pudo descargar aquí; use «Copiar como texto»');}return;}
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname();document.body.appendChild(a);a.click();a.remove();toast('Documento descargado');}
+
+/* ---------- Ejemplo resuelto (estudios reales verificados) ---------- */
+function example(){const e=blank();
+ Object.assign(e,{team:'Equipo de ejemplo',scenario:'rd',tema:'Precisión de algoritmos de IA para detectar retinopatía diabética en fotografías de fondo de ojo',
+ members:[{name:'Persona A',role:ROLES[0]},{name:'Persona B',role:ROLES[1]},{name:'Persona C',role:ROLES[2]},{name:'Persona D',role:ROLES[3]}],
+ p1:{P:'Personas adultas con diabetes en tamizaje de retinopatía',I:'Algoritmos de aprendizaje profundo aplicados a fotografías de fondo de ojo',C:'Clasificación por oftalmólogos o graduadores certificados',O:'Sensibilidad y especificidad para retinopatía diabética referible',tipo:'Diagnóstico',
+  pregunta:'En personas adultas con diabetes en programas de tamizaje, ¿cuál es la sensibilidad y la especificidad de los algoritmos de aprendizaje profundo, aplicados a fotografías de fondo de ojo, para detectar retinopatía diabética referible, en comparación con la clasificación por especialistas?'},
+ p2:{cadena:'("Diabetic Retinopathy"[Mesh] OR "diabetic retinopathy"[tiab]) AND ("Deep Learning"[Mesh] OR "Artificial Intelligence"[Mesh] OR "deep learning"[tiab] OR "artificial intelligence"[tiab]) AND ("Sensitivity and Specificity"[Mesh] OR sensitivity[tiab] OR accuracy[tiab])',resultados:'(anote el número que obtenga)',fechaBusqueda:'(anote la fecha de su búsqueda)'},
+ p3:{inc:'Estudios de precisión diagnóstica en adultos con diabetes; IA aplicada a fotografías de fondo de ojo; reporte de sensibilidad y especificidad.',exc:'Estudios sin estándar de referencia humano; resúmenes de congreso.'},
+ studies:[
+  {ref:'Gulshan V, Peng L, Coram M, et al. Development and validation of a deep learning algorithm for detection of diabetic retinopathy in retinal fundus photographs. JAMA. 2016;316(22):2402-2410.',id:'PMID 27898976 · doi:10.1001/jama.2016.17216',fuente:'PubMed',ver:true},
+  {ref:'Ting DSW, Cheung CY, Lim G, et al. Development and validation of a deep learning system for diabetic retinopathy and related eye diseases using retinal images from multiethnic populations with diabetes. JAMA. 2017;318(22):2211-2223.',id:'PMID 29234807 · doi:10.1001/jama.2017.18152',fuente:'PubMed',ver:true},
+  {ref:'Abràmoff MD, Lavin PT, Birch M, Shah N, Folk JC. Pivotal trial of an autonomous AI-based diagnostic system for detection of diabetic retinopathy in primary care offices. NPJ Digit Med. 2018;1:39.',id:'doi:10.1038/s41746-018-0040-6',fuente:'Consensus → verificado en PubMed',ver:true}],
+ p4:{tabla:'Estudio\tDiseño\tPoblación y n\tResultado principal\nGulshan 2016\tDesarrollo y validación de algoritmo\tEyePACS-1: 9963 imágenes de 4997 pacientes; Messidor-2: 1748 imágenes de 874 pacientes\tAlta especificidad: EyePACS-1 S 90,3 % / E 98,1 %; Messidor-2 S 87,0 % / E 98,5 %\nTing 2017\tValidación multicéntrica\tTamizaje nacional de Singapur: 71 896 imágenes de 14 880 pacientes\tRetinopatía referible: S 90,5 % (IC 95 %: 87,3–93,0); E 91,6 % (IC 95 %: 91,0–92,2)\nAbràmoff 2018\tEnsayo pivotal prospectivo\t900 personas con diabetes en atención primaria (EE. UU.)\tSistema autónomo: S 87,2 %; E 90,7 %',
+  discrepancias:'La IA mezcló las cifras de los dos puntos de operación del estudio de Gulshan (alta sensibilidad y alta especificidad). Se corrigió con el resumen del artículo.'},
+ p5:{titulo:'Precisión de la inteligencia artificial para detectar retinopatía diabética: síntesis rápida de evidencia',
+  sintesis:'Tres estudios de precisión diagnóstica muestran que los algoritmos de aprendizaje profundo alcanzan una sensibilidad cercana o superior al 87 % para detectar retinopatía diabética referible en fotografías de fondo de ojo (Estudios 1, 2 y 3). La especificidad varió entre 90,7 % y 98,5 %, según el punto de operación elegido y la población (Estudios 1 y 3). El desempeño se mantuvo en una población multiétnica de un programa nacional de tamizaje (Estudio 2) y en un ensayo prospectivo en atención primaria, donde el sistema operó de forma autónoma (Estudio 3). En conjunto, la evidencia respalda el uso de estos sistemas como apoyo al tamizaje, con la condición de validarlos en la población local antes de implementarlos.',
+  limitaciones:'Síntesis rápida con tres estudios seleccionados, sin evaluación formal del riesgo de sesgo ni metaanálisis. Los estudios provienen de poblaciones de EE. UU., India, Francia y Singapur; no se identificaron validaciones en Centroamérica.',
+  implicaciones:'Antes de adoptar un sistema de este tipo en Costa Rica se requiere una validación local con imágenes de la población atendida. En docencia, el caso ilustra cómo leer estudios de precisión diagnóstica de IA.'},
+ p6:{error:'Al pedir la cadena de búsqueda, el asistente incluyó un término MeSH que no existe; se eliminó al ejecutar la búsqueda en PubMed.',nodelegar:'La verificación de cifras y la decisión sobre qué estudios incluir.'},
+ aid:{0:'ChatGPT',1:'ChatGPT',2:'Consensus',7:'—',8:'NotebookLM',10:'ChatGPT'},gates:{}});
+ Object.keys(GATES).forEach(id=>e.gates[id]=GATES[id].map(()=>true));return e;}
+
+/* ---------- Render y enrutamiento ---------- */
+function cur(){const h=location.hash.slice(1);return STEPS.find(s=>s.id===h)?h:'inicio';}
+function renderRail(){const c=cur();document.getElementById('rail').innerHTML=STEPS.map(s=>s.sep?'<div class="sep"></div>':`<a href="#${s.id}" class="${s.id===c?'on':''}"><span class="k">${s.k}</span><span>${s.t}</span>${GATES[s.id]?`<span class="st ${gateState(s.id)==='done'?'done':gateState(s.id)==='part'?'part':''}" aria-label="${gateState(s.id)==='done'?'control aprobado':'control pendiente'}"></span>`:'<span></span>'}</a>`).join('');}
+function navFoot(c){const ids=STEPS.filter(s=>!s.sep).map(s=>s.id);const i=ids.indexOf(c);const t=id=>STEPS.find(s=>s.id===id).t;return`<div class="row" style="justify-content:space-between;margin-top:26px;border-top:1px solid var(--line);padding-top:16px">${i>0?`<a class="btn" href="#${ids[i-1]}">← ${t(ids[i-1])}</a>`:'<span></span>'}${i<ids.length-1?`<a class="btn primary" href="#${ids[i+1]}">${t(ids[i+1])} →</a>`:''}</div>`;}
+function render(keep){const c=cur();document.getElementById('sheet').innerHTML=`<div class="view">${V[c]()}</div>${navFoot(c)}`;renderRail();const b=document.getElementById('dlDoc');if(b)b.hidden=!dlReady;if(!keep)window.scrollTo({top:0});}
+addEventListener('hashchange',()=>render());
+
+const sheet=document.getElementById('sheet');
+function updPrev(){const p=document.getElementById('tablaPrev');if(!p)return;const r=parseTable(S.p4.tabla);p.innerHTML=r?tableHTML(r):(S.p4.tabla.trim()?'<p class="empty">No se reconoció una tabla. Copie la tabla completa (con columnas separadas) e inténtelo de nuevo.</p>':'');}
+sheet.addEventListener('paste',e=>{const t=e.target;if(t.id!=='f-p4-tabla')return;const html=e.clipboardData&&e.clipboardData.getData('text/html');if(!html||!/<table/i.test(html))return;
+ const doc=new DOMParser().parseFromString(html,'text/html');const tb=doc.querySelector('table');if(!tb)return;e.preventDefault();
+ const tsv=[...tb.querySelectorAll('tr')].map(tr=>[...tr.querySelectorAll('th,td')].map(c=>c.textContent.replace(/\s+/g,' ').trim()).join('\t')).filter(l=>l.replace(/\t/g,'').trim()).join('\n');
+ t.value=tsv;set('p4.tabla',tsv);updPrev();});
+sheet.addEventListener('input',e=>{const t=e.target;
+ if(t.dataset.bind){set(t.dataset.bind,t.value);if(t.dataset.bind==='p5.sintesis'){const w=document.getElementById('wc');if(w)w.textContent=wc(t.value);}if(t.dataset.bind==='p4.tabla')updPrev();}
+ if(t.dataset.aidtool!=null){S.aid[t.dataset.aidtool]=t.value;save();document.getElementById('aidOut').innerHTML=aidHTML();}});
+sheet.addEventListener('change',e=>{const t=e.target;
+ if(t.dataset.bind&&t.tagName==='SELECT')set(t.dataset.bind,t.value);
+ if(t.dataset.gate){const id=t.dataset.gate;S.gates[id]=S.gates[id]||[];S.gates[id][+t.dataset.i]=t.checked;save();const g=document.getElementById('gate-'+id);const st=gateState(id);g.classList.toggle('done',st==='done');g.querySelector('.stampmark').textContent=st==='done'?'Aprobado':'Pendiente';if(st==='done')toast('Control ético aprobado');}
+ if(t.dataset.bindCheck){set(t.dataset.bindCheck,t.checked);render(true);}});
+sheet.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.copy!==undefined){copyText(b.dataset.copy);return;}
+ if(b.dataset.scen){const s=SCEN.find(x=>x.id===b.dataset.scen);S.scenario=s.id;S.tema=s.id==='libre'?'':s.t+': '+s.d.split(' · ')[1];save();render(true);return;}
+ if(b.dataset.aid!=null){const i=b.dataset.aid;if(S.aid[i]!=null)delete S.aid[i];else S.aid[i]=AIDC[i][1];save();render(true);return;}
+ if(b.dataset.delstudy){S.studies.splice(+b.dataset.delstudy,1);save();render(true);return;}
+ if(b.id==='addStudy'){S.studies.push({ref:'',id:'',fuente:'',ver:false});save();render(true);return;}
+ if(b.id==='loadEx'){S=example();save();render(true);toast('Ejemplo cargado');return;}
+ if(b.id==='copyAid'){copyText(aidText()||'Sin usos declarados');return;}
+ if(b.id==='copyDoc'){copyText(docText());return;}
+ if(b.id==='dlDoc'){download();return;}
+});
+updateMeta();render();
+})();
+</script>
+</body></html>
